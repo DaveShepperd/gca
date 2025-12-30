@@ -1,0 +1,135 @@
+Path: dms!motcsd!apple!snorkelwacker.mit.edu!bionet!rutgers!cs.utexas.edu!swrinde!zaphod.mps.ohio-state.edu!cis.ohio-state.edu!runx.oz.AU!bde
+From: bde@runx.oz.AU (Bruce Evans)
+Newsgroups: gnu.gcc.bug
+Subject: Re: Generates 80387 instructions with -msoft-float
+Message-ID: <1991Dec9.105043.21262@runx.oz.au>
+Date: 9 Dec 91 10:50:43 GMT
+References: <9112061730.AA27139@jupiter.alcatel-bs-stbg.fr_absstbg.alcatel-bs-stbg.fr>
+Sender: gnulists@ai.mit.edu
+Distribution: gnu
+Organization: RUNX Un*x Timeshare.  Sydney, Australia.
+Lines: 122
+Approved: bug-gcc@prep.ai.mit.edu
+
+In article <9112061730.AA27139@jupiter.alcatel-bs-stbg.fr_absstbg.alcatel-bs-stbg.fr> bg@alcatel-bs-stbg.FR absstbg.alcatel-bs-stbg.FR ( Bruno GRABENSTAETTER#) writes:
+
+>Description: generates 80387 instructions (although -msoft-float is used).
+>             I have no 80387 on my machine and no 80387 emulation by the
+>             Operating system !
+
+This fix works for me.
+
+===
+*** ../config/i386.md	Sun Jun 30 06:12:44 1991
+--- i386.md	Mon Nov 18 00:19:57 1991
+***************
+*** 1991,2000 ****
+      output_asm_insn (\"call %1\", operands);
+  
+!   if (GET_MODE (operands[0]) == DFmode
+!       || GET_MODE (operands[0]) == SFmode)
+      {
+  /*      fp_pop_level++; */
+        /* pop if reg dead */
+!       if (!FP_REG_P (operands[0]))
+  	abort ();
+        if (top_dead_p (insn))
+--- 1991,2001 ----
+      output_asm_insn (\"call %1\", operands);
+  
+!   if (FP_REG_P (operands[0]))
+      {
+  /*      fp_pop_level++; */
+        /* pop if reg dead */
+!       if (GET_MODE (operands[0]) != DFmode
+! 	  && GET_MODE (operands[0]) != SFmode
+! 	  || !TARGET_80387)
+  	abort ();
+        if (top_dead_p (insn))
+===
+*** ../config/tm-i386gas.h	Sun May 20 05:04:08 1990
+--- tm-i386gas.h	Mon Nov 18 00:31:50 1991
+***************
+*** 105,106 ****
+--- 105,182 ----
+  #define ASM_FILE_START(FILE) \
+    fprintf (FILE, "\t.file\t\"%s\"\n", dump_base_name);
++ 
++ /*------------*/
++ /* Bug fixes. */
++ /*------------*/
++ 
++ /* Use the rounded size for local common symbols.  gas nails down the sizes
++    and it does not pad them, so symbols of size 1 and 2 used to mess up the
++    alignment of other symbols.  */
++ 
++ #undef ASM_OUTPUT_LOCAL
++ #define ASM_OUTPUT_LOCAL(FILE, NAME, SIZE, ROUNDED)  \
++ ( fputs (".lcomm ", (FILE)),			\
++   assemble_name ((FILE), (NAME)),		\
++   fprintf ((FILE), ",%u\n", (ROUNDED)))
++ 
++ /* Fix -msoft-float.  There is also something to be fixed in i386.md. */
++ 
++ #undef VALUE_REGNO
++ #define VALUE_REGNO(MODE) \
++   (((MODE)==SFmode || (MODE)==DFmode) && TARGET_80387 ? FIRST_FLOAT_REG : 0)
++ #undef FUNCTION_VALUE_REGNO_P
++ #define FUNCTION_VALUE_REGNO_P(N) \
++   ((N) == 0 || TARGET_80387 && (N)== FIRST_FLOAT_REG)
++ 
++ /* This fix is from the corresponding thing in tm-m68k.h.  */
++ /* Make sure everything's fine if we *don't* have a 387.
++    This assumes that putting a register in fixed_regs will keep the
++    compilers mitt's completely off it.  We don't bother to zero it out
++    of register classes.  If TARGET_80387 is not set,
++    the compiler won't touch since no instructions that use these
++    registers will be valid.  */
++ 
++ #define CONDITIONAL_REGISTER_USAGE \
++ { 						\
++   int i; 					\
++   HARD_REG_SET x; 				\
++   if (!TARGET_80387)				\
++     { 						\
++       COPY_HARD_REG_SET (x, reg_class_contents[(int)FLOAT_REGS]); \
++       for (i = 0; i < FIRST_PSEUDO_REGISTER; i++ ) \
++        if (TEST_HARD_REG_BIT (x, i)) 		\
++ 	fixed_regs[i] = call_used_regs[i] = 1; 	\
++     }						\
++ }
++ 
++ /* In tm-m68k.h, the following things also depend on the target FPU.  This
++    seems to be unnecessary since the above kills all FP regs.
++ 	HARD_REGNO_MODE_OK(REGNO, MODE)
++ 	MODES_TIEABLE_P(MODE1, MODE2)
++ 	REG_CLASS_FROM_LETTER(C)
++ 	CONST_DOUBLE_OK_FOR_LETTER_P(VALUE, C)  (already dependent).  */
++ 
++ /*--------------*/
++ /* Local stuff. */
++ /*--------------*/
++ 
++ /* Default args for gcc.  */
++ 
++ #define CC1_SPEC \
++ 	"-fcombine-regs\
++ 	 -fstrength-reduce\
++ 	 -msoft-float"
++ 
++ /* For Minix setjmp.  */
++ 
++ #define NON_REG_SAVING_SETJMP
++ 
++ /* It is stupid to return floating point values in an FP register when
++    compatibility with AT&T is not required, because it requires different
++    libraries for hard and soft FP, and the gcc-1.40 code generator doesn't
++    handle things on the FP stack very well.  */
++ 
++ #undef VALUE_REGNO
++ #define VALUE_REGNO(MODE) 0
++ #undef FUNCTION_VALUE_REGNO_P
++ #define FUNCTION_VALUE_REGNO_P(N) ((N) == 0)
+===
+-- 
+Bruce Evans  (bde@runxtsa.runx.oz.au)

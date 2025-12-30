@@ -1,0 +1,2 @@
+Check out ASM_RETURN_CASE_JUMP (done, incorporated in tm-mac68k.h)
+out-m68k.c does not include branch-shortening, as in gcc-1.37/MC68k/aux-output.c

@@ -1,0 +1,41 @@
+aux-output.c:/*  if ( arg_pointer_needed && !regs_ever_live[ARG_POINTER_REGNUM])++nregs; */
+aux-output.c:       reg_names[ARG_POINTER_REGNUM],
+aux-output.c:/*  if ( arg_pointer_needed && !regs_ever_live[ARG_POINTER_REGNUM] )++nregs; */
+aux-output.c:/*	(arg_pointer_needed && i == ARG_POINTER_REGNUM) || */
+aux-output.c:      if ( REGNO (addr) == ARG_POINTER_REGNUM) {
+aux-output.c:	  if ( REGNO (index) == ARG_POINTER_REGNUM ) {
+aux-output.c:      if ( REGNO (base) == ARG_POINTER_REGNUM ) {
+aux-output.c:      if ( REGNO (reg0) == ARG_POINTER_REGNUM)
+cse.c:		   hash == FRAME_POINTER_REGNUM || hash == ARG_POINTER_REGNUM))
+cse.c:		      hash == FRAME_POINTER_REGNUM || hash == ARG_POINTER_REGNUM)))
+cse.c:		&& i != ARG_POINTER_REGNUM)
+emit-rtl.c:rtx arg_pointer_rtx;		/* (REG:Pmode ARG_POINTER_REGNUM) */
+emit-rtl.c:  if (FRAME_POINTER_REGNUM == ARG_POINTER_REGNUM)
+emit-rtl.c:    arg_pointer_rtx = gen_rtx (REG, Pmode, ARG_POINTER_REGNUM);
+flow.c:      && regno != ARG_POINTER_REGNUM
+flow.c:	  /* && regno != ARG_POINTER_REGNUM) -- and without this.  */
+flow.c:		  || regno == ARG_POINTER_REGNUM)
+flow.c:	    && regno != ARG_POINTER_REGNUM
+insn-output.c:  operands[1] = gen_rtx (REG, SImode, ARG_POINTER_REGNUM);
+insn-output.c:      operands[2] = gen_rtx (REG, SImode, ARG_POINTER_REGNUM);
+insn-output.c:    operands[1] = gen_rtx (REG, SImode, ARG_POINTER_REGNUM);
+insn-output.c:      operands[2] = gen_rtx (REG, SImode, ARG_POINTER_REGNUM);
+integrate.c:	      || REGNO (XEXP (XEXP (x, 0), 0)) == ARG_POINTER_REGNUM)
+integrate.c:		|| REGNO (XEXP (x, 0)) == ARG_POINTER_REGNUM)
+integrate.c:#if FRAME_POINTER_REGNUM != ARG_POINTER_REGNUM
+integrate.c:	  || (ARG_POINTER_REGNUM != FRAME_POINTER_REGNUM
+integrate.c:	      || (ARG_POINTER_REGNUM != FRAME_POINTER_REGNUM
+integrate.c:		   || (ARG_POINTER_REGNUM != FRAME_POINTER_REGNUM
+nux-output.c:/*  if ( arg_pointer_needed && !regs_ever_live[ARG_POINTER_REGNUM])++nregs; */
+nux-output.c:       reg_names[ARG_POINTER_REGNUM],
+nux-output.c:/*  if ( arg_pointer_needed && !regs_ever_live[ARG_POINTER_REGNUM] )++nregs; */
+nux-output.c:/*	(arg_pointer_needed && i == ARG_POINTER_REGNUM) || */
+nux-output.c:      if ( REGNO (addr) == ARG_POINTER_REGNUM) {
+nux-output.c:	  if ( REGNO (index) == ARG_POINTER_REGNUM ) {
+nux-output.c:      if ( REGNO (base) == ARG_POINTER_REGNUM ) {
+nux-output.c:      if ( REGNO (reg0) == ARG_POINTER_REGNUM)
+reload.c:#if FRAME_POINTER_REGNUM != ARG_POINTER_REGNUM
+rtlanal.c:	      || REGNO (x) == ARG_POINTER_REGNUM
+rtlanal.c:	      || REGNO (x) == ARG_POINTER_REGNUM);
+stmt.c:#if ARG_POINTER_REGNUM == FRAME_POINTER_REGNUM
+stmt.c:  if (fixed_regs[ARG_POINTER_REGNUM])

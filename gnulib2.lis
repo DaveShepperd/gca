@@ -1,0 +1,254 @@
+    1          000000		.psect text,dat=2,seg=2
+    2         		.RP = %28.
+    3         		.SP = %29.
+    4         		.FP = %27.
+    5         		; compiled by gcc 1.40 ASAP
+    6         			.align 2
+    7         			.globl __adddi3
+    8         		; function __adddi3() returns DI
+    9         		;0) "u" 8 bytes, 2 slots
+   10         		;1) "v" 8 bytes, 2 slots
+   11         		; 2 parms totaling 16 bytes in 4 slots
+   12         		__adddi3:
+
+ source file: "./gnulib2.c"
+/* More subroutines needed by GCC output code on some machines.  */
+/* Compile this one with gcc.  */
+
+#include "config.h"
+#include <stddef.h>
+
+#ifndef SItype
+#define SItype long int
+#endif
+
+/* long long ints are pairs of long ints in the order determined by
+   WORDS_BIG_ENDIAN.  */
+
+#ifdef WORDS_BIG_ENDIAN
+  struct longlong {long high, low;};
+#else
+  struct longlong {long low, high;};
+#endif
+
+/* We need this union to unpack/pack longlongs, since we don't have
+   any arithmetic yet.  Incoming long long parameters are stored
+   into the `ll' field, and the unpacked result is read from the struct
+   longlong.  */
+
+typedef union
+{
+  struct longlong s;
+  long long ll;
+  SItype i[2];
+  unsigned SItype ui[2];
+} long_long;
+
+/* Internally, long long ints are strings of unsigned shorts in the
+   order determined by BYTES_BIG_ENDIAN.  */
+
+#define B 0x10000
+#define low16 (B - 1)
+
+#ifdef BYTES_BIG_ENDIAN
+
+/* Note that HIGH and LOW do not describe the order
+   of words in a long long.  They describe the order of words
+   in vectors ordered according to the byte order.  */
+
+#define HIGH 0
+#define LOW 1
+
+#define big_end(n)	0 
+#define little_end(n)	((n) - 1)
+#define next_msd(i)	((i) - 1)
+#define next_lsd(i)	((i) + 1)
+#define is_not_msd(i,n)	((i) >= 0)
+#define is_not_lsd(i,n)	((i) < (n))
+
+#else
+
+#define LOW 0
+#define HIGH 1
+
+#define big_end(n)	((n) - 1)
+#define little_end(n)	0 
+#define next_msd(i)	((i) + 1)
+#define next_lsd(i)	((i) - 1)
+#define is_not_msd(i,n)	((i) < (n))
+#define is_not_lsd(i,n)	((i) >= 0)
+
+#endif
+
+/* These algorithms are all straight out of Knuth, vol. 2, sec. 4.3.1. */
+
+static int badd ();
+static int bsub ();
+static void bmul ();
+static int bneg ();
+static int bshift ();
+
+#ifdef L_adddi3
+long long 
+__adddi3 (u, v)
+     long long u, v;
+{
+
+   14         		;regs_ever_live = [%1,%2,%3,%4,%11,%12,.RP](7 total)
+   15         		; args_size = 0
+   16         		; pretend_args_size = 0
+   17         		; size of locals 24 (24)
+   18         		; frame pointer needed
+   19         		;saved_reg_mask =[%11,%12,.FP,.RP]
+   20         		;asap_stack_size = 40
+   21         		;asap_last_named_arg = 3
+   22 48000030 000000		SUB .SP,.SP,48
+   23 a140000b 000004		ST %5,.SP[44] ; anon arg 2
+   24 a100000a 000008		ST %4,.SP[40] ; anon arg 1
+   25 a2c00009 00000C		ST %11,.SP[36]
+   26 a3000008 000010		ST %12,.SP[32]
+   27 a0000007 000014		ST .FP,.SP[28]
+   28 a0000006 000018		ST .RP,.SP[24]
+   29 40000000 00001C		ADD .FP,.SP,0
+
+  long a[2], b[2], c[2];
+  long_long w;
+  long_long uu, vv;
+
+  uu.ll = u;
+
+
+  vv.ll = v;
+
+
+
+  a[HIGH] = uu.s.high;
+
+   33 a0800001 000020		ST %2,.FP[4]
+
+  a[LOW] = uu.s.low;
+
+   35 a0400000 000024		ST %1,.FP[0]
+
+  b[HIGH] = vv.s.high;
+
+   37 a1000003 000028		ST %4,.FP[12]
+
+  b[LOW] = vv.s.low;
+
+   39 a0c00002 00002C		ST %3,.FP[8]
+
+
+  badd (a, b, c, sizeof c);
+
+   41 7040ffe0 000030		OR %1,%0,.FP
+   42 40800008 000034		ADD %2,.FP,8
+   43 40c00010 000038		ADD %3,.FP,16
+   44 71000008 00003C		OR %4,%0,8
+   45 1000.... 000040		BSR .RP,badd
+   46 40000000 000044		ADD %0,%0,0
+
+
+  w.s.high = c[HIGH];
+
+   48 83000005 000048		LD %12,.FP[20]
+
+  w.s.low = c[LOW];
+
+   50 82c00004 00004C		LD %11,.FP[16]
+
+  return w.ll;
+
+   52 4040ffeb 000050		add %1,%0,%11
+   53 4080ffec 000054		add %2,%0,%12
+
+}
+
+   55 40000000 000058		ADD .SP,.FP,0
+   56 82c00009 00005C		LD %11,.SP[36]
+   57 83000008 000060		LD %12,.SP[32]
+   58 80000007 000064		LD .FP,.SP[28]
+   59 80000006 000068		LD .RP,.SP[24]
+   60 f0000000 00006C		JSR %0,.RP[0]
+   61 40000030 000070		ADD .SP,.SP,48
+   62         			.align 2
+   63         		; function badd() returns SI
+   64         		;0) "a" 4 bytes, 1 slots
+   65         		;1) "b" 4 bytes, 1 slots
+   66         		;2) "c" 4 bytes, 1 slots
+   67         		;3) "n" 4 bytes, 1 slots
+   68         		; 4 parms totaling 16 bytes in 4 slots
+   69         		badd:
+
+
+static int 
+badd (a, b, c, n)
+     unsigned short *a, *b, *c;
+     size_t n;
+{
+
+   71         		;regs_ever_live = [%1,%2,%3,%4,%5,%6,%7,%8](8 total)
+   72         		; args_size = 0
+   73         		; pretend_args_size = 0
+   74         		; size of locals 0 (0)
+   75         		;saved_reg_mask =<none>
+   76         		;asap_stack_size = 0
+   77         		;asap_last_named_arg = 4
+   78 7200ffe1 000074		OR %8,%0,%1
+   79 71c0ffe2 000078		OR %7,%0,%2
+   80 7180ffe3 00007C		OR %6,%0,%3
+   81 7140ffe4 000080		OR %5,%0,%4
+
+  unsigned long acc;
+  int i;
+
+  n /= sizeof *c;
+
+   83 c9450001 000084		LSHR %5,%5,1
+
+
+  acc = 0;
+
+   85 71000000 000088		OR %4,%0,0
+
+  for (i = little_end (n); is_not_msd (i, n); i = next_msd (i))
+
+   87 70c0ffe4 00008C		OR %3,%0,%4
+   88 4823ffe5 000090		SUB.C %0,%3,%5
+   89 0a40.... 000094		BHS .L7
+   90 40000000 000098		ADD %0,%0,0
+   91         		.L6:
+
+    {
+      /* Widen before adding to avoid loss of high bits.  */
+      acc += (unsigned long) a[i] + b[i];
+
+   93 9048ffe3 00009C		LDUS %1,%8[%3]
+   94 9087ffe3 0000A0		LDUS %2,%7[%3]
+   95 4041ffe2 0000A4		ADD %1,%1,%2
+   96 4104ffe1 0000A8		ADD %4,%4,%1
+
+      c[i] = acc & low16;
+
+   98 9906ffe3 0000AC		STS %4,%6[%3]
+
+      acc = acc >> 16;
+
+  100 c9040010 0000B0		LSHR %4,%4,16
+
+
+  102 40c30001 0000B4		ADD %3,%3,1
+  103 4823ffe5 0000B8		SUB.C %0,%3,%5
+  104 0a3ffff8 0000BC		BLO .L6
+  105 40000000 0000C0		ADD %0,%0,0
+  106         		.L7:
+
+    }
+  return acc;
+
+  108 7040ffe4 0000C4		OR %1,%0,%4
+
+}
+
+  110 f0000000 0000C8		JSR %0,.RP[0]
+  111 40000000 0000CC		ADD .SP,.SP,0

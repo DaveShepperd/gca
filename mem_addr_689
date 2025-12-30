@@ -1,0 +1,140 @@
+rtx
+memory_address (mode, x)
+     enum machine_mode mode;
+     register rtx x;
+{
+  register rtx oldx;
+
+   
+
+  if (! cse_not_expected && (	((x)->code)  == LABEL_REF || 	((x)->code)  == SYMBOL_REF	|| 	((x)->code)  == CONST_INT	|| 	((x)->code)  == CONST) )
+    return force_reg (SImode , x);
+
+   
+
+
+
+  if (	((x)->code)  == QUEUED
+      && 	((((x)->fld[ 0].rtx)  )->code)  == REG)
+    return x;
+
+   
+
+
+
+  oldx = x;
+  if (! cse_not_expected && 	((x)->code)  != REG)
+    x = break_out_memory_refs (x);
+
+   
+  { if ((	(( x)->code)  == REG && (((( x)->fld[0].rtint)  >= 12 ) || ( ((((( x)->fld[0].rtint) ) >= 1 ) && (((( x)->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(( x)->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(( x)->fld[0].rtint) ]) >= 1
+ ) && (((unsigned) reg_renumber[(( x)->fld[0].rtint) ]) <= 5 ))  )) ) ) ) goto  win; if ((((	(( x)->code)  == PRE_DEC) || (	(( x)->code)  == POST_INC)) && (((	(((( x)->fld[ 0].rtx) )->code)  == REG && (((((( x)->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || 
+( ((((((( x)->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((( x)->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) >
+= 1 ) && (((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) )	|| (	(((( x)->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->m
+ode)  == HImode	&& (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg
+_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) 
+]) <= 5 ))  )) ) )) )) ) goto  win; if (((	(( x)->code)  == LABEL_REF || 	(( x)->code)  == SYMBOL_REF	|| 	(( x)->code)  == CONST_INT	|| 	(( x)->code)  == CONST) )  ) goto  win; if (((	(( x)->code)  == PLUS && ((	(((( x)->fld[ 0].rtx) )->code)  == REG && 
+(((((( x)->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((( x)->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((( x)->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg
+_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) )	|| (	(((( x)->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  ==
+ REG	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((( x)->fld[ 0].rtx) )->fld[ 0].
+rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[((((
+(( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) ))  && (((	(((( x)->fld[ 1].rtx) )->code)  == LABEL_REF || 	(((( x)->fld[ 1].rtx) )->code)  == SYMBOL_REF	|| 	(((( x)->fld[ 1].rtx) )->code)  == CONST_INT	|| 	(((( x)->fld[ 1].rtx) )->
+code)  == CONST) )  || (	(((( x)->fld[ 1].rtx) )->code)  == REG && (((((( x)->fld[ 1].rtx) )->fld[0].rtint)  >= 12 ) || ((((((( x)->fld[ 1].rtx) )->fld[0].rtint) ) == 0 )   || (((unsigned) reg_renumber[(((( x)->fld[ 1].rtx) )->fld[0].rtint) ]) && (((unsi
+gned) reg_renumber[(((( x)->fld[ 1].rtx) )->fld[0].rtint) ]) == 0 )  )) ) )) ) || (	(( x)->code)  == PLUS && ((	(((( x)->fld[ 1].rtx) )->code)  == REG && (((((( x)->fld[ 1].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((( x)->fld[ 1].rtx) )->fld[0].rtint) ) >
+= 1 ) && (((((( x)->fld[ 1].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((( x)->fld[ 1].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((( x)->fld[ 1].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((( x)->fld
+[ 1].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) )	|| (	(((( x)->fld[ 1].rtx) )->code)  == SIGN_EXTEND	&& 	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((( x)->fld[ 1].rtx) )-
+>fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((((( x)->fld[ 1].rtx) )->fld[ 0].rt
+x) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) ))  && (((	(((( x)->fld[ 0].rt
+x) )->code)  == LABEL_REF || 	(((( x)->fld[ 0].rtx) )->code)  == SYMBOL_REF	|| 	(((( x)->fld[ 0].rtx) )->code)  == CONST_INT	|| 	(((( x)->fld[ 0].rtx) )->code)  == CONST) )  || (	(((( x)->fld[ 0].rtx) )->code)  == REG && (((((( x)->fld[ 0].rtx) )->fld[0]
+.rtint)  >= 12 ) || ((((((( x)->fld[ 0].rtx) )->fld[0].rtint) ) == 0 )   || (((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) && (((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) == 0 )  )) ) )) )) ) goto  win; if ((	(
+( x)->code)  == MEM) && (	(((( x)->fld[ 0].rtx) )->code)  == REG && (((((( x)->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((( x)->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((( x)->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renu
+mber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((( x)->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) ) ) goto  win; if ((	(( x)->code)  == MEM)
+ && (((	(((( x)->fld[ 0].rtx) )->code)  == PRE_DEC) || (	(((( x)->fld[ 0].rtx) )->code)  == POST_INC)) && (((	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG && (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((( x
+)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[((
+(((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) )	|| (	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((((( x
+)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((((( x
+)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )
+->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) 
+) )) )) ) goto  win; if ((	(( x)->code)  == MEM) && ((	(((( x)->fld[ 0].rtx) )->code)  == LABEL_REF || 	(((( x)->fld[ 0].rtx) )->code)  == SYMBOL_REF	|| 	(((( x)->fld[ 0].rtx) )->code)  == CONST_INT	|| 	(((( x)->fld[ 0].rtx) )->code)  == CONST) )  ) goto
+  win; if ((	(( x)->code)  == MEM) && ((	(((( x)->fld[ 0].rtx) )->code)  == PLUS && ((	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG && (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((( x)->fld[ 0].rtx) )->fld[
+ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )
+->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) )	|| (	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((((( x)->fld[ 0].rtx) )->fld[
+ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((((( x)->fld[ 0].rtx) )->fld[
+ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) &&  
+((((unsigned) reg_renumber[(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) ))  && (((	(((((( x)-
+>fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == LABEL_REF || 	(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == SYMBOL_REF	|| 	(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	|| 	(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == CONST) ) 
+ || (	(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == REG && (((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  >= 12 ) || ((((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint) ) == 0 )   || (((unsigned) reg_renumber[(((((( x)->fld[ 0
+].rtx) )->fld[ 1].rtx) )->fld[0].rtint) ]) && (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint) ]) == 0 )  )) ) )) ) || (	(((( x)->fld[ 0].rtx) )->code)  == PLUS && ((	(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == 
+REG && (((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint) ) <= 5 ))   || (((unsigned) reg_renumber[((
+(((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint) ]) <= 5 ))  
+)) ) )	|| (	(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == SIGN_EXTEND	&& 	(((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((((( x)
+->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || ( ((((((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) >= 1 ) && (((((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) <= 5 ))
+   || (((unsigned) reg_renumber[(((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) &&  ((((unsigned) reg_renumber[(((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) >= 1 ) && (((unsigned) reg_renumber
+[(((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) <= 5 ))  )) ) ))  && (((	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == LABEL_REF || 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == SYMBOL_REF	|| 	(((((( x)->fld[
+ 0].rtx) )->fld[ 0].rtx) )->code)  == CONST_INT	|| 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == CONST) )  || (	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG && (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  >= 12 ) || (((
+(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ) == 0 )   || (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) && (((unsigned) reg_renumber[(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint) ]) == 0 )  
+)) ) )) )) ) goto  win; } ;
+
+   
+
+  if (memory_address_p (mode, oldx))
+    goto win2;
+
+   
+
+
+
+  { } ;
+
+   
+
+
+
+
+
+
+
+
+  if (	((x)->code)  == PLUS)
+    {
+      int constant_term = 0;
+      rtx y = eliminate_constant_term (x, &constant_term);
+      if (constant_term == 0
+	  || ! memory_address_p (mode, y))
+	return force_operand (x, 0);
+
+      y = plus_constant (copy_to_reg (y), constant_term);
+      if (! memory_address_p (mode, y))
+	return force_operand (x, 0);
+      return y;
+    }
+  if (	((x)->code)  == MULT || 	((x)->code)  == MINUS)
+    return force_operand (x, 0);
+
+   
+
+  if (	((x)->code)  == REG)
+    return copy_to_reg (x);
+
+   
+
+  return force_reg (SImode , x);
+
+ win2:
+  x = oldx;
+ win:
+  if (flag_force_addr && optimize && 	((x)->code)  != REG
+       
+
+      && ! (	((x)->code)  == PLUS
+	    && (((x)->fld[ 0].rtx)  == frame_pointer_rtx
+		|| ((x)->fld[ 0].rtx)  == arg_pointer_rtx)))
+    {
+      if (general_operand (x, SImode ))
+	return force_reg (SImode , x);
+      else
+	return force_operand (x, 0);
+    }
+  return x;
+}
+

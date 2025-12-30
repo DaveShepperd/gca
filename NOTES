@@ -1,0 +1,24 @@
+Mike Albaugh's notes on gcc-1.40:
+
+to configure for use on our systems (all targets)
+
+	ln config/xm-i386v.h ./config.h
+
+then for each target:
+
+Native:
+	ln config/tm-i386sco.h	./tm.h
+	ln config/out-i386.c	./aux-output.c
+	ln config/i386.md	./md
+
+Motorola 68000 cross-compiler:
+	ln config/tm-mac68k.h	./tm.h
+	ln config/out-m68k.c	./aux-output.c
+	ln config/m68k.md	./md
+
+ASAP cross-compiler:
+	ln config/tm-asap.h	./tm.h
+	ln config/out-asap.c	./aux-output.c
+	ln config/asap.md	./md
+
+

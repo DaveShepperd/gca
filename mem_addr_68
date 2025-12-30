@@ -1,0 +1,277 @@
+rtx
+memory_address (mode, x)
+     enum machine_mode mode;
+     register rtx x;
+{
+  register rtx oldx;
+
+   
+
+  if (! cse_not_expected
+	&& (	((x)->code)  == LABEL_REF
+	  || 	((x)->code)  == SYMBOL_REF
+	  || 	((x)->code)  == CONST_INT
+	  || 	((x)->code)  == CONST
+	)
+    ) return force_reg (SImode , x);
+
+   
+
+
+
+  if (	((x)->code)  == QUEUED
+      && 	((((x)->fld[ 0].rtx)  )->code)  == REG)
+    return x;
+
+   
+
+
+
+  oldx = x;
+  if (! cse_not_expected && 	((x)->code)  != REG)
+   x = break_out_memory_refs (x);
+
+   
+  { { if ((
+	(	(( x)->code)  == LABEL_REF
+	|| 	(( x)->code)  == SYMBOL_REF
+	|| 	(( x)->code)  == CONST_INT
+	|| 	(( x)->code)  == CONST
+	)
+  ||	(	(( x)->code)  == REG
+	&& 	(((( x)->fld[0].rtint)  & ~027) != 0)
+	)
+  || 	(	((( x)->code)  == PRE_DEC || 	(( x)->code)  == POST_INC)
+	&& 	((((( x)->fld[ 0].rtx) )->code)  == REG)
+ 	&& 	(((((( x)->fld[ 0].rtx) )->fld[0].rtint)  & ~027) != 0)
+	)
+  ||	(	(( x)->code)  == PLUS
+	&&	((((( x)->fld[ 0].rtx) )->code)  == REG)
+	&&	(((((( x)->fld[ 0].rtx) )->fld[0].rtint)  & ~027) != 0)
+ 	&&	(((( x)->fld[ 1].rtx) )->code)  == CONST_INT
+	&& 	((unsigned) (((( x)->fld[ 1].rtx) )->fld[0].rtint)  + 0x8000)
+	        < 0x10000
+	)) ) goto   win;
+ } ;	{ { if (	(( x)->code)  == PLUS && (((	(((( x)->fld[ 0].rtx) )->code)  == REG && (((((( x)->fld[ 0].rtx) )->fld[0]
+
+.rtint)  ^ 020) >= 8) )	|| (	(((( x)->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0
+
+].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	(((( x)->fld[ 0].rtx) )->code)  == MULT	&& ((	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG && (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	(((((( x)->fl
+
+d[ 0].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((((( x)->fld[ 0].rtx) )->fld[ 0]
+
+.rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& ((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| (((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  ==
+
+ 4	|| (((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	(((( x)->fld[ 1].rtx) )->code)  == LABEL_REF) goto     win;	if (	(((( x)->fld[ 1].rtx) )->code)  == REG && (((((( x)->fld[ 1].rtx) )->fld[0].rtint)  & ~027) != 0) ) goto  
+
+   win; } ; }	if (	(( x)->code)  == PLUS && (((	(((( x)->fld[ 1].rtx) )->code)  == REG && (((((( x)->fld[ 1].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	(((( x)->fld[ 1].rtx) )->code)  == SIGN_EXTEND	&& 	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  =
+
+= REG	&& 	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	(((( x)->fld[ 1].rtx) )->code)  == MULT	&& ((	(((((( x)->fld[ 1].rtx) )->fld
+
+[ 0].rtx) )->code)  == REG && (((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	
+
+&& 	(((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	(((((( x)->fld[ 1].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& ((((
+
+((( x)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| (((((( x)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 4	|| (((((( x)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	(((( x)->fld[ 0].rtx) )->code)  == LABEL_REF) go
+
+to     win;	if (	(((( x)->fld[ 0].rtx) )->code)  == REG && (((((( x)->fld[ 0].rtx) )->fld[0].rtint)  & ~027) != 0) ) goto     win; } ; } } ;	if (	(( x)->code)  == PLUS)	{ if (	(((( x)->fld[ 1].rtx) )->code)  == CONST_INT	&& (unsigned) (((( x)->fld[ 1].rt
+
+x) )->fld[0].rtint)  + 0x80 < 0x100)	{ rtx go_temp = (( x)->fld[ 0].rtx) ; { if (	((go_temp)->code)  == PLUS && (((	((((go_temp)->fld[ 0].rtx) )->code)  == REG && ((((((go_temp)->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((go_temp)->fld[ 0].rt
+
+x) )->code)  == SIGN_EXTEND	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((t
+
+arget_flags & 1)  && 	((((go_temp)->fld[ 0].rtx) )->code)  == MULT	&& ((	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG && ((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((((go_temp)->fld[ 0].rtx) )-
+
+>fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((((go_temp)->fld[ 0].rtx) )->fld[ 
+
+0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& (((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| ((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->
+
+fld[0].rtint)  == 4	|| ((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	((((go_temp)->fld[ 1].rtx) )->code)  == LABEL_REF) goto     win;	if (	((((go_temp)->fld[ 1].rtx) )->code)  == REG && ((((((go_temp)->fld[ 1].rtx) )->
+
+fld[0].rtint)  & ~027) != 0) ) goto     win; } ; }	if (	((go_temp)->code)  == PLUS && (((	((((go_temp)->fld[ 1].rtx) )->code)  == REG && ((((((go_temp)->fld[ 1].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((go_temp)->fld[ 1].rtx) )->code)  == SIGN_EXTEN
+
+D	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	((((
+
+go_temp)->fld[ 1].rtx) )->code)  == MULT	&& ((	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG && ((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  ==
+
+ SIGN_EXTEND	&& 	((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )-
+
+>fld[0].rtint)  ^ 020) >= 8) )) 	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& (((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| ((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 4	|| (((
+
+(((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	((((go_temp)->fld[ 0].rtx) )->code)  == LABEL_REF) goto     win;	if (	((((go_temp)->fld[ 0].rtx) )->code)  == REG && ((((((go_temp)->fld[ 0].rtx) )->fld[0].rtint)  & ~027) != 
+
+0) ) goto     win; } ; } } ; }	if (	(((( x)->fld[ 0].rtx) )->code)  == CONST_INT	&& (unsigned) (((( x)->fld[ 0].rtx) )->fld[0].rtint)  + 0x80 < 0x100)	{ rtx go_temp = (( x)->fld[ 1].rtx) ; { if (	((go_temp)->code)  == PLUS && (((	((((go_temp)->fld[ 0].rt
+
+x) )->code)  == REG && ((((((go_temp)->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((go_temp)->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rt
+
+x) )->mode)  == HImode	&& ((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	((((go_temp)->fld[ 0].rtx) )->code)  == MULT	&& ((	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG && ((
+
+((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((((go_te
+
+mp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& ((((((
+
+(go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| ((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 4	|| ((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	((((go_temp)->fld[ 1].rtx) )->code)
+
+  == LABEL_REF) goto     win;	if (	((((go_temp)->fld[ 1].rtx) )->code)  == REG && ((((((go_temp)->fld[ 1].rtx) )->fld[0].rtint)  & ~027) != 0) ) goto     win; } ; }	if (	((go_temp)->code)  == PLUS && (((	((((go_temp)->fld[ 1].rtx) )->code)  == REG && (((
+
+(((go_temp)->fld[ 1].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((go_temp)->fld[ 1].rtx) )->code)  == SIGN_EXTEND	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& 
+
+((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	((((go_temp)->fld[ 1].rtx) )->code)  == MULT	&& ((	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG && ((((((((go_temp)->fld[ 1].rt
+
+x) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((((go_temp)->fld[ 1].rtx) )->fld[ 
+
+0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& (((((((go_temp)->fld[ 1].rtx) )-
+
+>fld[ 1].rtx) )->fld[0].rtint)  == 2	|| ((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 4	|| ((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	((((go_temp)->fld[ 0].rtx) )->code)  == LABEL_REF) goto     w
+
+in;	if (	((((go_temp)->fld[ 0].rtx) )->code)  == REG && ((((((go_temp)->fld[ 0].rtx) )->fld[0].rtint)  & ~027) != 0) ) goto     win; } ; } } ; } } } ; } ;
+
+   
+
+  if (memory_address_p (mode, oldx))
+    goto win2;
+
+   
+
+
+
+  { register int ch = (x) != ( oldx);	if (	((x)->code)  == PLUS)	{ if (	((((x)->fld[ 0].rtx) )->code)  == MULT)	ch = 1, ((x)->fld[ 0].rtx)  = force_operand (((x)->fld[ 0].rtx) , 0);	if (	((((x)->fld[ 1].rtx) )->code)  == MULT)	ch = 1, ((x)->fld[ 1].rtx) 
+
+ = force_operand (((x)->fld[ 1].rtx) , 0);	if (ch && 	((((x)->fld[ 1].rtx) )->code)  == REG	&& 	((((x)->fld[ 0].rtx) )->code)  == REG)	return x;	if (ch) { { { if (( (	(( x)->code)  == LABEL_REF || 	(( x)->code)  == SYMBOL_REF	|| 	(( x)->code)  == CONST_I
+
+NT	|| 	(( x)->code)  == CONST)  	|| (	(( x)->code)  == REG && (((( x)->fld[0].rtint)  & ~027) != 0) )	|| ((	(( x)->code)  == PRE_DEC || 	(( x)->code)  == POST_INC)	&& (	(((( x)->fld[ 0].rtx) )->code)  == REG) 	&& (((((( x)->fld[ 0].rtx) )->fld[0].rtint) 
+
+ & ~027) != 0) )	|| (	(( x)->code)  == PLUS	&& (	(((( x)->fld[ 0].rtx) )->code)  == REG)  && (((((( x)->fld[ 0].rtx) )->fld[0].rtint)  & ~027) != 0) 	&& 	(((( x)->fld[ 1].rtx) )->code)  == CONST_INT	&& ((unsigned) (((( x)->fld[ 1].rtx) )->fld[0].rtint)  
+
++ 0x8000) < 0x10000)) ) goto    win; } ;	{ { if (	(( x)->code)  == PLUS && (((	(((( x)->fld[ 0].rtx) )->code)  == REG && (((((( x)->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	(((( x)->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((( x)->fld[ 0].r
+
+tx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	(((( x)->fld[ 0].rtx) )->code)  == MULT	&& ((
+
+	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG && (((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	(((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )-
+
+>fld[ 0].rtx) )->code)  == REG	&& 	(((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((((( x)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	(((((( x)->fld[ 0].rtx) )->fld[ 1].rtx)
+
+ )->code)  == CONST_INT	&& ((((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| (((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 4	|| (((((( x)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	(((( x)->fld[ 1].
+
+rtx) )->code)  == LABEL_REF) goto      win;	if (	(((( x)->fld[ 1].rtx) )->code)  == REG && (((((( x)->fld[ 1].rtx) )->fld[0].rtint)  & ~027) != 0) ) goto      win; } ; }	if (	(( x)->code)  == PLUS && (((	(((( x)->fld[ 1].rtx) )->code)  == REG && (((((( x
+
+)->fld[ 1].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	(((( x)->fld[ 1].rtx) )->code)  == SIGN_EXTEND	&& 	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((( x)->fld[ 1].rtx)
+
+ )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	(((( x)->fld[ 1].rtx) )->code)  == MULT	&& ((	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG && (((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >
+
+= 8) )	|| (	(((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	(((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	(((((((( x)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& (((((((((( x)
+
+->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	(((((( x)->fld[ 1].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& ((((((( x)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| (((((( x)->fld[ 1].rtx) )->fld[ 1].
+
+rtx) )->fld[0].rtint)  == 4	|| (((((( x)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	(((( x)->fld[ 0].rtx) )->code)  == LABEL_REF) goto      win;	if (	(((( x)->fld[ 0].rtx) )->code)  == REG && (((((( x)->fld[ 0].rtx) )->fld[0].rtin
+
+t)  & ~027) != 0) ) goto      win; } ; } } ;	if (	(( x)->code)  == PLUS)	{ if (	(((( x)->fld[ 1].rtx) )->code)  == CONST_INT	&& (unsigned) (((( x)->fld[ 1].rtx) )->fld[0].rtint)  + 0x80 < 0x100)	{ rtx go_temp = (( x)->fld[ 0].rtx) ; { if (	((go_temp)->co
+
+de)  == PLUS && (((	((((go_temp)->fld[ 0].rtx) )->code)  == REG && ((((((go_temp)->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((go_temp)->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&&
+
+ 	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	((((go_temp)->fld[ 0].rtx) )->code)  == MULT	&& ((	((((((go_temp)->fld[ 0]
+
+.rtx) )->fld[ 0].rtx) )->code)  == REG && ((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld
+
+[ 0].rtx) )->code)  == REG	&& 	((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	((((((go_temp)->fld[ 0].rtx) )->f
+
+ld[ 1].rtx) )->code)  == CONST_INT	&& (((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| ((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 4	|| ((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	
+
+{ { if (	((((go_temp)->fld[ 1].rtx) )->code)  == LABEL_REF) goto      win;	if (	((((go_temp)->fld[ 1].rtx) )->code)  == REG && ((((((go_temp)->fld[ 1].rtx) )->fld[0].rtint)  & ~027) != 0) ) goto      win; } ; }	if (	((go_temp)->code)  == PLUS && (((	((((
+
+go_temp)->fld[ 1].rtx) )->code)  == REG && ((((((go_temp)->fld[ 1].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((go_temp)->fld[ 1].rtx) )->code)  == SIGN_EXTEND	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((go_temp)->fld[ 1
+
+].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((target_flags & 1)  && 	((((go_temp)->fld[ 1].rtx) )->code)  == MULT	&& ((	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )-
+
+>code)  == REG && ((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == R
+
+EG	&& 	((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->code)  ==
+
+ CONST_INT	&& (((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| ((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 4	|| ((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	((((go_temp)->f
+
+ld[ 0].rtx) )->code)  == LABEL_REF) goto      win;	if (	((((go_temp)->fld[ 0].rtx) )->code)  == REG && ((((((go_temp)->fld[ 0].rtx) )->fld[0].rtint)  & ~027) != 0) ) goto      win; } ; } } ; }	if (	(((( x)->fld[ 0].rtx) )->code)  == CONST_INT	&& (unsigne
+
+d) (((( x)->fld[ 0].rtx) )->fld[0].rtint)  + 0x80 < 0x100)	{ rtx go_temp = (( x)->fld[ 1].rtx) ; { if (	((go_temp)->code)  == PLUS && (((	((((go_temp)->fld[ 0].rtx) )->code)  == REG && ((((((go_temp)->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((
+
+((go_temp)->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^
+
+ 020) >= 8) )) 	|| ((target_flags & 1)  && 	((((go_temp)->fld[ 0].rtx) )->code)  == MULT	&& ((	((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG && ((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((((go_
+
+temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((((go_temp)->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((((go_temp)-
+
+>fld[ 0].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& (((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| ((((((go_temp)->fld[ 0].rt
+
+x) )->fld[ 1].rtx) )->fld[0].rtint)  == 4	|| ((((((go_temp)->fld[ 0].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	((((go_temp)->fld[ 1].rtx) )->code)  == LABEL_REF) goto      win;	if (	((((go_temp)->fld[ 1].rtx) )->code)  == REG && ((((((go_
+
+temp)->fld[ 1].rtx) )->fld[0].rtint)  & ~027) != 0) ) goto      win; } ; }	if (	((go_temp)->code)  == PLUS && (((	((((go_temp)->fld[ 1].rtx) )->code)  == REG && ((((((go_temp)->fld[ 1].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((go_temp)->fld[ 1].rtx)
+
+ )->code)  == SIGN_EXTEND	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	|| ((tar
+
+get_flags & 1)  && 	((((go_temp)->fld[ 1].rtx) )->code)  == MULT	&& ((	((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG && ((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )	|| (	((((((go_temp)->fld[ 1].rtx) )->f
+
+ld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((((go_temp)->fld[ 1].rtx) )->fld[ 0].rtx) )->fld[ 0].rtx) )->mode)  == HImode	&& ((((((((((go_temp)->fld[ 1].rtx) )->fld[ 0]
+
+.rtx) )->fld[ 0].rtx) )->fld[0].rtint)  ^ 020) >= 8) )) 	&& 	((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->code)  == CONST_INT	&& (((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 2	|| ((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fl
+
+d[0].rtint)  == 4	|| ((((((go_temp)->fld[ 1].rtx) )->fld[ 1].rtx) )->fld[0].rtint)  == 8))) )	{ { if (	((((go_temp)->fld[ 0].rtx) )->code)  == LABEL_REF) goto      win;	if (	((((go_temp)->fld[ 0].rtx) )->code)  == REG && ((((((go_temp)->fld[ 0].rtx) )->f
+
+ld[0].rtint)  & ~027) != 0) ) goto      win; } ; } } ; } } } ; } ; }	if (	((((x)->fld[ 0].rtx) )->code)  == REG	|| (	((((x)->fld[ 0].rtx) )->code)  == SIGN_EXTEND	&& 	((((((x)->fld[ 0].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((x)->fld[ 0].rtx) )->f
+
+ld[ 0].rtx) )->mode)  == HImode))	{ register rtx temp = gen_reg_rtx (SImode );	register rtx val = force_operand (((x)->fld[ 1].rtx) , 0);	emit_move_insn (temp, val);	((x)->fld[ 1].rtx)  = temp;	return x; }	else if (	((((x)->fld[ 1].rtx) )->code)  == REG	
+
+|| (	((((x)->fld[ 1].rtx) )->code)  == SIGN_EXTEND	&& 	((((((x)->fld[ 1].rtx) )->fld[ 0].rtx) )->code)  == REG	&& 	((((((x)->fld[ 1].rtx) )->fld[ 0].rtx) )->mode)  == HImode))	{ register rtx temp = gen_reg_rtx (SImode );	register rtx val = force_operand 
+
+(((x)->fld[ 0].rtx) , 0);	emit_move_insn (temp, val);	((x)->fld[ 0].rtx)  = temp;	return x; }}} ;
+
+   
+
+
+
+
+
+
+
+
+  if (	((x)->code)  == PLUS)
+    {
+      int constant_term = 0;
+      rtx y = eliminate_constant_term (x, &constant_term);
+      if (constant_term == 0
+	  || ! memory_address_p (mode, y))
+	return force_operand (x, 0);
+
+      y = plus_constant (copy_to_reg (y), constant_term);
+      if (! memory_address_p (mode, y))
+	return force_operand (x, 0);
+      return y;
+    }
+  if (	((x)->code)  == MULT || 	((x)->code)  == MINUS)
+    return force_operand (x, 0);
+
+   
+
+  if (	((x)->code)  == REG)
+    return copy_to_reg (x);
+
+   
+
+  return force_reg (SImode , x);
+
+ win2:
+  x = oldx;
+ win:
+  if (flag_force_addr && optimize && 	((x)->code)  != REG
+       
+
+      && ! (	((x)->code)  == PLUS
+	    && (((x)->fld[ 0].rtx)  == frame_pointer_rtx
+		|| ((x)->fld[ 0].rtx)  == arg_pointer_rtx)))
+    {
+      if (general_operand (x, SImode ))
+	return force_reg (SImode , x);
+      else
+	return force_operand (x, 0);
+    }
+  return x;
+}
+
