@@ -109,7 +109,7 @@ struct file_buf;
 struct arglist;
 struct argdata;
 
-int do_define (), do_line (), do_include (), do_undef (), do_error (),
+void do_define (), do_line (), do_include (), do_undef (), do_error (),
   do_pragma (), do_if (), do_xifdef (), do_else (),
   do_elif (), do_endif (), do_sccs (), do_once ();
 
