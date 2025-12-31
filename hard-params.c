@@ -236,6 +236,12 @@
 
 #define Unexpected(place) if (setjmp(lab)!=0) croak(place)
 
+/* Forward declarations */
+int basic(), fprop(), dprop(), ldprop();
+void efprop(), edprop(), eldprop();
+void sprop(), iprop(), lprop();
+void usprop(), uiprop(), ulprop();
+
 int V= 0,	/* verbose */
     L= 0,	/* produce limits.h */
     F= 0,	/* produce float.h  */
@@ -341,8 +347,7 @@ croak(place) int place; {
 
 char *
 xmalloc(size) unsigned size; {
-	char *malloc();
-	char *value = malloc(size);
+	char *value = (char *) malloc(size);
 	if (value == 0) {
 		fprintf(stderr, "Virtual memory exceeded\n");
 		exit(bugs+1);
@@ -351,8 +356,7 @@ xmalloc(size) unsigned size; {
 }
 
 main(argc, argv) int argc; char *argv[]; {
-	int dprec, fprec, lprec, basic(), fprop(), dprop(), efprop(), edprop();
-	char *malloc();
+	int dprec, fprec, lprec;
 	unsigned int size;
 	long total;
 	int i; char *s; int bad;

@@ -21,7 +21,9 @@ Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
  You are forbidden to forbid anyone else to use, share and improve
  what you give them.   Help stamp out software-hoarding!  */
 
+#ifndef U_CHAR_DEF
 typedef unsigned char U_CHAR;
+#endif
 
 #ifdef EMACS
 #define NO_SHORTNAMES
@@ -95,6 +97,8 @@ typedef unsigned char U_CHAR;
 #define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
 
+#include "prototypes.h"
+
 /* External declarations.  */
 
 void bcopy (), bzero ();
@@ -109,9 +113,10 @@ struct file_buf;
 struct arglist;
 struct argdata;
 
-int do_define (), do_line (), do_include (), do_undef (), do_error (),
-  do_pragma (), do_if (), do_xifdef (), do_else (),
-  do_elif (), do_endif (), do_sccs (), do_once ();
+int do_define (), do_pragma (), do_xifdef (), do_elif ();
+void do_line (), do_include (), do_undef (), do_error (),
+  do_if (), do_else (),
+  do_endif (), do_sccs (), do_once ();
 
 struct hashnode *install ();
 struct hashnode *lookup ();
@@ -125,7 +130,9 @@ void conditional_skip ();
 void skip_if_group ();
 void output_line_command ();
 /* Last arg to output_line_command.  */
+#ifndef FILE_CHANGE_ENUM_DEF
 enum file_change_code {same_file, enter_file, leave_file};
+#endif
 
 int grow_outbuf ();
 int handle_directive ();
@@ -215,7 +222,8 @@ int no_output;
    It is zero for rescanning results of macro expansion
    and for expanding macro arguments.  */
 #define INPUT_STACK_MAX 200
-struct file_buf {
+#ifndef FILE_BUF_DEF
+typedef struct file_buf {
   char *fname;
   int lineno;
   int length;
@@ -230,7 +238,9 @@ struct file_buf {
   struct if_stack *if_stack;
   /* Object to be freed at end of input at this level.  */
   U_CHAR *free_ptr;
-} instack[INPUT_STACK_MAX];
+} FILE_BUF;
+#endif
+FILE_BUF instack[INPUT_STACK_MAX];
 
 /* Current nesting level of input sources.
    `instack[indepth]' is the level currently being read.  */
@@ -245,8 +255,6 @@ int indepth = -1;
 
 /* Current depth in #include directives that use <...>.  */
 int system_include_depth = 0;
-
-typedef struct file_buf FILE_BUF;
 
 /* The output buffer.  Its LENGTH field is the amount of room allocated
    for the buffer, not the number of chars actually present.  To get
@@ -335,8 +343,8 @@ struct file_name_list *all_include_files = 0;
      { (0, 1), (1, 1), (1, 1), ..., (1, 1), NULL }
    where (x, y) means (nchars, argno). */
 
-typedef struct definition DEFINITION;
-struct definition {
+#ifndef DEFINITION_DEF
+typedef struct definition {
   int nargs;
   int length;			/* length of expansion string */
   U_CHAR *expansion;
@@ -355,8 +363,10 @@ struct definition {
      The only use of this is that we warn on redefinition
      if this differs between the old and new definitions.  */
   U_CHAR *argnames;
-};
+} DEFINITION;
+#endif
 
+#ifndef HASHMODE_DEF
 /* different kinds of things that can appear in the value field
    of a hash node.  Actually, this may be useless now. */
 union hashval {
@@ -403,7 +413,7 @@ enum node_type {
  T_UNUSED	/* Used for something not defined.  */
  };
 
-struct hashnode {
+typedef struct hashnode {
   struct hashnode *next;	/* double links for easy deletion */
   struct hashnode *prev;
   struct hashnode **bucket_hdr;	/* also, a back pointer to this node's hash
@@ -413,9 +423,8 @@ struct hashnode {
   int length;			/* length of token, for quick comparison */
   U_CHAR *name;			/* the actual name */
   union hashval value;		/* pointer to expansion, or whatever */
-};
-
-typedef struct hashnode HASHNODE;
+} HASHNODE;
+#endif
 
 /* Some definitions for the hash table.  The hash function MUST be
    computed as shown in hashf () below.  That is because the rescan
@@ -438,8 +447,8 @@ char *predefs = "";
 #endif
 
 /* `struct directive' defines one #-directive, including how to handle it.  */
-
-struct directive {
+#ifndef DIRECTIVE_DEF
+typedef struct directive {
   int length;			/* Length of name */
   int (*func)();		/* Function to handle directive */
   char *name;			/* Name of directive */
@@ -447,7 +456,8 @@ struct directive {
   char angle_brackets;		/* Nonzero => <...> is special.  */
   char traditional_comments;	/* Nonzero: keep comments if -traditional.  */
   char pass_thru;		/* Copy preprocessed directive to output file.  */
-};
+} DIRECTIVE;
+#endif
 
 /* Here is the actual list of #-directives, most-often-used first.  */
 

@@ -46,10 +46,12 @@ lose
 #endif /* static */
 #endif /* emacs */
 
+#ifndef POINTER
 #ifdef X3J11
 typedef void	*pointer;		/* generic pointer type */
 #else
 typedef char	*pointer;		/* generic pointer type */
+#endif
 #endif
 
 #define	NULL	0			/* null pointer constant */

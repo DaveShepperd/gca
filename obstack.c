@@ -57,22 +57,16 @@ struct obstack *_obstack;
    CHUNKFUN is the function to use to allocate chunks,
    and FREEFUN the function to free them.  */
 
-void
-_obstack_begin (h, size, alignment, chunkfun, freefun)
-     struct obstack *h;
-     int size;
-     int alignment;
-     POINTER (*chunkfun) ();
-     void (*freefun) ();
+void _obstack_begin ( void *inpH, int size, int alignment, POINTER (*chunkfun) (), void (*freefun) () )
 {
   register struct _obstack_chunk* chunk; /* points to new chunk */
-
+  struct obstack *h = (struct obstack *)inpH;
   if (alignment == 0)
     alignment = DEFAULT_ALIGNMENT;
   if (size == 0)
     /* Default size is what GNU malloc can fit in a 4096-byte block.
        Pick a number small enough that when rounded up to DEFAULT_ROUNDING
-       it is still smaller than 4096 - 4.  */
+       <S-Del>it is still smaller than 4096 - 4.  */
     {
       int extra = 4;
       if (extra < DEFAULT_ROUNDING)
@@ -98,11 +92,9 @@ _obstack_begin (h, size, alignment, chunkfun, freefun)
    Copies any partial object from the end of the old chunk
    to the beginning of the new one.  */
 
-void
-_obstack_newchunk (h, length)
-     struct obstack *h;
-     int length;
+void _obstack_newchunk ( void *inpH, int length)
 {
+  struct obstack *h = (struct obstack *)inpH;
   register struct _obstack_chunk*	old_chunk = h->chunk;
   register struct _obstack_chunk*	new_chunk;
   register long	new_size;

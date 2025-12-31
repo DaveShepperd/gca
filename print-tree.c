@@ -22,7 +22,7 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "tree.h"
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "print-tree.h"
 
 /* Names of tree components.
    Used for printing out the tree and error messages.  */
@@ -63,9 +63,7 @@ static struct bucket **table;
    Most nodes referred to by this one are printed recursively
    down to a depth of six.  */
 
-void
-debug_tree (node)
-     tree node;
+void debug_tree (tree node)
 {
   char *object = (char *) oballoc (0);
   table = (struct bucket **) oballoc (HASH_SIZE * sizeof (struct bucket *));
@@ -78,12 +76,7 @@ debug_tree (node)
 
 /* Print a node in brief fashion, with just the code, address and name.  */
 
-void
-print_node_brief (file, prefix, node, indent)
-     FILE *file;
-     char *prefix;
-     tree node;
-     int indent;
+void print_node_brief (FILE *file, char *prefix, tree node, int indent )
 {
   char class;
 
@@ -150,10 +143,7 @@ print_node_brief (file, prefix, node, indent)
   fprintf (file, ">");
 }
 
-void
-indent_to (file, column)
-     FILE *file;
-     int column;
+void indent_to (FILE *file, int column)
 {
   int i;
 
@@ -167,12 +157,7 @@ indent_to (file, column)
 /* Print the node NODE in full on file FILE, preceded by PREFIX,
    starting in column INDENT.  */
 
-void
-print_node (file, prefix, node, indent)
-     FILE *file;
-     char *prefix;
-     tree node;
-     int indent;
+void print_node ( FILE *file, char *prefix, tree node, int indent )
 {
   int hash;
   struct bucket *b;

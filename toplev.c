@@ -52,6 +52,7 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "c-tree.h"
 #include "rtl.h"
 #include "flags.h"
+#include "prototypes.h"
 
 extern int yydebug;
 
@@ -68,13 +69,6 @@ extern void init_optabs ();
 extern void init_reg_sets ();
 extern void dump_flow_info ();
 extern void dump_local_alloc ();
-
-void rest_of_decl_compilation ();
-void error ();
-void error_with_file_and_line ();
-void fancy_abort ();
-void set_target_switch ();
-void print_target_switch_defaults ();
 
 /* Bit flags that specify the machine subtype we are compiling for.
    Bits are tested using macros TARGET_... defined in the tm-...h file
@@ -375,7 +369,7 @@ int dump_time;
 /* Return time used so far, in microseconds.  */
 
 int
-gettime ()
+gettime (void)
 {
 #ifdef USG
   struct tms tms;
@@ -415,9 +409,7 @@ gettime ()
 do { int otime = gettime (); BODY; VAR += gettime () - otime; } while (0)
 
 void
-print_time (str, total)
-     char *str;
-     int total;
+print_time (const char *str, int total)
 {
   fprintf (stderr,
 	   "time in %s: %d.%06d\n",
@@ -427,8 +419,7 @@ print_time (str, total)
 /* Count an error or warning.  Return 1 if the message should be printed.  */
 
 int
-count_error (warningp)
-     int warningp;
+count_error (int warningp)
 {
   if (warningp && inhibit_warnings)
     return 0;
@@ -445,8 +436,7 @@ count_error (warningp)
    Also include a system error message based on `errno'.  */
 
 void
-pfatal_with_name (name)
-     char *name;
+pfatal_with_name (const char *name)
 {
   fprintf (stderr, "%s: ", progname);
   perror (name);
@@ -454,20 +444,20 @@ pfatal_with_name (name)
 }
 
 void
-fatal_io_error (name)
-     char *name;
+fatal_io_error (const char *name)
 {
   fprintf (stderr, "%s: %s: I/O error\n", progname, name);
   exit (35);
 }
 
-void
-fatal (s, v)
-     char *s;
-     int v;
+void fatal (const char *format, ...)
 {
-  error (s, v);
-  exit (34);
+	va_list ap;
+	
+	va_start(ap, format);
+	verror_with_file_and_line (input_filename, lineno, format, ap);
+	va_end(ap);
+	exit (34);
 }
 
 /* Called from insn-extract to give a better error message when we
@@ -475,10 +465,9 @@ fatal (s, v)
    than just calling abort().  */
 
 void
-fatal_insn_not_found (insn)
-     rtx insn;
+fatal_insn_not_found (rtx insn)
 {
-  error ("The following insn was not recognizable:", 0);
+  error ("The following insn was not recognizable:");
   debug_rtx (insn);
   abort ();
 }
@@ -497,8 +486,7 @@ static int last_error_tick;
    this function prints on stderr the name of the function.  */
 
 void
-announce_function (decl)
-     tree decl;
+announce_function (tree decl)
 {
   if (! quiet_flag)
     {
@@ -513,8 +501,7 @@ announce_function (decl)
    which caused an error.  Called from all error and warning functions.  */
 
 void
-report_error_function (file)
-     char *file;
+report_error_function (const char *file)
 {
   struct file_stack *p;
 
@@ -555,28 +542,10 @@ report_error_function (file)
     }
 }
 
-/* Report an error at the current line number.
-   S and V are a string and an arg for `printf'.  */
-
-void
-error (s, v, v2)
-     char *s;
-     int v;			/* @@also used as pointer */
-     int v2;			/* @@also used as pointer */
-{
-  error_with_file_and_line (input_filename, lineno, s, v, v2);
-}
-
 /* Report an error at line LINE of file FILE.
    S and V are a string and an arg for `printf'.  */
 
-void
-error_with_file_and_line (file, line, s, v, v2)
-     char *file;
-     int line;
-     char *s;
-     int v;
-     int v2;
+void verror_with_file_and_line (const char *file, int line, const char *format, va_list ap)
 {
   count_error (0);
 
@@ -586,33 +555,42 @@ error_with_file_and_line (file, line, s, v, v2)
     fprintf (stderr, "%s:%d: ", file, line);
   else
     fprintf (stderr, "%s: ", progname);
-  fprintf (stderr, s, v, v2);
+  if ( format )
+	  vfprintf(stderr, format, ap);
   fprintf (stderr, "\n");
+}
+
+/* Report an error at the current line number.
+   S and V are a string and an arg for `printf'.  */
+
+void error ( const char *format, ... )
+{
+	va_list ap;
+
+	va_start(ap, format);
+	verror_with_file_and_line (input_filename, lineno, format, ap);
+	va_end(ap);
 }
 
 /* Report an error at the declaration DECL.
    S and V are a string and an arg which uses %s to substitute the declaration name.  */
 
-void
-error_with_decl (decl, s, v)
-     tree decl;
-     char *s;
-     int v;
+void error_with_decl (tree decl, const char *format /*, int arg */)
 {
-  count_error (0);
-
-  report_error_function (DECL_SOURCE_FILE (decl));
-
-  fprintf (stderr, "%s:%d: ",
-	   DECL_SOURCE_FILE (decl), DECL_SOURCE_LINE (decl));
-
-  if (DECL_PRINT_NAME (decl))
-    fprintf (stderr, s, DECL_PRINT_NAME (decl), v);
-  else if (DECL_NAME (decl))
-    fprintf (stderr, s, IDENTIFIER_POINTER (DECL_NAME (decl)), v);
-  else
-    fprintf (stderr, s, "((anonymous))", v);
-  fprintf (stderr, "\n");
+	count_error (0);
+	
+	report_error_function (DECL_SOURCE_FILE (decl));
+	
+	fprintf (stderr, "%s:%d: ",
+		DECL_SOURCE_FILE (decl), DECL_SOURCE_LINE (decl));
+	
+	if (DECL_PRINT_NAME (decl))
+		fprintf (stderr, format, DECL_PRINT_NAME (decl) /*, arg */);
+	else if (DECL_NAME (decl))
+		fprintf (stderr, format, IDENTIFIER_POINTER (DECL_NAME (decl)) /*, arg */);
+	else
+		fprintf (stderr, format, "((anonymous))" /*, arg */);
+	fprintf (stderr, "\n");
 }
 
 /* Report an error at the line number of the insn INSN.
@@ -621,18 +599,16 @@ error_with_decl (decl, s, v)
    and each ASM_OPERANDS records its own source file and line.  */
 
 void
-error_for_asm (insn, s, v, v2)
-     rtx insn;
-     char *s;
-     int v;			/* @@also used as pointer */
-     int v2;			/* @@also used as pointer */
+error_for_asm (rtx insn, const char *format, ...)
 {
   rtx temp;
   char *filename;
   int line;
   rtx body = PATTERN (insn);
   rtx asmop;
+  va_list ap;
 
+  va_start(ap, format);
   /* Find the (or one of the) ASM_OPERANDS in the insn.  */
   if (GET_CODE (body) == SET && GET_CODE (SET_SRC (body)) == ASM_OPERANDS)
     asmop = SET_SRC (body);
@@ -648,60 +624,60 @@ error_for_asm (insn, s, v, v2)
   filename = ASM_OPERANDS_SOURCE_FILE (asmop);
   line = ASM_OPERANDS_SOURCE_LINE (asmop);
 
-  error_with_file_and_line (filename, line, s, v, v2);
+  verror_with_file_and_line (filename, line, format, ap);
+  va_end(ap);
 }
 
 /* Report a warning at line LINE.
    S and V are a string and an arg for `printf'.  */
 
-void
-warning_with_file_and_line (file, line, s, v, v2)
-     char *file;
-     int line;
-     char *s;
-     int v;
-     int v2;
+void vwarning_with_file_and_line (const char *file, int line, const char *format, va_list ap)
 {
-  if (count_error (1) == 0)
-    return;
 
-  report_error_function (file);
+	if (count_error (1) == 0)
+		return;
 
-  if (file)
-    fprintf (stderr, "%s:%d: ", file, line);
-  else
-    fprintf (stderr, "%s: ", progname);
+	report_error_function (file);
+	
+	if (file)
+		fprintf (stderr, "%s:%d: ", file, line);
+	else
+		fprintf (stderr, "%s: ", progname);
+	
+	fprintf (stderr, "warning: ");
+	vfprintf (stderr, format, ap);
+	fprintf (stderr, "\n");
+}
 
-  fprintf (stderr, "warning: ");
-  fprintf (stderr, s, v, v2);
-  fprintf (stderr, "\n");
+void warning_with_file_and_line (const char *file, int line, const char *format, ...)
+{
+	va_list ap;
+
+	if (count_error (1) == 0)
+		return;
+
+	va_start(ap, format);
+	vwarning_with_file_and_line(file,line,format,ap);
+	va_end(ap);
 }
 
 /* Report a warning at the current line number.
    S and V are a string and an arg for `printf'.  */
 
-void
-warning (s, v, v2)
-     char *s;
-     int v;			/* @@also used as pointer */
-     int v2;
+void warning (const char *format, ...)
 {
-  warning_with_file_and_line (input_filename, lineno, s, v, v2);
+	va_list ap;
+	va_start(ap,format);
+	vwarning_with_file_and_line (input_filename, lineno, format, ap);
+	va_end(ap);
 }
 
 /* Report a warning at the declaration DECL.
    S is string which uses %s to substitute the declaration name.
    V is a second parameter that S can refer to.  */
 
-void
-warning_with_decl (decl, s, v)
-     tree decl;
-     char *s;
-     int v;
+void warning_with_decl (tree decl, const char *format /*, int arg */)
 {
-  if (count_error (1) == 0)
-    return;
-
   report_error_function (DECL_SOURCE_FILE (decl));
 
   fprintf (stderr, "%s:%d: ",
@@ -709,56 +685,56 @@ warning_with_decl (decl, s, v)
 
   fprintf (stderr, "warning: ");
   if (DECL_PRINT_NAME (decl))
-    fprintf (stderr, s, DECL_PRINT_NAME (decl), v);
+    fprintf (stderr, format, DECL_PRINT_NAME (decl) /*, arg */);
   else if (DECL_NAME (decl))
-    fprintf (stderr, s, IDENTIFIER_POINTER (DECL_NAME (decl)), v);
+    fprintf (stderr, format, IDENTIFIER_POINTER (DECL_NAME (decl)) /*, arg */);
   else
-    fprintf (stderr, s, "((anonymous))", v);
+    fprintf (stderr, format, "((anonymous))" /*, arg */);
   fprintf (stderr, "\n");
 }
 
 /* Apologize for not implementing some feature.
    S, V, and V2 are a string and args for `printf'.  */
 
-void
-sorry (s, v, v2)
-     char *s;
-     int v, v2;
+static void vsorry (const char *opt, const char *format, va_list ap)
 {
-  sorrycount++;
-  if (input_filename)
-    fprintf (stderr, "%s:%d: ", input_filename, lineno);
-  else
-    fprintf (stderr, "%s: ", progname);
+	sorrycount++;
+	if (input_filename)
+		fprintf (stderr, "%s:%d: ", input_filename, lineno);
+	else
+		fprintf (stderr, "%s: ", opt);
+	
+	fprintf (stderr, "sorry, not implemented: ");
+	vfprintf (stderr, format, ap);
+	fprintf (stderr, "\n");
+}
 
-  fprintf (stderr, "sorry, not implemented: ");
-  fprintf (stderr, s, v, v2);
-  fprintf (stderr, "\n");
+void sorry (const char *format, ...)
+{
+	va_list ap;
+	
+	va_start(ap,format);
+	vsorry(progname,format,ap);
+	va_end(ap);
 }
 
 /* Apologize for not implementing some feature, then quit.
    S, V, and V2 are a string and args for `printf'.  */
 
-void
-really_sorry (s, v, v2)
-     char *s;
-     int v, v2;
+void really_sorry (const char *format, ...)
 {
-  if (input_filename)
-    fprintf (stderr, "%s:%d: ", input_filename, lineno);
-  else
-    fprintf (stderr, "c++: ");
-
-  fprintf (stderr, "sorry, not implemented: ");
-  fprintf (stderr, s, v, v2);
-  fatal (" (fatal)\n");
+	va_list ap;
+	va_start(ap,format);
+	vsorry("c++",format,ap);
+	va_end(ap);
+	fatal (" (fatal)\n");
 }
 
 /* More 'friendly' abort that prints the line and file.
    config.h can #define abort fancy_abort if you like that sort of thing.  */
 
 void
-fancy_abort ()
+fancy_abort (void)
 {
   fatal ("Internal gcc abort.");
 }
@@ -767,31 +743,26 @@ fancy_abort ()
    it calls this function to report clobberage.  */
 
 void
-botch (s)
+botch (const char *msg)
 {
   abort ();
 }
 
 /* Same as `malloc' but report error if no memory available.  */
 
-int
-xmalloc (size)
-     unsigned size;
+void *xmalloc (unsigned int size)
 {
-  register int value = (int) malloc (size);
-  if (value == 0)
+  void *value = (void *) malloc (size);
+  if (value == NULL)
     fatal ("Virtual memory exhausted.");
   return value;
 }
 
 /* Same as `realloc' but report error if no memory available.  */
 
-int
-xrealloc (ptr, size)
-     char *ptr;
-     int size;
+void *xrealloc (void *ptr, unsigned int size)
 {
-  int result = realloc (ptr, size);
+  void *result = (void *)realloc (ptr, size);
   if (!result)
     fatal ("Virtual memory exhausted.");
   return result;
@@ -801,8 +772,7 @@ xrealloc (ptr, size)
    if X is a power of 2.  Otherwise, returns -1.  */
 
 int
-exact_log2 (x)
-     register unsigned int x;
+exact_log2 (unsigned int x)
 {
   register int log = 0;
   for (log = 0; log < HOST_BITS_PER_INT; log++)

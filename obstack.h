@@ -179,6 +179,14 @@ void * obstack_next_free (struct obstack *obstack);
 int obstack_alignment_mask (struct obstack *obstack);
 int obstack_chunk_size (struct obstack *obstack);
 
+/*
+void _obstack_newchunk ( struct _obstack_chunk *h, int length);
+void _obstack_begin ( struct obstack *h, int size, int alignment,  struct _obstack_chunk *(*chunkfun) (), void (*freefun) (void *) );
+*/
+
+void _obstack_newchunk ( void *h, int length);	/* Actually accepts struct _obstack_chunk *h */
+void _obstack_begin ( void *h, int size, int alignment,  void *(*chunkfun) (), void (*freefun) (void *) ); /* actually accepts struct obstack *h */
+
 #endif /* __STDC__ */
 
 /* Non-ANSI C cannot really support alternative functions for these macros,
@@ -211,6 +219,7 @@ int obstack_chunk_size (struct obstack *obstack);
 #define obstack_1grow_fast(h,achar) (*((h)->next_free)++ = achar)
 
 #define obstack_blank_fast(h,n) ((h)->next_free += (n))
+
 
 #if defined (__GNUC__) && defined (__STDC__)
 

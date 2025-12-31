@@ -1,4 +1,5 @@
 #include "xm-mips.h"
+#include <string.h>
 
 #define USG
 #define MIPS_DEBUGGING_INFO

@@ -20,6 +20,8 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
 This paragraph is here to try to keep Sun CC from dying.
 The number of chars here seems crucial!!!!  */
 
+#define _XOPEN_SOURCE 600
+
 void record_temp_file ();
 
 /* This program is the user interface to the C compiler and possibly to
@@ -127,6 +129,7 @@ position among the other output files.
 #include <signal.h>
 #include <sys/file.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
@@ -135,6 +138,7 @@ position among the other output files.
 #include "config.h"
 #include "obstack.h"
 #include "gvarargs.h"
+#include "prototypes.h"
 
 #ifdef USG
 #ifndef R_OK
@@ -146,10 +150,12 @@ position among the other output files.
 #define vfork fork
 #endif /* USG */
 
-#define obstack_chunk_alloc xmalloc
+#define obstack_chunk_alloc (void *(*)(unsigned int len))xmalloc
 #define obstack_chunk_free free
-extern int xmalloc ();
-extern void free ();
+#if 0
+extern void *xmalloc (unsigned int len);
+extern void free (void *);
+#endif
 
 /* If a stage of compilation returns an exit status >= 1,
    compilation of that file ceases.  */
@@ -160,9 +166,11 @@ extern void free ();
 
 struct obstack obstack;
 
+#if 0
 char *handle_braces ();
 char *save_string ();
 char *concat ();
+int xrealloc ();
 int do_spec ();
 int do_spec_1 ();
 char *find_file ();
@@ -170,6 +178,13 @@ static char *find_exec_file ();
 void validate_switches ();
 void validate_all_switches ();
 void fancy_abort ();
+int fatal ();
+int error ();
+void perror_with_name ();
+void pfatal_with_name ();
+void perror_exec ();
+void give_switch ();
+#endif
 
 /* config.h can define ASM_SPEC to provide extra args to the assembler
    or extra switch-translations.  */
@@ -578,7 +593,10 @@ choose_temp_base ()
     temp_filename[len++] = '/';
   strcpy (temp_filename + len, "ccXXXXXX");
 
-  mkstemp (temp_filename);
+  {
+    int fd = mkstemp (temp_filename);
+    if (fd >= 0) close (fd);  /* Close the file descriptor we don't need */
+  }
   temp_filename_length = strlen (temp_filename);
 }
 
@@ -741,14 +759,18 @@ pexecute (func, program, argv, not_last)
       /* Move the input and output pipes into place, if nec.  */
       if (input_desc != STDIN_FILE_NO)
 	{
+	  int new_fd;
 	  close (STDIN_FILE_NO);
-	  dup (input_desc);
+	  new_fd = dup (input_desc);
+	  if (new_fd < 0) pfatal_with_name ("dup");
 	  close (input_desc);
 	}
       if (output_desc != STDOUT_FILE_NO)
 	{
+	  int new_fd;
 	  close (STDOUT_FILE_NO);
-	  dup (output_desc);
+	  new_fd = dup (output_desc);
+	  if (new_fd < 0) pfatal_with_name ("dup");
 	  close (output_desc);
 	}
 
@@ -1712,9 +1734,7 @@ fatal_error (signum)
 }
 
 int
-main (argc, argv)
-     int argc;
-     char **argv;
+main (int argc, char **argv)
 {
   register int i;
   int value;

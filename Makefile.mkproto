@@ -1,0 +1,22 @@
+# Makefile for mkproto - C function prototype generator
+
+CC = gcc
+CFLAGS = -Wall -O2
+TARGET = mkproto
+
+all: $(TARGET)
+
+$(TARGET): mkproto.c
+	$(CC) $(CFLAGS) -o $(TARGET) mkproto.c
+
+clean:
+	rm -f $(TARGET)
+
+test: $(TARGET)
+	@echo "Testing on print-tree.c:"
+	@./$(TARGET) print-tree.c
+	@echo ""
+	@echo "Testing on toplev.c (first 10):"
+	@./$(TARGET) toplev.c | head -10
+
+.PHONY: all clean test
