@@ -122,11 +122,16 @@ position among the other output files.
 
 */
 
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 500		/* This to get mstemp */
+#endif
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <signal.h>
 #include <sys/file.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
@@ -134,7 +139,7 @@ position among the other output files.
 
 #include "config.h"
 #include "obstack.h"
-#include "gvarargs.h"
+/* #include "gvarargs.h" */
 
 #ifdef USG
 #ifndef R_OK
@@ -148,8 +153,15 @@ position among the other output files.
 
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
-extern int xmalloc ();
-extern void free ();
+void *xmalloc (unsigned int len);
+void *xrealloc (void *ptr, unsigned int len);
+void free (void *ptr);
+void fatal(const char *format, ...);
+void error(const char *format, ...);
+void perror_with_name (const char *name);
+void pfatal_with_name (const char *name);
+void perror_exec(const char *name);
+void give_switch (int switchnum);
 
 /* If a stage of compilation returns an exit status >= 1,
    compilation of that file ceases.  */
@@ -169,7 +181,7 @@ char *find_file ();
 static char *find_exec_file ();
 void validate_switches ();
 void validate_all_switches ();
-void fancy_abort ();
+void fancy_abort (void);
 
 /* config.h can define ASM_SPEC to provide extra args to the assembler
    or extra switch-translations.  */
@@ -554,7 +566,7 @@ choose_temp_base ()
 {
   extern char *getenv ();
   char *base = getenv ("TMPDIR");
-  int len;
+  int fd, len;
 
   if (base == (char *)0)
     {
@@ -578,8 +590,11 @@ choose_temp_base ()
     temp_filename[len++] = '/';
   strcpy (temp_filename + len, "ccXXXXXX");
 
-  mkstemp (temp_filename);
-  temp_filename_length = strlen (temp_filename);
+  fd = mkstemp (temp_filename);
+  if ( fd < 0 )
+	  pfatal_with_name(temp_filename);
+  close(fd);
+  temp_filename_length = strlen(temp_filename);
 }
 
 /* Search for an execute file through our search path.
@@ -704,6 +719,8 @@ int last_pipe_input;
    NOT_LAST is nonzero if this is not the last subcommand
    (i.e. its output should be piped to the next one.)  */
 
+static int wasteFd;
+
 static int
 pexecute (func, program, argv, not_last)
      char *program;
@@ -742,13 +759,13 @@ pexecute (func, program, argv, not_last)
       if (input_desc != STDIN_FILE_NO)
 	{
 	  close (STDIN_FILE_NO);
-	  dup (input_desc);
+	  wasteFd = dup (input_desc);
 	  close (input_desc);
 	}
       if (output_desc != STDOUT_FILE_NO)
 	{
 	  close (STDOUT_FILE_NO);
-	  dup (output_desc);
+	  wasteFd = dup (output_desc);
 	  close (output_desc);
 	}
 
@@ -1865,21 +1882,19 @@ main (argc, argv)
   exit (error_count);
 }
 
-int
-xmalloc (size)
-     int size;
+void *
+xmalloc (unsigned int size)
 {
-  register int value = (int)malloc (size);
+  void *value = (void *)malloc (size);
   if (value == 0)
     fatal ("virtual memory exhausted");
   return value;
 }
 
-int
-xrealloc (ptr, size)
-     int ptr, size;
+void *
+xrealloc (void *ptr, unsigned int size)
 {
-  register int value = (int)realloc ((void*)ptr, size);
+  void *value = (void *)realloc ((void*)ptr, size);
   if (value == 0)
     fatal ("virtual memory exhausted");
   return value;
@@ -1915,8 +1930,7 @@ save_string (s, len)
 }
 
 void
-pfatal_with_name (name)
-     char *name;
+pfatal_with_name (const char *name)
 {
 #if 0
   extern int errno, sys_nerr;
@@ -1937,8 +1951,7 @@ pfatal_with_name (name)
 }
 
 void
-perror_with_name (name)
-     char *name;
+perror_with_name (const char *name)
 {
 #if 0
   extern int errno, sys_nerr;
@@ -1958,8 +1971,7 @@ perror_with_name (name)
 }
 
 void
-perror_exec (name)
-     char *name;
+perror_exec (const char *name)
 {
 #if 0
   extern int errno, sys_nerr;
@@ -1984,24 +1996,24 @@ perror_exec (name)
    config.h can #define abort fancy_abort if you like that sort of thing.  */
 
 void
-fancy_abort ()
+fancy_abort (void)
 {
   fatal ("Internal gcc abort.");
 }
 
+#ifndef HAVE_VPRINTF
+#define HAVE_VPRINTF
+#endif
 #ifdef HAVE_VPRINTF
 
 /* Output an error message and exit */
 
-int 
-fatal (va_alist)
-     va_dcl
+void 
+fatal (const char *format, ...)
 {
   va_list ap;
-  char *format;
   
-  va_start(ap);
-  format = va_arg (ap, char *);
+  va_start(ap,format);
   vfprintf (stderr, format, ap);
   va_end (ap);
   fprintf (stderr, "\n");
@@ -2010,14 +2022,11 @@ fatal (va_alist)
 }
 
 void
-error (va_alist)
-     va_dcl
+error (const char *format, ...)
 {
   va_list ap;
-  char *format;
 
-  va_start(ap);
-  format = va_arg (ap, char *);
+  va_start(ap,format);
   fprintf (stderr, "%s: ", programname);
   vfprintf (stderr, format, ap);
   va_end (ap);

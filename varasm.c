@@ -37,6 +37,14 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "hard-reg-set.h"
 
 #include "obstack.h"
+#include "toplev.h"
+#include "regclass.h"
+#include "final.h"
+#include "dbxout.h"
+#include "insn-config.h"
+#include "recog.h"
+#include "varasm.h"
+
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
@@ -48,7 +56,6 @@ extern struct obstack *current_obstack;
 extern struct obstack *saveable_obstack;
 extern struct obstack permanent_obstack;
 #define obstack_chunk_alloc xmalloc
-extern int xmalloc ();
 
 /* Number for making the label on the next
    constant that is stored in memory.  */

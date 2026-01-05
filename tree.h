@@ -20,6 +20,9 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 /* codes of tree nodes */
 
+#ifndef _TREE_H_
+#define _TREE_H_ 1
+
 #define DEFTREECODE(SYM, STRING, TYPE, NARGS)   SYM,
 
 enum tree_code {
@@ -647,8 +650,10 @@ extern tree build_real_from_string ();
 extern tree build_real_from_int_cst ();
 extern tree build_complex ();
 extern tree build_string ();
+#if 0
 extern tree build ();
 extern tree build_nt ();
+#endif
 extern tree build_tree_list ();
 extern tree build_op_identifier ();
 extern tree build_decl ();
@@ -904,27 +909,90 @@ extern int current_function_calls_setjmp;
 
 extern int all_types_permanent;
 
-/* In stmt.c */
+/* In tree.c */
+#if 1
+void init_tree(void);
+void temporary_allocation(void);
+void end_temporary_allocation(void);
+void resume_temporary_allocation(void);
+int allocation_temporary_p(void);
+void permanent_allocation(void);
+void preserve_data(void);
+char *oballoc(int size);
+void obfree(char *ptr);
+char *permalloc(long size);
+char *savealloc(int size);
+void push_momentary(void);
+void clear_momentary(void);
+void pop_momentary(void);
+int suspend_momentary(void);
+void resume_momentary(int yes);
+tree make_node(enum tree_code code);
+tree copy_node(tree node);
+tree copy_list(tree list);
+tree get_identifier(register char* text);
+void start_identifier_warnings(void);
+void set_identifier_size(int size);
+tree build_int_2(int low, int hi);
+tree build_real(tree type, REAL_VALUE_TYPE d);
+REAL_VALUE_TYPE real_value_from_int_cst(tree i);
+tree build_real_from_int_cst(tree type, tree i);
+tree build_string(int len, char* str);
+tree build_complex(tree real, tree imag);
+int integer_zerop(tree expr);
+int integer_onep(tree expr);
+int integer_all_onesp(tree expr);
+int list_length(tree t);
+tree chainon(tree op1, tree op2);
+tree build_tree_list(tree parm, tree value);
+tree tree_cons(tree purpose, tree value, tree chain);
+tree perm_tree_cons(tree purpose, tree value, tree chain);
+tree temp_tree_cons(tree purpose, tree value, tree chain);
+tree saveable_tree_cons(tree purpose, tree value, tree chain);
+tree tree_last(register tree chain);
+tree nreverse(tree t);
+tree size_in_bytes(tree type);
+int int_size_in_bytes(tree type);
+tree array_type_nelts(tree type);
+int staticp(tree arg);
+int lvalue_p(tree ref);
+int lvalue_or_else(tree ref, char* string);
+tree save_expr(tree expr);
+tree stabilize_reference(tree ref);
+tree build(int code, ...);
+tree build_nt(int code, ...);
+tree build_op_identifier(tree op1, tree op2);
+tree build_decl(enum tree_code code, tree name, tree type);
+tree build_goto(char* filename, int line, tree label);
+tree build_return(char* filename, int line, tree arg);
+tree build_expr_stmt(char* filename, int line, tree expr);
+tree build_if(char* filename, int line, tree cond, tree thenclause, tree elseclause);
+tree build_exit(char* filename, int line, tree cond);
+tree build_asm_stmt(char* filename, int line, tree asmcode);
+tree build_case(char* filename, int line, tree object, tree cases);
+tree build_loop(char* filename, int line, tree body);
+tree build_compound(char* filename, int line, tree body);
+tree build_let(char* filename, int line, tree vars, tree subblocks, tree supercontext, tree tags);
+tree build_type_variant(tree type, int constp, int volatilep);
+int type_hash_list(tree list);
+tree type_hash_lookup(int hashcode, tree type);
+void type_hash_add(int hashcode, tree type);
+tree type_hash_canon(int hashcode, tree type);
+int type_list_equal(tree l1, tree l2);
+int tree_int_cst_equal(tree t1, tree t2);
+int tree_int_cst_lt(tree t1, tree t2);
+int simple_cst_equal(tree t1, tree t2);
+tree build_pointer_type(tree to_type);
+tree build_index_type(tree maxval);
+tree build_array_type(tree elt_type, tree index_type);
+tree build_function_type(tree value_type, tree arg_types);
+tree build_reference_type(tree to_type);
+tree build_method_type(tree basetype, tree type);
+tree build_offset_type(tree basetype, tree type);
+tree get_unwidened(register tree op, tree for_type);
+tree get_narrower(register tree op, int* unsignedp_ptr);
+int type_precision(register tree type);
+#endif
+int int_fits_type_p(tree c, tree type);
 
-extern tree expand_start_stmt_expr ();
-extern tree expand_end_stmt_expr ();
-extern void expand_expr_stmt (), clear_last_expr ();
-extern void expand_label (), expand_goto (), expand_asm ();
-extern void expand_start_cond (), expand_end_cond ();
-extern void expand_start_else (), expand_end_else ();
-extern void expand_start_loop (), expand_start_loop_continue_elsewhere ();
-extern void expand_loop_continue_here ();
-extern void expand_end_loop ();
-extern int expand_continue_loop ();
-extern int expand_exit_loop (), expand_exit_loop_if_false ();
-extern int expand_exit_something ();
-
-extern void expand_start_delayed_expr ();
-extern tree expand_end_delayed_expr ();
-extern void expand_emit_delayed_expr ();
-
-extern void expand_null_return (), expand_return ();
-extern void expand_start_bindings (), expand_end_bindings ();
-extern void expand_start_case (), expand_end_case ();
-extern int pushcase (), pushcase_range ();
-extern void expand_start_function (), expand_end_function ();
+#endif	/* _TREE_H_ */

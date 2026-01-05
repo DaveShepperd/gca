@@ -32,8 +32,17 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "obstack.h"
 #define	obstack_chunk_alloc	xmalloc
 #define	obstack_chunk_free	free
-extern int xmalloc ();
-extern void free ();
+
+#include "emit-rtl.h"
+#include "output.h"
+#include "stmt.h"
+#include "c-decl.h"
+#include "insn-config.h"
+#include "recog.h"
+#include "regs.h"
+#include "rtlanal.h"
+#include "toplev.h"
+#include "integrate.h"
 
 extern struct obstack permanent_obstack, maybepermanent_obstack;
 extern struct obstack *rtl_obstack, *saveable_obstack, *current_obstack;
@@ -241,9 +250,6 @@ void
 save_for_inline (fndecl)
      tree fndecl;
 {
-  extern rtx *regno_reg_rtx;	/* in emit-rtl.c.  */
-  extern current_function_args_size;
-
   rtx first_insn, last_insn, insn;
   rtx head, copy;
   tree parms;

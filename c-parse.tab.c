@@ -67,28 +67,34 @@
 
 
 /* First part of user prologue.  */
-#line 39 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 39 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
 
 #include "config.h"
 #include "tree.h"
 #include "input.h"
 #include "c-parse.h"
 #include "c-tree.h"
+#include "flags.h"
+/* #include "rtl.h" */
+#define _RTL_H_
+typedef int rtx;
+typedef int rtvec;
+#include "stmt.h"
+#include "toplev.h"
+#include "varasm.h"
+#include "c-decl.h"
+#include "emit-rtl.h"
+#include "c-typeck.h"
 #include <stdlib.h>
-
 #include <stdio.h>
 #include <errno.h>
-
-#ifndef errno
-extern int errno;
-#endif
 
 void yyerror ();
 
 /* Cause the `yydebug' variable to be defined.  */
 #define YYDEBUG 1
 
-#line 91 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 98 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -177,10 +183,10 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 61 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 68 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
 long itype; tree ttype; enum tree_code code; 
 
-#line 183 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 190 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -378,7 +384,7 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 /* Second part of user prologue.  */
-#line 154 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 161 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
 
 /* the declaration found for the last IDENTIFIER token read in.
    yylex must look this up to detect typedefs, which get token type TYPENAME,
@@ -400,7 +406,7 @@ int undeclared_variable_notice;	/* 1 if we explained undeclared var errors.  */
 
 static int yylex ();
 
-#line 403 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 410 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
 
 
 #ifdef short
@@ -786,36 +792,36 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   177,   177,   178,   186,   186,   187,   187,   191,   192,
-     193,   201,   206,   208,   210,   212,   214,   215,   216,   223,
-     227,   222,   230,   233,   237,   232,   240,   243,   247,   242,
-     250,   255,   256,   259,   261,   263,   265,   267,   269,   271,
-     275,   281,   282,   286,   288,   293,   294,   296,   298,   311,
-     313,   346,   351,   352,   355,   370,   371,   373,   375,   377,
-     379,   381,   383,   385,   387,   389,   391,   393,   395,   397,
-     399,   401,   403,   408,   456,   457,   459,   461,   464,   463,
-     483,   485,   487,   489,   491,   493,   499,   500,   504,   506,
-     510,   511,   512,   513,   521,   528,   532,   536,   538,   547,
-     549,   554,   555,   557,   566,   568,   570,   572,   582,   584,
-     589,   590,   598,   599,   600,   601,   605,   613,   614,   615,
-     619,   620,   624,   625,   630,   631,   641,   640,   645,   652,
-     651,   656,   664,   665,   670,   671,   675,   679,   687,   694,
-     695,   699,   701,   703,   710,   712,   720,   721,   727,   729,
-     734,   736,   738,   740,   749,   754,   756,   758,   760,   767,
-     772,   774,   776,   778,   780,   785,   784,   792,   795,   798,
-     797,   801,   804,   807,   806,   813,   812,   818,   822,   824,
-     827,   829,   834,   836,   842,   843,   845,   860,   865,   870,
-     876,   879,   880,   885,   887,   889,   899,   900,   906,   908,
-     913,   915,   921,   922,   926,   928,   934,   935,   940,   943,
-     945,   947,   949,   951,   953,   955,   957,   966,   967,   968,
-     971,   973,   976,   980,   989,   991,   994,   996,  1000,  1004,
-    1012,  1011,  1018,  1019,  1030,  1029,  1033,  1036,  1040,  1035,
-    1045,  1049,  1044,  1057,  1062,  1068,  1055,  1078,  1077,  1087,
-    1086,  1119,  1118,  1129,  1133,  1137,  1140,  1143,  1148,  1155,
-    1162,  1169,  1176,  1175,  1181,  1188,  1191,  1199,  1200,  1206,
-    1207,  1211,  1212,  1217,  1222,  1224,  1231,  1231,  1242,  1242,
-    1251,  1252,  1254,  1259,  1260,  1267,  1268,  1270,  1275,  1277,
-    1284,  1286,  1288,  1290,  1292,  1298,  1300
+       0,   184,   184,   185,   193,   193,   194,   194,   198,   199,
+     200,   208,   213,   215,   217,   219,   221,   222,   223,   230,
+     234,   229,   237,   240,   244,   239,   247,   250,   254,   249,
+     257,   262,   263,   266,   268,   270,   272,   274,   276,   278,
+     282,   288,   289,   293,   295,   300,   301,   303,   305,   318,
+     320,   353,   358,   359,   362,   377,   378,   380,   382,   384,
+     386,   388,   390,   392,   394,   396,   398,   400,   402,   404,
+     406,   408,   410,   415,   463,   464,   466,   468,   471,   470,
+     490,   492,   494,   496,   498,   500,   506,   507,   511,   513,
+     517,   518,   519,   520,   528,   535,   539,   543,   545,   554,
+     556,   561,   562,   564,   573,   575,   577,   579,   589,   591,
+     596,   597,   605,   606,   607,   608,   612,   620,   621,   622,
+     626,   627,   631,   632,   637,   638,   648,   647,   652,   659,
+     658,   663,   671,   672,   677,   678,   682,   686,   694,   701,
+     702,   706,   708,   710,   717,   719,   727,   728,   734,   736,
+     741,   743,   745,   747,   756,   761,   763,   765,   767,   774,
+     779,   781,   783,   785,   787,   792,   791,   799,   802,   805,
+     804,   808,   811,   814,   813,   820,   819,   825,   829,   831,
+     834,   836,   841,   843,   849,   850,   852,   867,   872,   877,
+     883,   886,   887,   892,   894,   896,   906,   907,   913,   915,
+     920,   922,   928,   929,   933,   935,   941,   942,   947,   950,
+     952,   954,   956,   958,   960,   962,   964,   973,   974,   975,
+     978,   980,   983,   987,   996,   998,  1001,  1003,  1007,  1011,
+    1019,  1018,  1025,  1026,  1037,  1036,  1040,  1043,  1047,  1042,
+    1052,  1056,  1051,  1064,  1069,  1075,  1062,  1085,  1084,  1094,
+    1093,  1126,  1125,  1136,  1140,  1144,  1147,  1150,  1155,  1162,
+    1169,  1176,  1183,  1182,  1188,  1195,  1198,  1206,  1207,  1213,
+    1214,  1218,  1219,  1224,  1229,  1231,  1238,  1238,  1249,  1249,
+    1258,  1259,  1261,  1266,  1267,  1274,  1275,  1277,  1282,  1284,
+    1291,  1293,  1295,  1297,  1299,  1305,  1307
 };
 #endif
 
@@ -1941,224 +1947,224 @@ yyreduce:
   switch (yyn)
     {
   case 4: /* @1: %empty  */
-#line 186 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 193 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
         {(yyval.ttype) = NULL_TREE; }
-#line 1946 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 1953 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 6: /* @2: %empty  */
-#line 187 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 194 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                   {(yyval.ttype) = NULL_TREE; }
-#line 1952 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 1959 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 10: /* extdef: ASM '(' string ')' ';'  */
-#line 194 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 201 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (pedantic)
 		    warning ("ANSI C forbids use of `asm' keyword");
 		  if (TREE_CHAIN ((yyvsp[-2].ttype))) (yyvsp[-2].ttype) = combine_strings ((yyvsp[-2].ttype));
 		  assemble_asm ((yyvsp[-2].ttype)); }
-#line 1961 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 1968 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 11: /* datadef: setspecs notype_initdecls ';'  */
-#line 202 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 209 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (pedantic)
 		    error ("ANSI C forbids data definition lacking type or storage class");
 		  else if (!flag_traditional)
 		    warning ("data definition lacks type or storage class"); }
-#line 1970 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 1977 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 12: /* datadef: declmods setspecs notype_initdecls ';'  */
-#line 207 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 214 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
           {}
-#line 1976 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 1983 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 13: /* datadef: typed_declspecs setspecs initdecls ';'  */
-#line 209 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 216 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
           {}
-#line 1982 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 1989 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 14: /* datadef: declmods ';'  */
-#line 211 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 218 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
           { error ("empty declaration"); }
-#line 1988 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 1995 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 15: /* datadef: typed_declspecs ';'  */
-#line 213 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 220 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
           { shadow_tag ((yyvsp[-1].ttype)); }
-#line 1994 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2001 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 18: /* datadef: ';'  */
-#line 217 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 224 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (pedantic)
 		    warning ("ANSI C does not allow extra `;' outside of a function"); }
-#line 2001 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2008 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 19: /* $@3: %empty  */
-#line 223 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 230 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (! start_function ((yyvsp[-2].ttype), (yyvsp[0].ttype)))
 		    YYERROR;
 		  reinit_parse_for_function (); }
-#line 2009 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2016 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 20: /* $@4: %empty  */
-#line 227 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 234 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { store_parm_decls (); }
-#line 2015 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2022 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 21: /* fndef: typed_declspecs setspecs declarator $@3 xdecls $@4 compstmt_or_error  */
-#line 229 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 236 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { finish_function (lineno); }
-#line 2021 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2028 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 22: /* fndef: typed_declspecs setspecs declarator error  */
-#line 231 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 238 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { }
-#line 2027 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2034 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 23: /* $@5: %empty  */
-#line 233 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 240 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (! start_function ((yyvsp[-2].ttype), (yyvsp[0].ttype)))
 		    YYERROR;
 		  reinit_parse_for_function (); }
-#line 2035 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2042 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 24: /* $@6: %empty  */
-#line 237 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 244 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { store_parm_decls (); }
-#line 2041 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2048 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 25: /* fndef: declmods setspecs notype_declarator $@5 xdecls $@6 compstmt_or_error  */
-#line 239 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 246 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { finish_function (lineno); }
-#line 2047 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2054 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 26: /* fndef: declmods setspecs notype_declarator error  */
-#line 241 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 248 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { }
-#line 2053 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2060 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 27: /* $@7: %empty  */
-#line 243 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 250 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (! start_function (0, (yyvsp[0].ttype)))
 		    YYERROR;
 		  reinit_parse_for_function (); }
-#line 2061 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2068 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 28: /* $@8: %empty  */
-#line 247 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 254 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { store_parm_decls (); }
-#line 2067 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2074 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 29: /* fndef: setspecs notype_declarator $@7 xdecls $@8 compstmt_or_error  */
-#line 249 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 256 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { finish_function (lineno); }
-#line 2073 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2080 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 30: /* fndef: setspecs notype_declarator error  */
-#line 251 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 258 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { }
-#line 2079 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2086 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 33: /* unop: '&'  */
-#line 260 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 267 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.code) = ADDR_EXPR; }
-#line 2085 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2092 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 34: /* unop: '-'  */
-#line 262 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 269 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.code) = NEGATE_EXPR; }
-#line 2091 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2098 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 35: /* unop: '+'  */
-#line 264 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 271 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.code) = CONVERT_EXPR; }
-#line 2097 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2104 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 36: /* unop: PLUSPLUS  */
-#line 266 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 273 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.code) = PREINCREMENT_EXPR; }
-#line 2103 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2110 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 37: /* unop: MINUSMINUS  */
-#line 268 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 275 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.code) = PREDECREMENT_EXPR; }
-#line 2109 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2116 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 38: /* unop: '~'  */
-#line 270 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 277 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.code) = BIT_NOT_EXPR; }
-#line 2115 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2122 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 39: /* unop: '!'  */
-#line 272 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 279 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.code) = TRUTH_NOT_EXPR; }
-#line 2121 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2128 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 40: /* expr: nonnull_exprlist  */
-#line 276 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 283 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_compound_expr ((yyvsp[0].ttype)); }
-#line 2127 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2134 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 41: /* exprlist: %empty  */
-#line 281 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 288 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 2133 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2140 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 43: /* nonnull_exprlist: expr_no_commas  */
-#line 287 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 294 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list (NULL_TREE, (yyvsp[0].ttype)); }
-#line 2139 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2146 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 44: /* nonnull_exprlist: nonnull_exprlist ',' expr_no_commas  */
-#line 289 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 296 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { chainon ((yyvsp[-2].ttype), build_tree_list (NULL_TREE, (yyvsp[0].ttype))); }
-#line 2145 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2152 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 46: /* unary_expr: '*' cast_expr  */
-#line 295 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 302 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_indirect_ref ((yyvsp[0].ttype), "unary *"); }
-#line 2151 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2158 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 47: /* unary_expr: unop cast_expr  */
-#line 297 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 304 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_unary_op ((yyvsp[-1].code), (yyvsp[0].ttype), 0); }
-#line 2157 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2164 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 48: /* unary_expr: SIZEOF unary_expr  */
-#line 299 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 306 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (TREE_CODE ((yyvsp[0].ttype)) == COMPONENT_REF
 		      && TREE_PACKED (TREE_OPERAND ((yyvsp[0].ttype), 1)))
 		    error ("`sizeof' applied to a bit-field");
@@ -2171,17 +2177,17 @@ yyreduce:
 			  || TREE_CODE (TREE_TYPE ((yyvsp[0].ttype))) == FUNCTION_TYPE))
 		    (yyvsp[0].ttype) = default_conversion ((yyvsp[0].ttype));
 		  (yyval.ttype) = c_sizeof (TREE_TYPE ((yyvsp[0].ttype))); }
-#line 2174 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2181 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 49: /* unary_expr: SIZEOF '(' typename ')'  */
-#line 312 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 319 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = c_sizeof (groktypename ((yyvsp[-1].ttype))); }
-#line 2180 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2187 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 50: /* unary_expr: ALIGNOF unary_expr  */
-#line 314 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 321 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (TREE_CODE ((yyvsp[0].ttype)) == COMPONENT_REF
 		      && TREE_PACKED (TREE_OPERAND ((yyvsp[0].ttype), 1)))
 		    error ("`__alignof' applied to a bit-field");
@@ -2214,24 +2220,24 @@ yyreduce:
 		      (yyval.ttype) = c_alignof (TREE_TYPE ((yyvsp[0].ttype)));
 		    }
 		}
-#line 2217 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2224 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 51: /* unary_expr: ALIGNOF '(' typename ')'  */
-#line 347 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 354 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = c_alignof (groktypename ((yyvsp[-1].ttype))); }
-#line 2223 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2230 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 53: /* cast_expr: '(' typename ')' cast_expr  */
-#line 353 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 360 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { tree type = groktypename ((yyvsp[-2].ttype));
 		  (yyval.ttype) = build_c_cast (type, (yyvsp[0].ttype)); }
-#line 2230 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2237 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 54: /* cast_expr: '(' typename ')' '{' initlist maybecomma '}'  */
-#line 356 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 363 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { tree type = groktypename ((yyvsp[-5].ttype));
 		  if (pedantic)
 		    warning ("ANSI C forbids constructor expressions");
@@ -2243,113 +2249,113 @@ yyreduce:
 			abort ();
 		    }
 		}
-#line 2246 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2253 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 56: /* expr_no_commas: expr_no_commas '+' expr_no_commas  */
-#line 372 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 379 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2252 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2259 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 57: /* expr_no_commas: expr_no_commas '-' expr_no_commas  */
-#line 374 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 381 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2258 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2265 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 58: /* expr_no_commas: expr_no_commas '*' expr_no_commas  */
-#line 376 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 383 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2264 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2271 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 59: /* expr_no_commas: expr_no_commas '/' expr_no_commas  */
-#line 378 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 385 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2270 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2277 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 60: /* expr_no_commas: expr_no_commas '%' expr_no_commas  */
-#line 380 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 387 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2276 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2283 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 61: /* expr_no_commas: expr_no_commas LSHIFT expr_no_commas  */
-#line 382 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 389 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2282 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2289 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 62: /* expr_no_commas: expr_no_commas RSHIFT expr_no_commas  */
-#line 384 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 391 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2288 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2295 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 63: /* expr_no_commas: expr_no_commas ARITHCOMPARE expr_no_commas  */
-#line 386 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 393 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2294 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2301 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 64: /* expr_no_commas: expr_no_commas EQCOMPARE expr_no_commas  */
-#line 388 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 395 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2300 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2307 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 65: /* expr_no_commas: expr_no_commas '&' expr_no_commas  */
-#line 390 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 397 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2306 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2313 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 66: /* expr_no_commas: expr_no_commas '|' expr_no_commas  */
-#line 392 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 399 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2312 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2319 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 67: /* expr_no_commas: expr_no_commas '^' expr_no_commas  */
-#line 394 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 401 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op ((yyvsp[-1].code), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2318 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2325 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 68: /* expr_no_commas: expr_no_commas ANDAND expr_no_commas  */
-#line 396 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 403 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op (TRUTH_ANDIF_EXPR, (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2324 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2331 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 69: /* expr_no_commas: expr_no_commas OROR expr_no_commas  */
-#line 398 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 405 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_binary_op (TRUTH_ORIF_EXPR, (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2330 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2337 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 70: /* expr_no_commas: expr_no_commas '?' xexpr ':' expr_no_commas  */
-#line 400 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 407 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_conditional_expr ((yyvsp[-4].ttype), (yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2336 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2343 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 71: /* expr_no_commas: expr_no_commas '=' expr_no_commas  */
-#line 402 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 409 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_modify_expr ((yyvsp[-2].ttype), NOP_EXPR, (yyvsp[0].ttype)); }
-#line 2342 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2349 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 72: /* expr_no_commas: expr_no_commas ASSIGN expr_no_commas  */
-#line 404 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 411 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_modify_expr ((yyvsp[-2].ttype), (yyvsp[-1].code), (yyvsp[0].ttype)); }
-#line 2348 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2355 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 73: /* primary: IDENTIFIER  */
-#line 409 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 416 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = lastiddecl;
 		  if (!(yyval.ttype) || (yyval.ttype) == error_mark_node)
 		    {
@@ -2397,29 +2403,29 @@ yyreduce:
 		  if (TREE_CODE ((yyval.ttype)) == CONST_DECL)
 		    (yyval.ttype) = DECL_INITIAL ((yyval.ttype));
 		}
-#line 2400 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2407 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 75: /* primary: string  */
-#line 458 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 465 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = combine_strings ((yyvsp[0].ttype)); }
-#line 2406 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2413 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 76: /* primary: '(' expr ')'  */
-#line 460 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 467 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[-1].ttype); }
-#line 2412 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2419 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 77: /* primary: '(' error ')'  */
-#line 462 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 469 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = error_mark_node; }
-#line 2418 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2425 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 78: /* @9: %empty  */
-#line 464 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 471 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (current_function_decl == 0)
 		    {
 		      error ("braced-group within expression allowed only inside a function");
@@ -2427,11 +2433,11 @@ yyreduce:
 		    }
 		  keep_next_level ();
 		  (yyval.ttype) = expand_start_stmt_expr (); }
-#line 2430 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2437 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 79: /* primary: '(' @9 compstmt ')'  */
-#line 472 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 479 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { tree rtl_exp;
 		  if (pedantic)
 		    warning ("ANSI C forbids braced-groups within expressions");
@@ -2443,258 +2449,258 @@ yyreduce:
 		  TREE_VOLATILE ((yyval.ttype)) = 1;
 		  TREE_TYPE ((yyval.ttype)) = TREE_TYPE (rtl_exp);
 		  STMT_BODY ((yyval.ttype)) = rtl_exp; }
-#line 2446 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2453 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 80: /* primary: primary '(' exprlist ')'  */
-#line 484 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 491 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_function_call ((yyvsp[-3].ttype), (yyvsp[-1].ttype)); }
-#line 2452 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2459 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 81: /* primary: primary '[' expr ']'  */
-#line 486 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 493 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_array_ref ((yyvsp[-3].ttype), (yyvsp[-1].ttype)); }
-#line 2458 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2465 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 82: /* primary: primary '.' identifier  */
-#line 488 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 495 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_component_ref ((yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2464 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2471 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 83: /* primary: primary POINTSAT identifier  */
-#line 490 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 497 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_component_ref (build_indirect_ref ((yyvsp[-2].ttype), "->"), (yyvsp[0].ttype)); }
-#line 2470 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2477 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 84: /* primary: primary PLUSPLUS  */
-#line 492 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 499 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_unary_op (POSTINCREMENT_EXPR, (yyvsp[-1].ttype), 0); }
-#line 2476 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2483 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 85: /* primary: primary MINUSMINUS  */
-#line 494 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 501 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_unary_op (POSTDECREMENT_EXPR, (yyvsp[-1].ttype), 0); }
-#line 2482 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2489 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 87: /* string: string STRING  */
-#line 501 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 508 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 2488 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2495 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 94: /* setspecs: %empty  */
-#line 521 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 528 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.itype) = suspend_momentary ();
 		  declspec_stack = tree_cons (0, current_declspecs,
 					      declspec_stack);
 		  current_declspecs = (yyvsp[0].ttype); }
-#line 2497 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2504 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 95: /* decl: typed_declspecs setspecs initdecls ';'  */
-#line 529 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 536 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { current_declspecs = TREE_VALUE (declspec_stack);
 		  declspec_stack = TREE_CHAIN (declspec_stack);
 		  resume_momentary ((yyvsp[-2].itype)); }
-#line 2505 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2512 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 96: /* decl: declmods setspecs notype_initdecls ';'  */
-#line 533 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 540 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { current_declspecs = TREE_VALUE (declspec_stack);
 		  declspec_stack = TREE_CHAIN (declspec_stack);
 		  resume_momentary ((yyvsp[-2].itype)); }
-#line 2513 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2520 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 97: /* decl: typed_declspecs ';'  */
-#line 537 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 544 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { shadow_tag ((yyvsp[-1].ttype)); }
-#line 2519 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2526 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 98: /* decl: declmods ';'  */
-#line 539 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 546 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { warning ("empty declaration"); }
-#line 2525 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2532 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 99: /* typed_declspecs: typespec reserved_declspecs  */
-#line 548 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 555 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 2531 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2538 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 100: /* typed_declspecs: declmods typespec reserved_declspecs  */
-#line 550 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 557 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[0].ttype), tree_cons (NULL_TREE, (yyvsp[-1].ttype), (yyvsp[-2].ttype))); }
-#line 2537 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2544 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 101: /* reserved_declspecs: %empty  */
-#line 554 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 561 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 2543 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2550 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 102: /* reserved_declspecs: reserved_declspecs typespecqual_reserved  */
-#line 556 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 563 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), (yyvsp[-1].ttype)); }
-#line 2549 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2556 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 103: /* reserved_declspecs: reserved_declspecs SCSPEC  */
-#line 558 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 565 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), (yyvsp[-1].ttype)); }
-#line 2555 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2562 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 104: /* declmods: TYPE_QUAL  */
-#line 567 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 574 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), NULL_TREE); }
-#line 2561 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2568 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 105: /* declmods: SCSPEC  */
-#line 569 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 576 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), NULL_TREE); }
-#line 2567 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2574 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 106: /* declmods: declmods TYPE_QUAL  */
-#line 571 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 578 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), (yyvsp[-1].ttype)); }
-#line 2573 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2580 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 107: /* declmods: declmods SCSPEC  */
-#line 573 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 580 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), (yyvsp[-1].ttype)); }
-#line 2579 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2586 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 108: /* typed_typespecs: typespec reserved_typespecquals  */
-#line 583 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 590 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 2585 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2592 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 109: /* typed_typespecs: nonempty_type_quals typespec reserved_typespecquals  */
-#line 585 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 592 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[0].ttype), tree_cons (NULL_TREE, (yyvsp[-1].ttype), (yyvsp[-2].ttype))); }
-#line 2591 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2598 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 110: /* reserved_typespecquals: %empty  */
-#line 589 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 596 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 2597 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2604 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 111: /* reserved_typespecquals: reserved_typespecquals typespecqual_reserved  */
-#line 591 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 598 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), (yyvsp[-1].ttype)); }
-#line 2603 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2610 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 115: /* typespec: TYPEOF '(' expr ')'  */
-#line 602 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 609 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = TREE_TYPE ((yyvsp[-1].ttype));
 		  if (pedantic)
 		    warning ("ANSI C forbids `typeof'"); }
-#line 2611 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2618 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 116: /* typespec: TYPEOF '(' typename ')'  */
-#line 606 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 613 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = groktypename ((yyvsp[-1].ttype));
 		  if (pedantic)
 		    warning ("ANSI C forbids `typeof'"); }
-#line 2619 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2626 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 124: /* maybeasm: %empty  */
-#line 630 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 637 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 2625 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2632 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 125: /* maybeasm: ASM '(' string ')'  */
-#line 632 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 639 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (TREE_CHAIN ((yyvsp[-1].ttype))) (yyvsp[-1].ttype) = combine_strings ((yyvsp[-1].ttype));
 		  (yyval.ttype) = (yyvsp[-1].ttype);
 		  if (pedantic)
 		    warning ("ANSI C forbids use of `asm' keyword");
 		}
-#line 2635 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2642 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 126: /* @10: %empty  */
-#line 641 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 648 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = start_decl ((yyvsp[-3].ttype), current_declspecs, 1); }
-#line 2641 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2648 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 127: /* initdcl: declarator maybeasm maybe_attribute '=' @10 init  */
-#line 644 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 651 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { finish_decl ((yyvsp[-1].ttype), (yyvsp[0].ttype), (yyvsp[-4].ttype)); }
-#line 2647 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2654 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 128: /* initdcl: declarator maybeasm maybe_attribute  */
-#line 646 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 653 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { tree d = start_decl ((yyvsp[-2].ttype), current_declspecs, 0);
 		  finish_decl (d, NULL_TREE, (yyvsp[-1].ttype)); }
-#line 2654 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2661 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 129: /* @11: %empty  */
-#line 652 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 659 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = start_decl ((yyvsp[-3].ttype), current_declspecs, 1); }
-#line 2660 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2667 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 130: /* notype_initdcl: notype_declarator maybeasm maybe_attribute '=' @11 init  */
-#line 655 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 662 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { finish_decl ((yyvsp[-1].ttype), (yyvsp[0].ttype), (yyvsp[-4].ttype)); }
-#line 2666 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2673 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 131: /* notype_initdcl: notype_declarator maybeasm maybe_attribute  */
-#line 657 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 664 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { tree d = start_decl ((yyvsp[-2].ttype), current_declspecs, 0);
 		  finish_decl (d, NULL_TREE, (yyvsp[-1].ttype)); }
-#line 2673 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2680 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 132: /* maybe_attribute: %empty  */
-#line 664 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 671 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
         { (yyval.ttype) = NULL_TREE; }
-#line 2679 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2686 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 133: /* maybe_attribute: ATTRIBUTE '(' '(' attribute_list ')' ')'  */
-#line 666 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 673 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
         { (yyval.ttype) = (yyvsp[-2].ttype); }
-#line 2685 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2692 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 136: /* attrib: IDENTIFIER  */
-#line 676 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 683 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
         { warning ("`%s' attribute directive ignored",
 		   IDENTIFIER_POINTER ((yyvsp[0].ttype)));
 	  (yyval.ttype) = (yyvsp[0].ttype); }
-#line 2693 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2700 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 137: /* attrib: IDENTIFIER '(' CONSTANT ')'  */
-#line 680 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 687 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
         { /* if not "aligned(1)", then issue warning */
 	  if (strcmp (IDENTIFIER_POINTER ((yyvsp[-3].ttype)), "aligned") != 0
 	      || TREE_CODE ((yyvsp[-1].ttype)) != INTEGER_CST
@@ -2702,495 +2708,495 @@ yyreduce:
 	    warning ("`%s' attribute directive ignored",
 		     IDENTIFIER_POINTER ((yyvsp[-3].ttype)));
 	  (yyval.ttype) = (yyvsp[-3].ttype); }
-#line 2705 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2712 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 138: /* attrib: IDENTIFIER '(' identifiers ')'  */
-#line 688 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 695 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
         { warning ("`%s' attribute directive ignored",
 		   IDENTIFIER_POINTER ((yyvsp[-3].ttype)));
 	  (yyval.ttype) = (yyvsp[-3].ttype); }
-#line 2713 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2720 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 140: /* init: '{' '}'  */
-#line 696 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 703 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (CONSTRUCTOR, NULL_TREE, NULL_TREE);
 		  if (pedantic)
 		    warning ("ANSI C forbids empty initializer braces"); }
-#line 2721 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2728 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 141: /* init: '{' initlist '}'  */
-#line 700 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 707 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (CONSTRUCTOR, NULL_TREE, nreverse ((yyvsp[-1].ttype))); }
-#line 2727 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2734 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 142: /* init: '{' initlist ',' '}'  */
-#line 702 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 709 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (CONSTRUCTOR, NULL_TREE, nreverse ((yyvsp[-2].ttype))); }
-#line 2733 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2740 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 143: /* init: error  */
-#line 704 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 711 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 2739 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2746 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 144: /* initlist: init  */
-#line 711 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 718 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list (NULL_TREE, (yyvsp[0].ttype)); }
-#line 2745 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2752 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 145: /* initlist: initlist ',' init  */
-#line 713 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 720 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), (yyvsp[-2].ttype)); }
-#line 2751 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2758 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 148: /* after_type_declarator: '(' after_type_declarator ')'  */
-#line 728 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 735 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[-1].ttype); }
-#line 2757 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2764 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 149: /* after_type_declarator: after_type_declarator '(' parmlist_or_identifiers  */
-#line 730 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 737 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (CALL_EXPR, (yyvsp[-2].ttype), (yyvsp[0].ttype), NULL_TREE); }
-#line 2763 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2770 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 150: /* after_type_declarator: after_type_declarator '[' expr ']'  */
-#line 735 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 742 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, (yyvsp[-3].ttype), (yyvsp[-1].ttype)); }
-#line 2769 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2776 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 151: /* after_type_declarator: after_type_declarator '[' ']'  */
-#line 737 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 744 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, (yyvsp[-2].ttype), NULL_TREE); }
-#line 2775 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2782 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 152: /* after_type_declarator: '*' type_quals after_type_declarator  */
-#line 739 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 746 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = make_pointer_declarator ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 2781 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2788 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 154: /* parm_declarator: parm_declarator '(' parmlist_or_identifiers  */
-#line 750 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 757 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (CALL_EXPR, (yyvsp[-2].ttype), (yyvsp[0].ttype), NULL_TREE); }
-#line 2787 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2794 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 155: /* parm_declarator: parm_declarator '[' expr ']'  */
-#line 755 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 762 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, (yyvsp[-3].ttype), (yyvsp[-1].ttype)); }
-#line 2793 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2800 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 156: /* parm_declarator: parm_declarator '[' ']'  */
-#line 757 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 764 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, (yyvsp[-2].ttype), NULL_TREE); }
-#line 2799 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2806 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 157: /* parm_declarator: '*' type_quals parm_declarator  */
-#line 759 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 766 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = make_pointer_declarator ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 2805 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2812 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 159: /* notype_declarator: notype_declarator '(' parmlist_or_identifiers  */
-#line 768 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 775 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (CALL_EXPR, (yyvsp[-2].ttype), (yyvsp[0].ttype), NULL_TREE); }
-#line 2811 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2818 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 160: /* notype_declarator: '(' notype_declarator ')'  */
-#line 773 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 780 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[-1].ttype); }
-#line 2817 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2824 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 161: /* notype_declarator: '*' type_quals notype_declarator  */
-#line 775 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 782 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = make_pointer_declarator ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 2823 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2830 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 162: /* notype_declarator: notype_declarator '[' expr ']'  */
-#line 777 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 784 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, (yyvsp[-3].ttype), (yyvsp[-1].ttype)); }
-#line 2829 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2836 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 163: /* notype_declarator: notype_declarator '[' ']'  */
-#line 779 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 786 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, (yyvsp[-2].ttype), NULL_TREE); }
-#line 2835 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2842 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 165: /* @12: %empty  */
-#line 785 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 792 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = start_struct (RECORD_TYPE, (yyvsp[-1].ttype));
 		  /* Start scope of tag before parsing components.  */
 		}
-#line 2843 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2850 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 166: /* structsp: STRUCT identifier '{' @12 component_decl_list '}'  */
-#line 789 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 796 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = finish_struct ((yyvsp[-2].ttype), (yyvsp[-1].ttype));
 		  /* Really define the structure.  */
 		}
-#line 2851 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2858 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 167: /* structsp: STRUCT '{' component_decl_list '}'  */
-#line 793 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 800 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = finish_struct (start_struct (RECORD_TYPE, NULL_TREE),
 				      (yyvsp[-1].ttype)); }
-#line 2858 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2865 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 168: /* structsp: STRUCT identifier  */
-#line 796 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 803 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = xref_tag (RECORD_TYPE, (yyvsp[0].ttype)); }
-#line 2864 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2871 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 169: /* @13: %empty  */
-#line 798 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 805 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = start_struct (UNION_TYPE, (yyvsp[-1].ttype)); }
-#line 2870 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2877 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 170: /* structsp: UNION identifier '{' @13 component_decl_list '}'  */
-#line 800 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 807 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = finish_struct ((yyvsp[-2].ttype), (yyvsp[-1].ttype)); }
-#line 2876 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2883 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 171: /* structsp: UNION '{' component_decl_list '}'  */
-#line 802 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 809 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = finish_struct (start_struct (UNION_TYPE, NULL_TREE),
 				      (yyvsp[-1].ttype)); }
-#line 2883 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2890 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 172: /* structsp: UNION identifier  */
-#line 805 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 812 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = xref_tag (UNION_TYPE, (yyvsp[0].ttype)); }
-#line 2889 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2896 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 173: /* @14: %empty  */
-#line 807 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 814 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyvsp[0].itype) = suspend_momentary ();
 		  (yyval.ttype) = start_enum ((yyvsp[-1].ttype)); }
-#line 2896 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2903 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 174: /* structsp: ENUM identifier '{' @14 enumlist maybecomma_warn '}'  */
-#line 810 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 817 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = finish_enum ((yyvsp[-3].ttype), nreverse ((yyvsp[-2].ttype)));
 		  resume_momentary ((yyvsp[-4].itype)); }
-#line 2903 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2910 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 175: /* @15: %empty  */
-#line 813 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 820 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyvsp[0].itype) = suspend_momentary ();
 		  (yyval.ttype) = start_enum (NULL_TREE); }
-#line 2910 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2917 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 176: /* structsp: ENUM '{' @15 enumlist maybecomma_warn '}'  */
-#line 816 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 823 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = finish_enum ((yyvsp[-3].ttype), nreverse ((yyvsp[-2].ttype)));
 		  resume_momentary ((yyvsp[-4].itype)); }
-#line 2917 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2924 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 177: /* structsp: ENUM identifier  */
-#line 819 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 826 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = xref_tag (ENUMERAL_TYPE, (yyvsp[0].ttype)); }
-#line 2923 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2930 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 181: /* maybecomma_warn: ','  */
-#line 830 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 837 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (pedantic) warning ("comma at end of enumerator list"); }
-#line 2929 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2936 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 182: /* component_decl_list: component_decl_list2  */
-#line 835 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 842 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[0].ttype); }
-#line 2935 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2942 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 183: /* component_decl_list: component_decl_list2 component_decl  */
-#line 837 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 844 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[-1].ttype), (yyvsp[0].ttype));
 		  warning ("no semicolon at end of struct or union"); }
-#line 2942 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2949 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 184: /* component_decl_list2: %empty  */
-#line 842 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 849 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 2948 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2955 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 185: /* component_decl_list2: component_decl_list2 component_decl ';'  */
-#line 844 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 851 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[-2].ttype), (yyvsp[-1].ttype)); }
-#line 2954 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2961 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 186: /* component_decl_list2: component_decl_list2 ';'  */
-#line 846 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 853 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (pedantic)
 		    warning ("extra semicolon in struct or union specified"); }
-#line 2961 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2968 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 187: /* component_decl: typed_typespecs setspecs components  */
-#line 861 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 868 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[0].ttype);
 		  current_declspecs = TREE_VALUE (declspec_stack);
 		  declspec_stack = TREE_CHAIN (declspec_stack);
 		  resume_momentary ((yyvsp[-1].itype)); }
-#line 2970 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2977 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 188: /* component_decl: nonempty_type_quals setspecs components  */
-#line 866 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 873 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[0].ttype);
 		  current_declspecs = TREE_VALUE (declspec_stack);
 		  declspec_stack = TREE_CHAIN (declspec_stack);
 		  resume_momentary ((yyvsp[-1].itype)); }
-#line 2979 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2986 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 189: /* component_decl: error  */
-#line 871 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 878 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 2985 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 2992 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 190: /* components: %empty  */
-#line 876 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 883 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (pedantic)
 		    warning ("ANSI C forbids member declarations with no members");
 		  (yyval.ttype) = NULL_TREE; }
-#line 2993 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3000 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 192: /* components: components ',' component_declarator  */
-#line 881 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 888 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 2999 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3006 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 193: /* component_declarator: declarator maybe_attribute  */
-#line 886 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 893 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = grokfield (input_filename, lineno, (yyvsp[-1].ttype), current_declspecs, NULL_TREE); }
-#line 3005 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3012 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 194: /* component_declarator: declarator ':' expr_no_commas maybe_attribute  */
-#line 888 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 895 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = grokfield (input_filename, lineno, (yyvsp[-3].ttype), current_declspecs, (yyvsp[-1].ttype)); }
-#line 3011 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3018 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 195: /* component_declarator: ':' expr_no_commas  */
-#line 890 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 897 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = grokfield (input_filename, lineno, NULL_TREE, current_declspecs, (yyvsp[0].ttype)); }
-#line 3017 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3024 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 197: /* enumlist: enumlist ',' enumerator  */
-#line 901 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 908 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[0].ttype), (yyvsp[-2].ttype)); }
-#line 3023 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3030 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 198: /* enumerator: identifier  */
-#line 907 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 914 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_enumerator ((yyvsp[0].ttype), NULL_TREE); }
-#line 3029 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3036 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 199: /* enumerator: identifier '=' expr_no_commas  */
-#line 909 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 916 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_enumerator ((yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 3035 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3042 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 200: /* typename: typed_typespecs absdcl  */
-#line 914 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 921 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 3041 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3048 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 201: /* typename: nonempty_type_quals absdcl  */
-#line 916 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 923 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 3047 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3054 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 202: /* absdcl: %empty  */
-#line 921 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 928 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 3053 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3060 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 204: /* nonempty_type_quals: TYPE_QUAL  */
-#line 927 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 934 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), NULL_TREE); }
-#line 3059 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3066 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 205: /* nonempty_type_quals: nonempty_type_quals TYPE_QUAL  */
-#line 929 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 936 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), (yyvsp[-1].ttype)); }
-#line 3065 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3072 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 206: /* type_quals: %empty  */
-#line 934 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 941 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 3071 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3078 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 207: /* type_quals: type_quals TYPE_QUAL  */
-#line 936 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 943 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, (yyvsp[0].ttype), (yyvsp[-1].ttype)); }
-#line 3077 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3084 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 208: /* absdcl1: '(' absdcl1 ')'  */
-#line 941 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 948 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[-1].ttype); }
-#line 3083 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3090 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 209: /* absdcl1: '*' type_quals absdcl1  */
-#line 944 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 951 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = make_pointer_declarator ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 3089 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3096 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 210: /* absdcl1: '*' type_quals  */
-#line 946 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 953 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = make_pointer_declarator ((yyvsp[0].ttype), NULL_TREE); }
-#line 3095 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3102 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 211: /* absdcl1: absdcl1 '(' parmlist  */
-#line 948 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 955 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (CALL_EXPR, (yyvsp[-2].ttype), (yyvsp[0].ttype), NULL_TREE); }
-#line 3101 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3108 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 212: /* absdcl1: absdcl1 '[' expr ']'  */
-#line 950 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 957 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, (yyvsp[-3].ttype), (yyvsp[-1].ttype)); }
-#line 3107 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3114 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 213: /* absdcl1: absdcl1 '[' ']'  */
-#line 952 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 959 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, (yyvsp[-2].ttype), NULL_TREE); }
-#line 3113 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3120 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 214: /* absdcl1: '(' parmlist  */
-#line 954 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 961 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (CALL_EXPR, NULL_TREE, (yyvsp[0].ttype), NULL_TREE); }
-#line 3119 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3126 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 215: /* absdcl1: '[' expr ']'  */
-#line 956 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 963 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, NULL_TREE, (yyvsp[-1].ttype)); }
-#line 3125 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3132 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 216: /* absdcl1: '[' ']'  */
-#line 958 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 965 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_nt (ARRAY_REF, NULL_TREE, NULL_TREE); }
-#line 3131 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3138 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 223: /* pushlevel: %empty  */
-#line 980 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 987 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { pushlevel (0);
 		  clear_last_expr ();
 		  push_momentary ();
 		  expand_start_bindings (0); }
-#line 3140 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3147 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 224: /* compstmt_or_error: compstmt  */
-#line 990 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 997 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 {}
-#line 3146 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3153 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 226: /* compstmt: '{' '}'  */
-#line 995 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1002 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = 0; }
-#line 3152 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3159 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 227: /* compstmt: '{' pushlevel decls xstmts '}'  */
-#line 997 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1004 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_end_bindings (getdecls (), 1, 0);
 		  (yyval.ttype) = poplevel (1, 1, 0);
 		  pop_momentary (); }
-#line 3160 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3167 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 228: /* compstmt: '{' pushlevel error '}'  */
-#line 1001 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1008 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_end_bindings (getdecls (), kept_level_p (), 0);
 		  (yyval.ttype) = poplevel (kept_level_p (), 0, 0);
 		  pop_momentary (); }
-#line 3168 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3175 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 229: /* compstmt: '{' pushlevel stmts '}'  */
-#line 1005 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1012 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_end_bindings (getdecls (), kept_level_p (), 0);
 		  (yyval.ttype) = poplevel (kept_level_p (), 0, 0);
 		  pop_momentary (); }
-#line 3176 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3183 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 230: /* $@16: %empty  */
-#line 1012 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1019 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  expand_start_cond (truthvalue_conversion ((yyvsp[-1].ttype)), 0); }
-#line 3183 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3190 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 232: /* stmt: compstmt  */
-#line 1018 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1025 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                         {}
-#line 3189 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3196 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 233: /* stmt: expr ';'  */
-#line 1020 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1027 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  /* Do default conversion if safe and possibly important,
 		     in case within ({...}).  */
@@ -3200,125 +3206,125 @@ yyreduce:
 		    (yyvsp[-1].ttype) = default_conversion ((yyvsp[-1].ttype));
 		  expand_expr_stmt ((yyvsp[-1].ttype));
 		  clear_momentary (); }
-#line 3203 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3210 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 234: /* $@17: %empty  */
-#line 1030 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1037 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_start_else (); }
-#line 3209 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3216 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 235: /* stmt: simple_if ELSE $@17 stmt  */
-#line 1032 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1039 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_end_else (); }
-#line 3215 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3222 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 236: /* stmt: simple_if  */
-#line 1034 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1041 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_end_cond (); }
-#line 3221 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3228 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 237: /* $@18: %empty  */
-#line 1036 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1043 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_nop ();
 		  emit_line_note (input_filename, lineno);
 		  expand_start_loop (1); }
-#line 3229 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3236 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 238: /* $@19: %empty  */
-#line 1040 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1047 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  expand_exit_loop_if_false (truthvalue_conversion ((yyvsp[-1].ttype))); }
-#line 3236 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3243 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 239: /* stmt: WHILE $@18 '(' expr ')' $@19 stmt  */
-#line 1043 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1050 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_end_loop (); }
-#line 3242 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3249 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 240: /* $@20: %empty  */
-#line 1045 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1052 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_nop ();
 		  emit_line_note (input_filename, lineno);
 		  expand_start_loop_continue_elsewhere (1); }
-#line 3250 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3257 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 241: /* $@21: %empty  */
-#line 1049 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1056 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_loop_continue_here (); }
-#line 3256 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3263 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 242: /* stmt: DO $@20 stmt WHILE $@21 '(' expr ')' ';'  */
-#line 1051 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1058 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  expand_exit_loop_if_false (truthvalue_conversion ((yyvsp[-2].ttype)));
 		  expand_end_loop ();
 		  clear_momentary (); }
-#line 3265 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3272 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 243: /* $@22: %empty  */
-#line 1057 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1064 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_nop ();
 		  emit_line_note (input_filename, lineno);
 		  if ((yyvsp[-1].ttype)) expand_expr_stmt ((yyvsp[-1].ttype));
 		  expand_start_loop_continue_elsewhere (1); }
-#line 3274 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3281 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 244: /* $@23: %empty  */
-#line 1062 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1069 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  if ((yyvsp[-1].ttype))
 		    expand_exit_loop_if_false (truthvalue_conversion ((yyvsp[-1].ttype))); }
-#line 3282 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3289 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 245: /* $@24: %empty  */
-#line 1068 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1075 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { push_momentary ();
 		  (yyvsp[0].itype) = lineno; }
-#line 3289 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3296 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 246: /* stmt: FOR '(' xexpr ';' $@22 xexpr ';' $@23 xexpr ')' $@24 stmt  */
-#line 1071 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1078 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, (yyvsp[-2].itype));
 		  expand_loop_continue_here ();
 		  if ((yyvsp[-3].ttype))
 		    expand_expr_stmt ((yyvsp[-3].ttype));
 		  pop_momentary ();
 		  expand_end_loop (); }
-#line 3300 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3307 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 247: /* $@25: %empty  */
-#line 1078 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1085 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  c_expand_start_case ((yyvsp[-1].ttype));
 		  /* Don't let the tree nodes for $3 be discarded by
 		     clear_momentary during the parsing of the next stmt.  */
 		  push_momentary (); }
-#line 3310 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3317 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 248: /* stmt: SWITCH '(' expr ')' $@25 stmt  */
-#line 1084 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1091 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { expand_end_case ((yyvsp[-3].ttype));
 		  pop_momentary (); }
-#line 3317 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3324 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 249: /* $@26: %empty  */
-#line 1087 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1094 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { register tree value = fold ((yyvsp[-1].ttype));
 		  register tree label
 		    = build_decl (LABEL_DECL, NULL_TREE, NULL_TREE);
@@ -3349,11 +3355,11 @@ yyreduce:
 			warning ("case value out of range");
 		    }
 		}
-#line 3352 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3359 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 251: /* $@27: %empty  */
-#line 1119 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1126 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 {
 		  register tree label
 		    = build_decl (LABEL_DECL, NULL_TREE, NULL_TREE);
@@ -3363,270 +3369,270 @@ yyreduce:
 		  else if (success == 2)
 		    error ("multiple default labels in one switch");
 		}
-#line 3366 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3373 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 253: /* stmt: BREAK ';'  */
-#line 1130 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1137 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  if ( ! expand_exit_something ())
 		    error ("break statement not within loop or switch"); }
-#line 3374 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3381 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 254: /* stmt: CONTINUE ';'  */
-#line 1134 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1141 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  if (! expand_continue_loop ())
 		    error ("continue statement not within a loop"); }
-#line 3382 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3389 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 255: /* stmt: RETURN ';'  */
-#line 1138 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1145 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  c_expand_return (NULL_TREE); }
-#line 3389 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3396 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 256: /* stmt: RETURN expr ';'  */
-#line 1141 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1148 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { emit_line_note (input_filename, lineno);
 		  c_expand_return ((yyvsp[-1].ttype)); }
-#line 3396 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3403 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 257: /* stmt: ASM maybe_type_qual '(' string ')' ';'  */
-#line 1144 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1151 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (TREE_CHAIN ((yyvsp[-2].ttype))) (yyvsp[-2].ttype) = combine_strings ((yyvsp[-2].ttype));
 		  emit_line_note (input_filename, lineno);
 		  expand_asm ((yyvsp[-2].ttype)); }
-#line 3404 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3411 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 258: /* stmt: ASM maybe_type_qual '(' string ':' asm_operands ')' ';'  */
-#line 1149 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1156 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (TREE_CHAIN ((yyvsp[-4].ttype))) (yyvsp[-4].ttype) = combine_strings ((yyvsp[-4].ttype));
 		  emit_line_note (input_filename, lineno);
 		  c_expand_asm_operands ((yyvsp[-4].ttype), (yyvsp[-2].ttype), NULL_TREE, NULL_TREE,
 					 (yyvsp[-6].ttype) == ridpointers[(int)RID_VOLATILE],
 					 input_filename, lineno); }
-#line 3414 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3421 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 259: /* stmt: ASM maybe_type_qual '(' string ':' asm_operands ':' asm_operands ')' ';'  */
-#line 1156 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1163 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (TREE_CHAIN ((yyvsp[-6].ttype))) (yyvsp[-6].ttype) = combine_strings ((yyvsp[-6].ttype));
 		  emit_line_note (input_filename, lineno);
 		  c_expand_asm_operands ((yyvsp[-6].ttype), (yyvsp[-4].ttype), (yyvsp[-2].ttype), NULL_TREE,
 					 (yyvsp[-8].ttype) == ridpointers[(int)RID_VOLATILE],
 					 input_filename, lineno); }
-#line 3424 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3431 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 260: /* stmt: ASM maybe_type_qual '(' string ':' asm_operands ':' asm_operands ':' asm_clobbers ')' ';'  */
-#line 1164 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1171 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (TREE_CHAIN ((yyvsp[-8].ttype))) (yyvsp[-8].ttype) = combine_strings ((yyvsp[-8].ttype));
 		  emit_line_note (input_filename, lineno);
 		  c_expand_asm_operands ((yyvsp[-8].ttype), (yyvsp[-6].ttype), (yyvsp[-4].ttype), (yyvsp[-2].ttype),
 					 (yyvsp[-10].ttype) == ridpointers[(int)RID_VOLATILE],
 					 input_filename, lineno); }
-#line 3434 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3441 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 261: /* stmt: GOTO identifier ';'  */
-#line 1170 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1177 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { tree decl;
 		  emit_line_note (input_filename, lineno);
 		  decl = lookup_label ((yyvsp[-1].ttype));
 		  TREE_USED (decl) = 1;
 		  expand_goto (decl); }
-#line 3444 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3451 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 262: /* $@28: %empty  */
-#line 1176 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1183 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { tree label = define_label (input_filename, lineno, (yyvsp[-1].ttype));
 		  emit_nop ();
 		  if (label)
 		    expand_label (label); }
-#line 3453 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3460 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 265: /* maybe_type_qual: %empty  */
-#line 1188 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1195 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (pedantic)
 		    warning ("ANSI C forbids use of `asm' keyword");
 		  emit_line_note (input_filename, lineno); }
-#line 3461 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3468 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 266: /* maybe_type_qual: TYPE_QUAL  */
-#line 1192 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1199 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { if (pedantic)
 		    warning ("ANSI C forbids use of `asm' keyword");
 		  emit_line_note (input_filename, lineno); }
-#line 3469 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3476 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 267: /* xexpr: %empty  */
-#line 1199 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1206 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 3475 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3482 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 269: /* asm_operands: %empty  */
-#line 1206 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1213 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = NULL_TREE; }
-#line 3481 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3488 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 272: /* nonnull_asm_operands: nonnull_asm_operands ',' asm_operand  */
-#line 1213 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1220 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[-2].ttype), (yyvsp[0].ttype)); }
-#line 3487 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3494 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 273: /* asm_operand: STRING '(' expr ')'  */
-#line 1218 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1225 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list ((yyvsp[-3].ttype), (yyvsp[-1].ttype)); }
-#line 3493 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3500 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 274: /* asm_clobbers: string  */
-#line 1223 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1230 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, combine_strings ((yyvsp[0].ttype)), NULL_TREE); }
-#line 3499 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3506 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 275: /* asm_clobbers: asm_clobbers ',' string  */
-#line 1225 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1232 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, combine_strings ((yyvsp[0].ttype)), (yyvsp[-2].ttype)); }
-#line 3505 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3512 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 276: /* $@29: %empty  */
-#line 1231 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1238 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { pushlevel (0);
 		  declare_parm_level (); }
-#line 3512 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3519 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 277: /* parmlist: $@29 parmlist_1  */
-#line 1234 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1241 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[0].ttype);
 		  parmlist_tags_warning ();
 		  poplevel (0, 0, 0); }
-#line 3520 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3527 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 278: /* $@30: %empty  */
-#line 1242 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1249 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { pushlevel (0);
 		  declare_parm_level (); }
-#line 3527 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3534 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 279: /* parmlist_or_identifiers: $@30 parmlist_or_identifiers_1  */
-#line 1245 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1252 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = (yyvsp[0].ttype);
 		  parmlist_tags_warning ();
 		  poplevel (0, 0, 0); }
-#line 3535 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3542 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 281: /* parmlist_or_identifiers_1: identifiers ')'  */
-#line 1253 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1260 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, NULL_TREE, (yyvsp[-1].ttype)); }
-#line 3541 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3548 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 282: /* parmlist_or_identifiers_1: error ')'  */
-#line 1255 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1262 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, NULL_TREE, NULL_TREE); }
-#line 3547 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3554 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 284: /* parmlist_1: error ')'  */
-#line 1261 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1268 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = tree_cons (NULL_TREE, NULL_TREE, NULL_TREE); }
-#line 3553 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3560 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 285: /* parmlist_2: %empty  */
-#line 1267 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1274 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = get_parm_info (0); }
-#line 3559 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3566 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 286: /* parmlist_2: parms  */
-#line 1269 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1276 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = get_parm_info (1); }
-#line 3565 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3572 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 287: /* parmlist_2: parms ',' ELLIPSIS  */
-#line 1271 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1278 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = get_parm_info (0); }
-#line 3571 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3578 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 288: /* parms: parm  */
-#line 1276 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1283 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { push_parm_decl ((yyvsp[0].ttype)); }
-#line 3577 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3584 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 289: /* parms: parms ',' parm  */
-#line 1278 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1285 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { push_parm_decl ((yyvsp[0].ttype)); }
-#line 3583 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3590 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 290: /* parm: typed_declspecs parm_declarator  */
-#line 1285 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1292 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list ((yyvsp[-1].ttype), (yyvsp[0].ttype))	; }
-#line 3589 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3596 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 291: /* parm: typed_declspecs notype_declarator  */
-#line 1287 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1294 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list ((yyvsp[-1].ttype), (yyvsp[0].ttype))	; }
-#line 3595 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3602 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 292: /* parm: typed_declspecs absdcl  */
-#line 1289 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1296 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 3601 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3608 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 293: /* parm: declmods notype_declarator  */
-#line 1291 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1298 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list ((yyvsp[-1].ttype), (yyvsp[0].ttype))	; }
-#line 3607 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3614 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 294: /* parm: declmods absdcl  */
-#line 1293 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1300 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list ((yyvsp[-1].ttype), (yyvsp[0].ttype)); }
-#line 3613 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3620 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 295: /* identifiers: IDENTIFIER  */
-#line 1299 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1306 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = build_tree_list (NULL_TREE, (yyvsp[0].ttype)); }
-#line 3619 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3626 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
   case 296: /* identifiers: identifiers ',' IDENTIFIER  */
-#line 1301 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1308 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
                 { (yyval.ttype) = chainon ((yyvsp[-2].ttype), build_tree_list (NULL_TREE, (yyvsp[0].ttype))); }
-#line 3625 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3632 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
     break;
 
 
-#line 3629 "/home/dave/tools/ctools/gcc-1.40/c-parse.tab.c"
+#line 3636 "/home/dave/tools/ctools/gca-1.40/c-parse.tab.c"
 
       default: break;
     }
@@ -3819,7 +3825,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 1303 "/home/dave/tools/ctools/gcc-1.40/c-parse.y"
+#line 1310 "/home/dave/tools/ctools/gca-1.40/c-parse.y"
 
 
 /* Return something to represent absolute declarators containing a *.
@@ -4033,7 +4039,7 @@ hash (str, len)
 #ifdef __GNUC__
 __inline
 #endif
-struct resword *
+static struct resword *
 is_reserved_word (str, len)
      register char *str;
      register int len;
@@ -5166,7 +5172,7 @@ yylex ()
     char_constant:
       {
 	register int result = 0;
-	register num_chars = 0;
+	register int num_chars = 0;
 	int width = TYPE_PRECISION (char_type_node);
 	int max_chars;
 
@@ -5322,7 +5328,7 @@ yylex ()
 	      abort ();
 	    yylval.ttype
 	      = build_string ((widep - wide_buffer + 1) * sizeof (int),
-			      wide_buffer);
+			      (char *)wide_buffer);
 	    TREE_TYPE (yylval.ttype) = int_array_type_node;
 	  }
 	else

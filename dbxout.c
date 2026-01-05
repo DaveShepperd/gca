@@ -71,8 +71,15 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "tree.h"
 #include "rtl.h"
 #include "flags.h"
+#include "toplev.h"
+#include "stor-layout.h"
+#include "c-decl.h"
+#include "final.h"
+#include "varasm.h"
+#include "dbxout.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 /* Typical USG systems don't have stab.h, and they also have
    no use for DBX-format debugging info.  */
@@ -343,7 +350,7 @@ dbxout_type (type, full)
 	fprintf (asmfile, "r2;0;127;");
       else
 	/* Output other integer types as subranges of `int'.  */
-	fprintf (asmfile, "r1;%d;%d;",
+	fprintf (asmfile, "r1;%ld;%ld;",
 		 TREE_INT_CST_LOW (TYPE_MIN_VALUE (type)),
 		 TREE_INT_CST_LOW (TYPE_MAX_VALUE (type)));
       CHARS (25);
@@ -351,7 +358,7 @@ dbxout_type (type, full)
 
     case REAL_TYPE:
       /* This must be magic.  */
-      fprintf (asmfile, "r1;%d;0;",
+      fprintf (asmfile, "r1;%ld;0;",
 	       TREE_INT_CST_LOW (size_in_bytes (type)));
       CHARS (16);
       break;
@@ -361,7 +368,7 @@ dbxout_type (type, full)
 	 for the index type of the array
 	 followed by a reference to the target-type.
 	 ar1;0;N;M for an array of type M and size N.  */
-      fprintf (asmfile, "ar1;0;%d;",
+      fprintf (asmfile, "ar1;0;%ld;",
 	       (TYPE_DOMAIN (type)
 		? TREE_INT_CST_LOW (TYPE_MAX_VALUE (TYPE_DOMAIN (type)))
 	        : -1));
@@ -397,7 +404,7 @@ dbxout_type (type, full)
 	  break;
 	}
       tem = size_in_bytes (type);
-      fprintf (asmfile, (TREE_CODE (type) == RECORD_TYPE) ? "s%d" : "u%d",
+      fprintf (asmfile, (TREE_CODE (type) == RECORD_TYPE) ? "s%ld" : "u%ld",
 	       TREE_INT_CST_LOW (tem));
 
       if (TYPE_BASETYPES (type) && use_gdb_dbx_extensions)
@@ -469,7 +476,7 @@ dbxout_type (type, full)
 	      }
 	    else
 	      {
-		fprintf (asmfile, ",%d,%d;", DECL_OFFSET (tem),
+		fprintf (asmfile, ",%d,%ld;", DECL_OFFSET (tem),
 			 (TREE_INT_CST_LOW (DECL_SIZE (tem))
 			  * DECL_SIZE_UNIT (tem)));
 		CHARS (23);
@@ -495,7 +502,7 @@ dbxout_type (type, full)
       CHARS (1);
       for (tem = TYPE_VALUES (type); tem; tem = TREE_CHAIN (tem))
 	{
-	  fprintf (asmfile, "%s:%d,", IDENTIFIER_POINTER (TREE_PURPOSE (tem)),
+	  fprintf (asmfile, "%s:%ld,", IDENTIFIER_POINTER (TREE_PURPOSE (tem)),
 		   TREE_INT_CST_LOW (TREE_VALUE (tem)));
 	  CHARS (11 + IDENTIFIER_LENGTH (TREE_PURPOSE (tem)));
 	  if (TREE_CHAIN (tem) != 0)

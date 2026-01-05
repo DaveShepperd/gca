@@ -38,6 +38,12 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include <stab.h>  /* On BSD, use the system's stab.h.  */
 #endif /* not USG */
 #endif
+#include <time.h>
+#include <unistd.h>
+#include "flags.h"
+#include "toplev.h"
+#include "varasm.h"
+#include "symout.h"
 
 /* .stabs code for source file name.  */
 #ifndef N_SO
@@ -1175,17 +1181,16 @@ symout_sources ()
    creation time.  */
 
 void
-symout_finish (filename, filetime)
-     char *filename;
-     int filetime;
+symout_finish (char *filename, int inFiletime)
 {
   int *blockvector = (int *) alloca ((total_blocks + 1) * sizeof (int));
   int *typevector;
-  int now = time (0);
+  time_t now = time (0);
   register int i;
   struct symbol_root buffer;
   char dir[MAXNAMLEN];
-
+  time_t filetime = inFiletime;
+  
   /* Output dummy entries for any undefined structure references.  */
   symout_types (filter_undefined_types (permanent_fwd_refs));
 

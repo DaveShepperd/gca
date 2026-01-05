@@ -21,11 +21,11 @@
 # Variables that exist for you to override.
 # See below for how to change them for certain systems.
 
-CFLAGS = -g -O -v -m32 -D_POSIX_SOURCE $(XCFLAGS)
+CFLAGS = -g -O -m32 -D_POSIX_SOURCE $(XCFLAGS) #-v
 LDFLAGS = -g -m32
 #CC = gcc
 BISON = bison
-BISONFLAGS = -v
+BISONFLAGS = #-v
 # This should be the version of ar to use with output from GCC.
 AR = ar
 SHELL = /bin/sh
@@ -248,7 +248,9 @@ CPLUS_TREE_H = $(TREE_H) cplus-tree.h c-tree.h
 # because all that file does, when not compiling with GCC,
 # is include the system varargs.h.
 
-all: config.status gca cc1 cpp float.h #gnulib gnulib2 # cc1plus
+all: config.status gca cc1 #cpp float.h gnulib gnulib2 # cc1plus
+allgen: gencodes genconfig genemit genextract genflags genoutput genpeep genrecog
+allinsns: insn-codes.h insn-config.h insn-emit.h insn-extract.h insn-flags.h insn-output.h insn-peep.h insn-recog.h 
 
 # Use this instead of `all' if you need to convert the libraries
 # before you can use the compiler.
@@ -380,17 +382,13 @@ gcc.o: gcc.c $(CONFIG_H) gvarargs.h obstack.h
 
 version.o: version.c
 obstack.o: obstack.c
-
 tree.o : tree.c $(CONFIG_H) $(TREE_H) flags.h
 print-tree.o : print-tree.c $(CONFIG_H) $(TREE_H)
 stor-layout.o : stor-layout.c $(CONFIG_H) $(TREE_H) $(RTL_H)
 fold-const.o : fold-const.c $(CONFIG_H) $(TREE_H)
 toplev.o : toplev.c $(CONFIG_H) $(TREE_H) $(RTL_H) flags.h input.h
-
 rtl.o : rtl.c $(CONFIG_H) $(RTL_H)
-
 rtlanal.o : rtlanal.c $(CONFIG_H) $(RTL_H)
-
 varasm.o : varasm.c $(CONFIG_H) $(TREE_H) $(RTL_H) flags.h expr.h \
    insn-codes.h hard-reg-set.h
 stmt.o : stmt.c $(CONFIG_H) $(RTL_H) $(TREE_H) flags.h  \

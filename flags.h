@@ -18,6 +18,10 @@ along with GNU CC; see the file COPYING.  If not, write to
 the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 /* Name of the input .c file being compiled.  */
+
+#ifndef _FLAGS_H_
+#define _FLAGS_H_
+
 extern char *main_input_filename;
 
 /* 1 => write gdb debugging output (using symout.c).
@@ -189,3 +193,5 @@ extern int flag_shared_data;
 /* Nonzero means put things in delayed-branch slots if supported. */
 
 extern int flag_delayed_branch;
+
+#endif	/* _FLAGS_H_ */

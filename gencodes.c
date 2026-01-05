@@ -26,17 +26,20 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "rtl.h"
 #include "obstack.h"
 #include <stdlib.h>
+#include <string.h>
 
 struct obstack obstack;
 struct obstack *rtl_obstack = &obstack;
+extern void init_rtl(void);
+extern char read_skip_spaces(FILE *infile);
 
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
-extern int xmalloc ();
-extern void free ();
+extern void *xmalloc (int size);
+extern void free (void *ptr);
 
-void fatal ();
-void fancy_abort ();
+void fatal (char *msg, int a, int b);
+void fancy_abort (void);
 
 int insn_code_number;
 
@@ -51,30 +54,27 @@ gen_insn (insn)
 	    insn_code_number);
 }
 
-int
-xmalloc (size)
+void *
+xmalloc (int size)
 {
-  register int val = malloc (size);
+  void *val = (void *)malloc (size);
 
   if (val == 0)
-    fatal ("virtual memory exhausted");
+    fatal ("virtual memory exhausted", 0, 0);
   return val;
 }
 
-int
-xrealloc (ptr, size)
-     char *ptr;
-     int size;
+void *
+xrealloc (void *ptr, int size)
 {
-  int result = realloc (ptr, size);
+  void *result = (void *)realloc (ptr, size);
   if (!result)
-    fatal ("virtual memory exhausted");
+    fatal ("virtual memory exhausted",0,0);
   return result;
 }
 
 void
-fatal (s, a1, a2)
-     char *s;
+fatal (char *s, int a1, int a2)
 {
   fprintf (stderr, "gencodes: ");
   fprintf (stderr, s, a1, a2);
@@ -86,9 +86,9 @@ fatal (s, a1, a2)
    config.h can #define abort fancy_abort if you like that sort of thing.  */
 
 void
-fancy_abort ()
+fancy_abort (void)
 {
-  fatal ("Internal gcc abort.");
+  fatal ("Internal gcc abort.",0,0);
 }
 
 int
@@ -104,7 +104,7 @@ main (argc, argv)
   obstack_init (rtl_obstack);
 
   if (argc <= 1)
-    fatal ("No input file name.");
+    fatal ("No input file name.",0,0);
 
   infile = fopen (argv[1], "r");
   if (infile == 0)

@@ -28,13 +28,14 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
    like a strange sort of assignment).  */
 
 #include "config.h"
-#include <stdio.h>
 #include "tree.h"
 #include "c-tree.h"
 #include "flags.h"
-#include <stdlib.h>
 
-
+#include "rtl.h"
+#include "toplev.h"
+#include "c-typeck.h"
+#include "stmt.h"
 
 int mark_addressable ();
 static tree convert_for_assignment ();
@@ -3317,8 +3318,7 @@ store_init_value (decl, init)
    TYPE is an aggregate and INIT is not a constructor.  */
 
 tree
-digest_init (type, init, tail)
-     tree type, init, *tail;
+digest_init (tree type, tree init, tree *tail)
 {
   enum tree_code code = TREE_CODE (type);
   tree element = 0;

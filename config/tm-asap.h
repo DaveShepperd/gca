@@ -434,7 +434,7 @@ enum reg_class { NO_REGS, ALL_REGS, LIM_REG_CLASSES };
 #define FUNCTION_ARG_ADVANCE(CUM, MODE, TYPE, NAMED)	\
  ((CUM) += ((MODE) != BLKmode			\
 	    ? (GET_MODE_SIZE (MODE) + 3) / 4	\
-	    : (int_size_in_bytes (TYPE) + 3) / 4))
+	    : (sizeof(/*size_in_bytes (*/TYPE) + 3) / 4))
 
 /* Determine where to put an argument to a function.
    Value is zero to push the argument on the stack,
@@ -456,7 +456,7 @@ enum reg_class { NO_REGS, ALL_REGS, LIM_REG_CLASSES };
 #define FUNCTION_ARG(CUM, MODE, TYPE, NAMED)		\
 (ASAP_LAST_PARM_REG >= ((CUM)						\
        + ((MODE) == BLKmode				\
-	  ? (int_size_in_bytes (TYPE) + 3) / 4		\
+	  ? (sizeof(/*size_in_bytes (*/TYPE) + 3) / 4		\
 	  : (GET_MODE_SIZE (MODE) + 3) / 4))		\
  ? gen_rtx (REG, (MODE), 1 + (CUM))			\
  : 0)
@@ -470,7 +470,7 @@ extern int asap_last_named_arg;
 #define FUNCTION_INCOMING_ARG(CUM, MODE, TYPE, NAMED)\
 (((NAMED) && (ASAP_LAST_PARM_REG >= ((CUM)				\
        + ((MODE) == BLKmode				\
-	  ? (int_size_in_bytes (TYPE) + 3) / 4		\
+	  ? (sizeof(/*size_in_bytes (*/TYPE) + 3) / 4		\
 	  : (GET_MODE_SIZE (MODE) + 3) / 4))))		\
  ? gen_rtx (REG, (MODE), (asap_last_named_arg = 1 + (CUM))) \
  : 0)
@@ -696,7 +696,12 @@ extern int legit_const_p();
    This, of course, changes _any_ valid address to a mis-aligned one if
    mode_size is larger than 1!
   */
-
+#ifdef DEBUG_INDEX_TERM_ADDR
+extern int index_term_addr_p(const char *filename, int line, int mode, void *addr);
+#define INDEX_TERM_P(MODE,X) index_term_addr_p(__FILE__, __LINE__, (int)MODE, (void *)X)
+extern int strict_index_term_addr_p(const char *filename, int line, int mode, void *addr);
+#define STRICT_INDEX_TERM_P(MODE,X) strict_index_term_addr_p(__FILE__, __LINE__, (int)MODE, (void *)X)
+#else
 #define INDEX_TERM_P(MODE, X)  \
   ((GET_CODE (X) == MULT					\
     && ((REG_P (XEXP (X, 0))					\
@@ -723,9 +728,9 @@ extern int legit_const_p();
             && INTVAL (XEXP (X, 0)) <= 4			\
             && (INTVAL (XEXP (X, 0)) == GET_MODE_SIZE (MODE))	\
 	      && (warning ("MULT backwards"), 1))))		\
-  || (REG_P (X) && REGNO (XEXP (X, 0)) < FIRST_PSEUDO_REGISTER  \
+  || (REG_P (X) && REGNO (X) < FIRST_PSEUDO_REGISTER  \
      && GET_MODE_SIZE (MODE) == 1))
-
+#endif
 #define VALID_OFFSET_P(MODE, X) \
 ( (GET_CODE (X) == CONST_INT)				\
     &&( (   (GET_MODE_SIZE (MODE) >= 4)			\
@@ -943,12 +948,12 @@ do { text_section();\
 /* Output to assembler file text saying following lines
    may contain character constants, extra white space, comments, etc.  */
 
-#define ASM_APP_ON ""
+#define ASM_APP_ON " "
 
 /* Output to assembler file text saying following lines
    no longer contain unusual constructs.  */
 
-#define ASM_APP_OFF ""
+#define ASM_APP_OFF " "
 
 /* Output before executable code and read-only data */
 

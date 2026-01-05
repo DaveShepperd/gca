@@ -23,6 +23,12 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "tree.h"
 #include "flags.h"
 #include "expr.h"
+#include "emit-rtl.h"
+#include "optabs.h"
+#include "insn-config.h"
+#include "recog.h"
+#include "rtlanal.h"
+#include "toplev.h"
 #include <stdlib.h>
 
 /* Return an rtx for the sum of X and the integer C.  */

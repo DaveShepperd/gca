@@ -17,8 +17,8 @@ You should have received a copy of the GNU General Public License
 along with GNU CC; see the file COPYING.  If not, write to
 the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
-#ifndef REAL_H_INCLUDED
-#define REAL_H_INCLUDED
+#ifndef _REAL_H_
+#define _REAL_H_ 1
 
 /* If we are not cross-compiling, use a `double' to represent the
    floating-point value.  Otherwise, use some other type
@@ -91,4 +91,4 @@ union real_extract
    from a given integer constant.  */
 REAL_VALUE_TYPE real_value_from_int_cst ();
 
-#endif /* Not REAL_H_INCLUDED */
+#endif /* _REAL_H_ */

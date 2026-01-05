@@ -61,6 +61,13 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "regs.h"
 #include "hard-reg-set.h"
 #include "recog.h"
+#include "toplev.h"
+#include "emit-rtl.h"
+#include "flow.h"
+#include "rtlanal.h"
+#include "varasm.h"
+#include "stmt.h"
+
 
 #define MAX(x,y) (((x) > (y)) ? (x) : (y))
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
@@ -1129,7 +1136,7 @@ tree
 expand_end_stmt_expr (t)
      tree t;
 {
-  rtx saved = RTL_EXPR_RTL (t);
+/*  rtx saved = RTL_EXPR_RTL (t); */
 
   OK_DEFER_POP;
 
@@ -1144,7 +1151,7 @@ expand_end_stmt_expr (t)
 
   rtl_expr_chain = tree_cons (NULL_TREE, t, rtl_expr_chain);
 
-  end_sequence (saved);
+  end_sequence ();
 
   /* Don't consider deleting this expr or containing exprs at tree level.  */
   TREE_VOLATILE (t) = 1;
@@ -3705,7 +3712,7 @@ fixup_memory_subreg (x, insn)
   int offset = SUBREG_WORD (x) * UNITS_PER_WORD;
   rtx addr = XEXP (SUBREG_REG (x), 0);
   enum machine_mode mode = GET_MODE (x);
-  rtx saved, result;
+  rtx result; /* saved, */
 
 #ifdef BYTES_BIG_ENDIAN
   offset += (MIN (UNITS_PER_WORD, GET_MODE_SIZE (GET_MODE (SUBREG_REG (x))))
@@ -3714,10 +3721,10 @@ fixup_memory_subreg (x, insn)
   addr = plus_constant (addr, offset);
   if (memory_address_p (mode, addr))
     return change_address (SUBREG_REG (x), mode, addr);
-  saved = start_sequence ();
+  /* saved = */ start_sequence ();
   result = change_address (SUBREG_REG (x), mode, addr);
   emit_insn_before (gen_sequence (), insn);
-  end_sequence (saved);
+  end_sequence ();
   return result;
 }
 
@@ -4948,7 +4955,7 @@ expand_function_end (filename, line)
 
   /* End any sequences that failed to be closed due to syntax errors.  */
   while (sequence_stack)
-    end_sequence (0);
+    end_sequence ();
 
   /* Outside function body, can't compute type's actual size
      until next function's body starts.  */

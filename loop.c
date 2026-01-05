@@ -39,12 +39,20 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 #include "config.h"
 #include "rtl.h"
-#include "expr.h"
 #include "insn-config.h"
 #include "regs.h"
 #include "hard-reg-set.h"
 #include "recog.h"
 #include "flags.h"
+#include "loop.h"
+#include "tree.h"
+#include "expr.h"
+#include "emit-rtl.h"
+#include "rtlanal.h"
+#include "jump.h"
+#include "cse.h"
+
+#include "loop.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -53,6 +61,8 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
    We use them to see whether a jump comes from outside a given loop.  */
 
 static int *uid_luid;
+
+int recog (rtx x0, rtx insn);
 
 /* Get the luid of an insn.  */
 
@@ -4454,7 +4464,7 @@ gen_iv_mult (mode, op0, op1, target)
     emit_move_insn (target, temp);
 
   result = gen_sequence ();
-  end_sequence (saved);
+  end_sequence ();
 
   return result;
 }

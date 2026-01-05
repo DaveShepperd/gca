@@ -70,6 +70,15 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "basic-block.h"
 #include "insn-config.h"
 #include "recog.h"
+#include "rtlanal.h"
+#include "jump.h"
+#include "emit-rtl.h"
+#include "tree.h"
+#include "expr.h"
+#include "toplev.h"
+#include "combine.h"
+
+extern int recog (rtx x0, rtx insn);	/* in created insn-recog.c */
 
 #define max(A,B) ((A) > (B) ? (A) : (B))
 #define min(A,B) ((A) < (B) ? (A) : (B))

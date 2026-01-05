@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with GNU CC; see the file COPYING.  If not, write to
 the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
+#ifndef _RTL_H_
+#define _RTL_H_ 1
 
 #undef FFS  /* Some systems predefine this symbol; don't let it interfere.  */
 
@@ -29,9 +31,9 @@ enum rtx_code  {
 #include "rtl.def"		/* rtl expressions are documented here */
 #undef DEF_RTL_EXPR
 
-  LAST_AND_UNUSED_RTX_CODE};	/* A convienent way to get a value for
-				   NUM_RTX_CODE.
+  LAST_AND_UNUSED_RTX_CODE		/* A convienent way to get a value for NUM_RTX_CODE.
 				   Assumes default enum value assignement.  */
+};
 
 #define NUM_RTX_CODE ((int)LAST_AND_UNUSED_RTX_CODE)
 				/* The cast here, saves many elsewhere.  */
@@ -452,10 +454,10 @@ extern char *note_insn_name[];
 extern rtx rtx_alloc ();
 extern rtvec rtvec_alloc ();
 extern rtx find_reg_note ();
-extern rtx gen_rtx ();
+extern rtx gen_rtx (int code, int mode, ...);
+extern rtvec gen_rtvec(int n, ...);
+extern rtvec gen_rtvec_v(int n, rtx *argp);
 extern rtx copy_rtx ();
-extern rtvec gen_rtvec ();
-extern rtvec gen_rtvec_v ();
 extern rtx gen_reg_rtx ();
 extern rtx gen_label_rtx ();
 extern rtx gen_inline_header_rtx ();
@@ -499,6 +501,8 @@ extern rtx plus_constant ();
 extern rtx find_equiv_reg ();
 extern rtx delete_insn ();
 extern rtx adj_offsettable_operand ();
+extern void debug_rtx (rtx x);
+extern void print_rtl (FILE *outf, rtx rtx_first);
 
 /* Maximum number of parallel sets and clobbers in any insn in this fn.
    Always at least 3, since the combiner could put that many togetherm
@@ -542,3 +546,5 @@ extern rtx struct_value_rtx;
 extern rtx struct_value_incoming_rtx;
 extern rtx static_chain_rtx;
 extern rtx static_chain_incoming_rtx;
+
+#endif	/* _RTL_H_ */

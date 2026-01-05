@@ -24,6 +24,14 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "hard-reg-set.h"
 #include "flags.h"
 #include "real.h"
+#include "tree.h"
+#include "insn-config.h"
+#include "recog.h"
+#include "rtlanal.h"
+#include "toplev.h"
+#include "jump.h"
+#include "emit-rtl.h"
+#include "cse.h"
 #include <stdlib.h>
 
 #include <setjmp.h>
@@ -755,9 +763,7 @@ get_element ()
    and we save much time not recomputing it.  */
 
 static void
-remove (elt, hash)
-     register struct table_elt *elt;
-     int hash;
+cse_remove (struct table_elt *elt, int hash)
 {
   if (elt == 0)
     return;
@@ -1076,7 +1082,7 @@ invalidate (x)
     {
       register int hash = HASH (x, 0);
       reg_invalidate (REGNO (x));
-      remove (lookup_for_remove (x, hash, GET_MODE (x)), hash);
+      cse_remove (lookup_for_remove (x, hash, GET_MODE (x)), hash);
       return;
     }
 
@@ -1120,7 +1126,7 @@ invalidate (x)
 	{
 	  next = p->next_same_hash;
 	  if (refers_to_mem_p (p->exp, base, start, end))
-	    remove (p, i);
+	    cse_remove (p, i);
 	}
     }
 }
@@ -1143,7 +1149,7 @@ remove_invalid_refs (regno)
       {
 	next = p->next_same_hash;
 	if (GET_CODE (p->exp) != REG && refers_to_p (p->exp, x))
-	  remove (p, i);
+	  cse_remove (p, i);
       }
 }
 
@@ -1167,7 +1173,7 @@ invalidate_memory (writes)
 	    && (all
 		|| (nonscalar && p->in_struct)
 		|| cse_rtx_addr_varies_p (p->exp)))
-	  remove (p, i);
+	  cse_remove (p, i);
       }
 }
 

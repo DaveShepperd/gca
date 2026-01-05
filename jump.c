@@ -54,6 +54,10 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "rtl.h"
 #include "flags.h"
 #include "regs.h"
+
+#include "rtlanal.h"
+#include "emit-rtl.h"
+#include "jump.h"
 #include <stdlib.h>
 
 /* ??? Eventually must record somehow the labels used by jumps
@@ -113,8 +117,7 @@ int condjump_p ();
    and refrains from actually deleting when that is 0.  */
 
 void
-jump_optimize (f, cross_jump, noop_moves)
-     rtx f;
+jump_optimize (rtx f, int cross_jump, int noop_moves)
 {
   register rtx insn;
   int changed;
@@ -648,10 +651,7 @@ jump_optimize (f, cross_jump, noop_moves)
    Actually we could transfer that label into stream 2.  */
 
 static void
-find_cross_jump (e1, e2, minimum, f1, f2)
-     rtx e1, e2;
-     int minimum;
-     rtx *f1, *f2;
+find_cross_jump (rtx e1, rtx e2, int minimum, rtx *f1, rtx *f2)
 {
   register rtx i1 = e1, i2 = e2;
   register rtx p1, p2;
@@ -730,8 +730,7 @@ find_cross_jump (e1, e2, minimum, f1, f2)
 }
 
 static void
-do_cross_jump (insn, newjpos, newlpos)
-     rtx insn, newjpos, newlpos;
+do_cross_jump (rtx insn, rtx newjpos, rtx newlpos)
 {
   register rtx label;
   /* Find an existing label at this point
@@ -771,8 +770,7 @@ do_cross_jump (insn, newjpos, newlpos)
    out before START.  Assume neither START nor END is such a note.  */
 
 static void
-squeeze_block_notes (start, end)
-     rtx start, end;
+squeeze_block_notes (rtx start, rtx end)
 {
   rtx insn;
   rtx next;
@@ -800,8 +798,7 @@ squeeze_block_notes (start, end)
    Assumes that TARGET is a conditional jump.  */
 
 static int
-jump_back_p (insn, target)
-     rtx insn, target;
+jump_back_p (rtx insn, rtx target)
 {
   rtx cinsn, ctarget, prev;
   enum rtx_code codei, codet;
@@ -847,8 +844,7 @@ jump_back_p (insn, target)
    because of the special treatment of non-signaling nans in comparisons.  */
 
 static enum rtx_code
-reverse_condition (code)
-     enum rtx_code code;
+reverse_condition (enum rtx_code code)
 {
   switch (code)
     {
@@ -891,8 +887,7 @@ reverse_condition (code)
 /* Return 1 if INSN is an unconditional jump and nothing else.  */
 
 int
-simplejump_p (insn)
-     rtx insn;
+simplejump_p (rtx insn)
 {
   register rtx x = PATTERN (insn);
   if (GET_CODE (x) != SET)
@@ -908,8 +903,7 @@ simplejump_p (insn)
    and nothing more.  */
 
 int
-condjump_p (insn)
-     rtx insn;
+condjump_p (rtx insn)
 {
   register rtx x = PATTERN (insn);
   if (GET_CODE (x) != SET)
@@ -935,8 +929,7 @@ condjump_p (insn)
    but also does other things.  */
 
 int
-sets_cc0_p (x)
-     rtx x;
+sets_cc0_p (rtx x)
 {
   if (GET_CODE (x) == SET && SET_DEST (x) == cc0_rtx)
     return 1;
@@ -961,8 +954,7 @@ sets_cc0_p (x)
 /* Return 1 if in between BEG and END there is no CODE_LABEL insn.  */
 
 int
-no_labels_between_p (beg, end)
-     rtx beg, end;
+no_labels_between_p (rtx beg, rtx end)
 {
   register rtx p;
   for (p = beg; p != end; p = NEXT_INSN (p))
@@ -975,8 +967,7 @@ no_labels_between_p (beg, end)
    or 0, if there is none.  */
 
 rtx
-prev_real_insn (label)
-     rtx label;
+prev_real_insn (rtx label)
 {
   register rtx insn = PREV_INSN (label);
   register RTX_CODE code;
@@ -998,8 +989,7 @@ prev_real_insn (label)
    or 0, if there is none.  */
 
 rtx
-next_real_insn (label)
-     rtx label;
+next_real_insn (rtx label)
 {
   register rtx insn = NEXT_INSN (label);
   register RTX_CODE code;
@@ -1020,8 +1010,7 @@ next_real_insn (label)
 /* Return the next CODE_LABEL after the insn INSN, or 0 if there is none.  */
 
 rtx
-next_label (insn)
-     rtx insn;
+next_label (rtx insn)
 {
   do insn = NEXT_INSN (insn);
   while (insn != 0 && GET_CODE (insn) != CODE_LABEL);
@@ -1034,9 +1023,7 @@ next_label (insn)
    If IGNORE_LOOPS is 0, we do not chain across a NOTE_INSN_LOOP_BEG.  */
 
 static rtx
-follow_jumps (label, ignore_loops)
-     rtx label;
-     int ignore_loops;
+follow_jumps (rtx label, int ignore_loops)
 {
   register rtx insn;
   register rtx next;
@@ -1077,10 +1064,7 @@ follow_jumps (label, ignore_loops)
    If IGNORE_LOOPS is 0, we do not chain across a NOTE_INSN_LOOP_BEG.  */
 
 static int
-tension_vector_labels (x, idx, ignore_loops)
-     register rtx x;
-     register int idx;
-     int ignore_loops;
+tension_vector_labels (rtx x, int idx, int ignore_loops)
 {
   int changed = 0;
   register int i;
@@ -1113,10 +1097,7 @@ tension_vector_labels (x, idx, ignore_loops)
    that loop-optimization is done with.  */
 
 static void
-mark_jump_label (x, insn, cross_jump)
-     register rtx x;
-     rtx insn;
-     int cross_jump;
+mark_jump_label (rtx x, rtx insn, int cross_jump)
 {
   register RTX_CODE code = GET_CODE (x);
   register int i;
@@ -1170,8 +1151,7 @@ mark_jump_label (x, insn, cross_jump)
    if that's what the previous thing was.  */
 
 static void
-delete_jump (insn)
-     rtx insn;
+delete_jump (rtx insn)
 {
   register rtx x = PATTERN (insn);
   register rtx prev;
@@ -1203,8 +1183,7 @@ delete_jump (insn)
    Returns the first insn after INSN that was not deleted.  */
 
 rtx
-delete_insn (insn)
-     register rtx insn;
+delete_insn (rtx insn)
 {
   register rtx next = NEXT_INSN (insn);
   register rtx prev = PREV_INSN (insn);
@@ -1305,8 +1284,7 @@ delete_insn (insn)
    then return that.  May return INSN itself.  */
 
 rtx
-next_nondeleted_insn (insn)
-     rtx insn;
+next_nondeleted_insn (rtx insn)
 {
   while (INSN_DELETED_P (insn))
     insn = NEXT_INSN (insn);
@@ -1319,8 +1297,7 @@ next_nondeleted_insn (insn)
    peephole insn that will replace them.  */
 
 void
-delete_for_peephole (from, to)
-     register rtx from, to;
+delete_for_peephole (rtx from, rtx to)
 {
   register rtx insn = from;
 
@@ -1358,8 +1335,7 @@ delete_for_peephole (from, to)
    to label NLABEL instead of where it jumps now.  */
 
 void
-invert_jump (jump, nlabel)
-     rtx jump, nlabel;
+invert_jump (rtx jump, rtx nlabel)
 {
   register rtx olabel = JUMP_LABEL (jump);
   invert_exp (PATTERN (jump), olabel, nlabel);
@@ -1376,9 +1352,7 @@ invert_jump (jump, nlabel)
    This is used in do_jump as well as in this file.  */
 
 void
-invert_exp (x, olabel, nlabel)
-     rtx x;
-     rtx olabel, nlabel;
+invert_exp (rtx x, rtx olabel, rtx nlabel)
 {
   register RTX_CODE code;
   register int i;
@@ -1423,8 +1397,7 @@ invert_exp (x, olabel, nlabel)
    it and the code following it may be deleted.  */
 
 void
-redirect_jump (jump, nlabel)
-     rtx jump, nlabel;
+redirect_jump (rtx jump, rtx nlabel)
 {
   register rtx olabel = JUMP_LABEL (jump);
 
@@ -1444,9 +1417,7 @@ redirect_jump (jump, nlabel)
    alter (LABEL_REF OLABEL) to (LABEL_REF NLABEL).  */
 
 static void
-redirect_exp (x, olabel, nlabel)
-     rtx x;
-     rtx olabel, nlabel;
+redirect_exp (rtx x, rtx olabel, rtx nlabel)
 {
   register RTX_CODE code = GET_CODE (x);
   register int i;
@@ -1477,8 +1448,7 @@ redirect_exp (x, olabel, nlabel)
    if they renumber to the same value.  */
 
 int
-rtx_renumbered_equal_p (x, y)
-     rtx x, y;
+rtx_renumbered_equal_p (rtx x, rtx y)
 {
   register int i;
   register RTX_CODE code = GET_CODE (x);
@@ -1600,8 +1570,7 @@ rtx_renumbered_equal_p (x, y)
    Any rtx is valid for X.  */
 
 int
-true_regnum (x)
-     rtx x;
+true_regnum (rtx x)
 {
   if (GET_CODE (x) == REG)
     {

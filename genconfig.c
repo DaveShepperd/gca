@@ -31,8 +31,11 @@ struct obstack *rtl_obstack = &obstack;
 
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
-extern int xmalloc ();
-extern void free ();
+void *xmalloc (unsigned int len);
+void *xrealloc(void *ptr, unsigned int len);
+void free (void *ptr);
+void init_rtl(void);
+char read_skip_spaces(FILE *infile);
 
 /* flags to determine output of machine description dependent #define's.  */
 int max_recog_operands_flag;
@@ -43,8 +46,8 @@ int register_constraint_flag;
 int clobbers_seen_this_insn;
 int dup_operands_seen_this_insn;
 
-void fatal ();
-void fancy_abort ();
+void fatal (const char *msg, const char *cp);
+void fancy_abort (void);
 
 void
 walk_insn_part (part)
@@ -167,34 +170,31 @@ gen_peephole (peep)
     walk_insn_part (XVECEXP (peep, 0, i));
 }
 
-int
-xmalloc (size)
+void *
+xmalloc (unsigned int size)
 {
-  register int val = malloc (size);
+  void *val = (void *)malloc (size);
 
   if (val == 0)
-    fatal ("virtual memory exhausted");
+    fatal ("virtual memory exhausted",NULL);
 
   return val;
 }
 
-int
-xrealloc (ptr, size)
-     char *ptr;
-     int size;
+void *
+xrealloc (void *ptr, unsigned int size)
 {
-  int result = realloc (ptr, size);
+  void *result = (void *)realloc (ptr, size);
   if (!result)
-    fatal ("virtual memory exhausted");
+    fatal ("virtual memory exhausted",NULL);
   return result;
 }
 
 void
-fatal (s, a1, a2)
-     char *s;
+fatal (const char *s, const char *a1)
 {
   fprintf (stderr, "genconfig: ");
-  fprintf (stderr, s, a1, a2);
+  fprintf (stderr, s, a1);
   fprintf (stderr, "\n");
   exit (FATAL_EXIT_CODE);
 }
@@ -203,9 +203,9 @@ fatal (s, a1, a2)
    config.h can #define abort fancy_abort if you like that sort of thing.  */
 
 void
-fancy_abort ()
+fancy_abort (void)
 {
-  fatal ("Internal gcc abort.");
+  fatal ("Internal gcc abort.",NULL);
 }
 
 int
@@ -221,7 +221,7 @@ main (argc, argv)
   obstack_init (rtl_obstack);
 
   if (argc <= 1)
-    fatal ("No input file name.");
+    fatal ("No input file name.",NULL);
 
   infile = fopen (argv[1], "r");
   if (infile == 0)

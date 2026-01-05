@@ -25,7 +25,10 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 #include "config.h"
 #include "tree.h"
-#include <stdlib.h>
+#include "rtl.h"
+#include "toplev.h"
+#include "c-typeck.h"
+#include "stmt.h"
 
 /* Change of width--truncation and extension of integers or reals--
    is represented with NOP_EXPR.  Proper functioning of many things

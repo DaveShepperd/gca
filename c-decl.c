@@ -30,9 +30,14 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "flags.h"
 #include "c-tree.h"
 #include "c-parse.h"
-#include <stdlib.h>
-
-#include <stdio.h>
+#include "rtl.h"
+#include "print-tree.h"
+#include "toplev.h"
+#include "c-typeck.h"
+#include "varasm.h"
+#include "stmt.h"
+#include "c-decl.h"
+#include "stor-layout.h"
 
 /* In grokdeclarator, distinguish syntactic contexts of declarators.  */
 enum decl_context
@@ -42,7 +47,7 @@ enum decl_context
   FIELD,			/* Declaration inside struct or union */
   TYPENAME};			/* Typename (inside cast or sizeof)  */
 
-#define NULL 0
+/* #define NULL 0 */
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 

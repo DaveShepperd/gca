@@ -20,6 +20,9 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 /* See reload.c and reload1.c for comments on these variables.  */
 
+#ifndef _RELOAD_H_
+#define _RELOAD_H_
+
 /* Maximum number of reloads we can need.  */
 #define MAX_RELOADS (2 * MAX_RECOG_OPERANDS * (MAX_REGS_PER_ADDRESS + 1))
 
@@ -64,6 +67,10 @@ extern int reload_first_uid;
 /* Nonzero if an address (plus (reg frame_pointer) (reg ...)) is valid.  */
 extern char double_reg_address_ok;
 
-void init_reload ();
-void find_reloads ();
-void subst_reloads ();
+int strict_memory_address_p(enum machine_mode mode, register rtx addr);
+int operands_match_p(register rtx x, register rtx y);
+void find_reloads(rtx insn, int replace, int ind_ok, int live_known, short* reload_reg_p);
+void subst_reloads(void);
+rtx find_equiv_reg(register rtx goal, rtx insn, enum reg_class class, register int other, short* reload_reg_p, int goalreg, enum machine_mode mode);
+
+#endif /* _RELOAD_H_ */

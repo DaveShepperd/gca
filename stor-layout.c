@@ -24,6 +24,9 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 #include "tree.h"
 #include "rtl.h"   /* For GET_MODE_SIZE */
+#include "c-decl.h"
+#include "toplev.h"
+#include "stor-layout.h"
 
 #define MAX(x,y) ((x) > (y) ? (x) : (y))
 #define MIN(x,y) ((x) < (y) ? (x) : (y))

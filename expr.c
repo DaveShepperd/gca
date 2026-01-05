@@ -27,10 +27,19 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "expr.h"
 #include "insn-config.h"
 #include "recog.h"
-#include "gvarargs.h"
+/* #include "gvarargs.h" */
 #include "typeclass.h"
 #include "recog.h"
+#include "emit-rtl.h"
+#include "optabs.h"
+#include "rtlanal.h"
+#include "c-typeck.h"
+#include "stmt.h"
+#include "toplev.h"
+#include "jump.h"
 #include <stdlib.h>
+
+#define int_size_in_bytes sizeof
 
 /* Decide whether a function's arguments should be processed
    from first to last or from last to first.  */
@@ -1531,16 +1540,14 @@ emit_push_insn (x, mode, size, align, partial, reg, extra, args_addr, args_so_fa
    The rtx values should have been passed through protect_from_queue already.  */
 
 void
-emit_library_call (va_alist)
-     va_dcl
+emit_library_call (rtx fun, ...)
 {
-  register va_list p;
+  va_list p;
   register int args_size = 0;
   register int argnum;
   enum machine_mode outmode;
   int nargs;
-  rtx fun;
-  rtx orgfun;
+  rtx orgfun=fun;
   int inc;
   int count;
   rtx *regvec;
@@ -1550,12 +1557,11 @@ emit_library_call (va_alist)
   struct arg *argvec;
   int old_inhibit_defer_pop = inhibit_defer_pop;
   int stack_padding = 0;
-  int no_queue = 0;
+  int no_queue;
   rtx use_insns;
 
-  va_start (p);
-  orgfun = fun = va_arg (p, rtx);
-  no_queue = va_arg (p, int);
+  va_start (p,fun);
+  no_queue = va_arg(p, int);
   outmode = va_arg (p, enum machine_mode);
   nargs = va_arg (p, int);
 
@@ -2188,7 +2194,7 @@ save_noncopied_parts (lhs, list)
       {
 	tree part = TREE_VALUE (tail);
 	tree part_type = TREE_TYPE (part);
-	parts = tree_cons (save_expr (build_component_ref (lhs, part, parts, 0)),
+	parts = tree_cons (save_expr (build_component_ref (lhs, part /*, parts, 0 */)),
 			   build_nt (RTL_EXPR, 0, (tree) assign_stack_local (TYPE_MODE (part_type), int_size_in_bytes (part_type))),
 			   parts);
 	store_expr (TREE_PURPOSE (parts), RTL_EXPR_RTL (TREE_VALUE (parts)), 0);
@@ -3783,7 +3789,7 @@ emit_call_1 (funexp, funtype, stack_size, next_arg_reg, valreg, old_inhibit_defe
 				    stack_size_rtx, next_arg_reg));
   else
     emit_call_insn (gen_call (gen_rtx (MEM, FUNCTION_MODE, funexp),
-			      stack_size_rtx, next_arg_reg));
+			      stack_size_rtx));
 
   /* Find the CALL insn we just emitted and write the USE insns before it.  */
   for (call_insn = get_last_insn();

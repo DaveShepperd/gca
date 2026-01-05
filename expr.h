@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with GNU CC; see the file COPYING.  If not, write to
 the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
+#ifndef _EXPR_H_
+#define _EXPR_H_ 1
 
 /* Macros to access the slots of a QUEUED rtx.
    Here rather than in rtl.h because only the expansion pass
@@ -274,20 +276,21 @@ void emit_cmp_insn ();
 
 /* Emit some rtl insns to move data between rtx's, converting machine modes.
    Both modes must be floating or both fixed.  */
-void convert_move ();
+void convert_move( rtx to,  rtx from, int unsignedp);
 
 /* Convert an rtx to specified machine mode and return the result.  */
-rtx convert_to_mode ();
+rtx convert_to_mode(enum machine_mode mode, rtx x, int unsignedp);
 
 /* Emit code to push some arguments and call a library routine,
    storing the value in a specified place.  Calling sequence is
    complicated.  */
-void emit_library_call ();
+void emit_library_call(rtx ptr, ...);
 
 /* Given an rtx that may include add and multiply operations,
    generate them as insns and return a pseudo-reg containing the value.
    Useful after calling expand_expr with 1 as sum_ok.  */
-rtx force_operand ();
+rtx force_operand(rtx value, rtx target);
+rtx expand_expr( tree exp, rtx target, enum machine_mode tmode, enum expand_modifier modifier);
 
 /* Return an rtx for the size in bytes of the value of an expr.  */
 rtx expr_size ();
@@ -379,8 +382,28 @@ rtx expand_mult_add ();
 rtx get_structure_value_addr ();
 rtx expand_stmt_expr ();
 
-void jumpifnot ();
-void jumpif ();
-void do_jump ();
+void jumpifnot(tree exp, rtx label);
+void jumpif(tree exp, rtx label);
+void do_jump(tree exp, rtx if_false_label, rtx if_true_label);
 
 rtx assemble_static_space ();
+
+/* Functions defines in expr.c */
+void init_comparisons(void);
+void init_expr(void);
+rtx protect_from_queue( rtx x, int modify);
+void emit_queue(void);
+int integer_mode_p(enum machine_mode mode);
+void move_block_from_reg(int regno, rtx x, int nregs);
+void clear_storage(rtx object, int size);
+rtx emit_move_insn(rtx x, rtx y);
+rtx push_block(rtx size, int extra);
+rtx expand_assignment(tree to, tree from, int want_value, int suggest_reg);
+rtx store_expr( tree exp,  rtx target, int suggest_reg);
+void init_pending_stack_adjust(void);
+void clear_pending_stack_adjust(void);
+void do_pending_stack_adjust(void);
+void do_tablejump(rtx index, rtx range, rtx table_label, rtx default_label);
+
+
+#endif /* _EXPR_H_ */

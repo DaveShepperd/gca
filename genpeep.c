@@ -29,8 +29,11 @@ struct obstack *rtl_obstack = &obstack;
 
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
-extern int xmalloc ();
-extern void free ();
+void *xmalloc (unsigned int size);
+void *xrealloc (void *ptr, unsigned int size);
+void free (void *ptr);
+extern void init_rtl(void);
+extern char read_skip_spaces(FILE *infile);
 
 /* While tree-walking an instruction pattern, we keep a chain
    of these `struct link's to record how to get down to the
@@ -47,8 +50,8 @@ struct link
 
 void match_rtx ();
 void gen_exp ();
-void fatal ();
-void fancy_abort ();
+void fatal (const char *msg);
+void fancy_abort (void);
 
 int max_opno;
 
@@ -319,34 +322,28 @@ print_code (code)
     }
 }
 
-int
-xmalloc (size)
+void *xmalloc (unsigned int size)
 {
-  register int val = malloc (size);
+  void *val = (void *)malloc (size);
 
   if (val == 0)
     fatal ("virtual memory exhausted");
   return val;
 }
 
-int
-xrealloc (ptr, size)
-     char *ptr;
-     int size;
+void *
+xrealloc (void *ptr, unsigned int size)
 {
-  int result = realloc (ptr, size);
+  void *result = (void *)realloc (ptr, size);
   if (!result)
     fatal ("virtual memory exhausted");
   return result;
 }
 
 void
-fatal (s, a1, a2)
-     char *s;
+fatal (const char *s)
 {
-  fprintf (stderr, "genpeep: ");
-  fprintf (stderr, s, a1, a2);
-  fprintf (stderr, "\n");
+  fprintf (stderr, "genpeep: %s\n", s);
   exit (FATAL_EXIT_CODE);
 }
 
@@ -354,7 +351,7 @@ fatal (s, a1, a2)
    config.h can #define abort fancy_abort if you like that sort of thing.  */
 
 void
-fancy_abort ()
+fancy_abort (void)
 {
   fatal ("Internal gcc abort.");
 }
@@ -391,6 +388,11 @@ from the machine description file `md'.  */\n\n");
   printf ("#include \"config.h\"\n");
   printf ("#include \"rtl.h\"\n");
   printf ("#include \"regs.h\"\n");
+  printf ("#include \"output.h\"\n");
+  printf ("#include \"insn-config.h\"\n");
+  printf ("#include \"recog.h\"\n");
+  printf ("#include \"rtlanal.h\"\n");
+  printf ("#include \"jump.h\"\n");
   printf ("#include \"real.h\"\n\n");
 
   printf ("extern rtx peep_operand[];\n\n");

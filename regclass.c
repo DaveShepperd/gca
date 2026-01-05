@@ -30,7 +30,15 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "regs.h"
 #include "insn-config.h"
 #include "recog.h"
+#include "tree.h"
+#include "toplev.h"
+#include "rtlanal.h"
+#include "expr.h"
+#include "optabs.h"
+#include "regclass.h"
 #include <stdlib.h>
+
+extern void insn_extract (rtx insn); /* in created file insn-extract.c */
 
 #define max(A,B) ((A) > (B) ? (A) : (B))
 #define min(A,B) ((A) < (B) ? (A) : (B))
@@ -329,8 +337,8 @@ reg_preferred_class (regno)
   return (enum reg_class) prefclass[regno];
 }
 
-int
-reg_preferred_or_nothing (regno)
+char  
+reg_preferred_or_nothing (int regno)
 {
   if (prefclass == 0)
     return 0;
@@ -394,7 +402,7 @@ regclass (f, nregs)
 	    for (i = noperands - 1; i >= 0; i--)
 	      reg_class_record (operands[i], i, constraints);
 
-	    obfree (operands);
+	    obfree ((char *)operands);
 	  }
 	else
 	  {
@@ -517,10 +525,7 @@ regclass (f, nregs)
    preferences for registers used in the address.  */
 
 void
-reg_class_record (op, opno, constraints)
-     rtx op;
-     int opno;
-     char **constraints;
+reg_class_record (rtx op, int opno, char * const *constraints)
 {
   char *constraint = constraints[opno];
   register char *p;

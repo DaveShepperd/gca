@@ -42,13 +42,20 @@ State 199 contains 1 shift/reduce conflict.  (Two ways to recover from error.)
 #include "input.h"
 #include "c-parse.h"
 #include "c-tree.h"
-
+#include "flags.h"
+/* #include "rtl.h" */
+#define _RTL_H_
+typedef int rtx;
+typedef int rtvec;
+#include "stmt.h"
+#include "toplev.h"
+#include "varasm.h"
+#include "c-decl.h"
+#include "emit-rtl.h"
+#include "c-typeck.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-
-#ifndef errno
-extern int errno;
-#endif
 
 void yyerror ();
 
@@ -1513,7 +1520,7 @@ hash (str, len)
 #ifdef __GNUC__
 __inline
 #endif
-struct resword *
+static struct resword *
 is_reserved_word (str, len)
      register char *str;
      register int len;
@@ -2646,7 +2653,7 @@ yylex ()
     char_constant:
       {
 	register int result = 0;
-	register num_chars = 0;
+	register int num_chars = 0;
 	int width = TYPE_PRECISION (char_type_node);
 	int max_chars;
 
@@ -2802,7 +2809,7 @@ yylex ()
 	      abort ();
 	    yylval.ttype
 	      = build_string ((widep - wide_buffer + 1) * sizeof (int),
-			      wide_buffer);
+			      (char *)wide_buffer);
 	    TREE_TYPE (yylval.ttype) = int_array_type_node;
 	  }
 	else

@@ -29,11 +29,14 @@ struct obstack *rtl_obstack = &obstack;
 
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
-extern int xmalloc ();
-extern void free ();
+void *xmalloc (unsigned int len);
+void *xrealloc(void *ptr, unsigned int len);
+void free (void *ptr);
+extern void init_rtl(void);
+extern char read_skip_spaces(FILE *infile);
 
-void fatal ();
-void fancy_abort ();
+void fatal (const char *msg, char *cp);
+void fancy_abort (void);
 
 int max_opno;
 int max_dup_opno;
@@ -148,7 +151,7 @@ gen_exp (x)
       return;
 
     case ADDRESS:
-      fatal ("ADDRESS expression code used in named instruction pattern");
+      fatal ("ADDRESS expression code used in named instruction pattern",NULL);
 
     case PC:
       printf ("pc_rtx");
@@ -224,7 +227,7 @@ gen_insn (insn)
   register_constraints = 0;
   operands = max_operand_vec (insn, 1);
   if (max_dup_opno >= operands)
-    fatal ("match_dup operand number has no match_operand");
+    fatal ("match_dup operand number has no match_operand",NULL);
 
   /* Output the function name and argument declarations.  */
   printf ("rtx\ngen_%s (", XSTR (insn, 0));
@@ -265,7 +268,7 @@ gen_expand (expand)
   register int i;
 
   if (strlen (XSTR (expand, 0)) == 0)
-    fatal ("define_expand lacks a name");
+    fatal ("define_expand lacks a name",NULL);
   if (XVEC (expand, 1) == 0)
     fatal ("define_expand for %s lacks a pattern", XSTR (expand, 0));
 
@@ -365,34 +368,30 @@ gen_expand (expand)
   printf ("  return _val;\n}\n\n");
 }
 
-int
-xmalloc (size)
+void *
+xmalloc (unsigned int size)
 {
-  register int val = malloc (size);
+  void *val = (void *)malloc (size);
 
   if (val == 0)
-    fatal ("virtual memory exhausted");
+    fatal ("virtual memory exhausted",NULL);
 
   return val;
 }
 
-int
-xrealloc (ptr, size)
-     char *ptr;
-     int size;
+void *
+xrealloc (void *ptr, unsigned int size)
 {
-  int result = realloc (ptr, size);
+  void *result = (void *)realloc (ptr, size);
   if (!result)
-    fatal ("virtual memory exhausted");
+    fatal ("virtual memory exhausted",NULL);
   return result;
 }
 
 void
-fatal (s, a1, a2)
-     char *s;
-{
+fatal (const char *msg, char *cp){
   fprintf (stderr, "genemit: ");
-  fprintf (stderr, s, a1, a2);
+  fprintf (stderr, msg, cp);
   fprintf (stderr, "\n");
   exit (FATAL_EXIT_CODE);
 }
@@ -401,9 +400,9 @@ fatal (s, a1, a2)
    config.h can #define abort fancy_abort if you like that sort of thing.  */
 
 void
-fancy_abort ()
+fancy_abort (void)
 {
-  fatal ("Internal gcc abort.");
+  fatal ("Internal gcc abort.",0);
 }
 
 int
@@ -419,7 +418,7 @@ main (argc, argv)
   obstack_init (rtl_obstack);
 
   if (argc <= 1)
-    fatal ("No input file name.");
+    fatal ("No input file name.",0);
 
   infile = fopen (argv[1], "r");
   if (infile == 0)
@@ -439,6 +438,8 @@ main (argc, argv)
 from the machine description file `md'.  */\n\n");
 
   printf ("#include \"config.h\"\n");
+  printf ("#include \"flags.h\"\n");
+  printf ("#include \"tree.h\"\n");
   printf ("#include \"rtl.h\"\n");
   printf ("#include \"expr.h\"\n");
   printf ("#include \"real.h\"\n");

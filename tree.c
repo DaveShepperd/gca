@@ -36,15 +36,15 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include <stdio.h>
 #include "tree.h"
 #include "obstack.h"
-#include "gvarargs.h"
+/* #include "gvarargs.h" */
 #include "flags.h"
+#include "c-typeck.h"
+#include "rtl.h"
+#include "toplev.h"
 #include <stdlib.h>
 
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
-
-extern int xmalloc ();
-extern void free ();
 
 /* Tree nodes of permanent duration are allocated in this obstack.
    They are the identifier nodes, and everything outside of
@@ -244,8 +244,7 @@ preserve_data ()
    In practice the current obstack is always the temporary one.  */
 
 char *
-oballoc (size)
-     int size;
+oballoc (int size)
 {
   return (char *) obstack_alloc (current_obstack, size);
 }
@@ -255,8 +254,7 @@ oballoc (size)
    In practice the current obstack is always the temporary one.  */
 
 void
-obfree (ptr)
-     char *ptr;
+obfree (char *ptr)
 {
   obstack_free (current_obstack, ptr);
 }
@@ -265,8 +263,7 @@ obfree (ptr)
    and return a pointer to them.  */
 
 char *
-permalloc (size)
-     long size;
+permalloc (long size)
 {
   return (char *) obstack_alloc (&permanent_obstack, size);
 }
@@ -275,8 +272,7 @@ permalloc (size)
    and return a pointer to them.  */
 
 char *
-savealloc (size)
-     int size;
+savealloc (int size)
 {
   return (char *) obstack_alloc (saveable_obstack, size);
 }
@@ -1196,27 +1192,25 @@ stabilize_reference (ref)
    Constants, decls, types and misc nodes cannot be.  */
 
 tree
-build (va_alist)
-     va_dcl
+build (int iCode, ...)
 {
-  register va_list p;
-  enum tree_code code;
+  va_list ap;
+  enum tree_code code = (enum tree_code)iCode;
   register tree t;
   register int length;
   register int i;
 
-  va_start (p);
+  va_start (ap,iCode);
 
-  code = va_arg (p, enum tree_code);
   t = make_node (code);
   length = tree_code_length[(int) code];
-  TREE_TYPE (t) = va_arg (p, tree);
+  TREE_TYPE (t) = va_arg (ap, tree);
 
   if (length == 2)
     {
       /* This is equivalent to the loop below, but faster.  */
-      register tree arg0 = va_arg (p, tree);
-      register tree arg1 = va_arg (p, tree);
+      register tree arg0 = va_arg (ap, tree);
+      register tree arg1 = va_arg (ap, tree);
       TREE_OPERAND (t, 0) = arg0;
       TREE_OPERAND (t, 1) = arg1;
       TREE_VOLATILE (t)
@@ -1226,13 +1220,13 @@ build (va_alist)
     {
       for (i = 0; i < length; i++)
 	{
-	  register tree operand = va_arg (p, tree);
+	  register tree operand = va_arg (ap, tree);
 	  TREE_OPERAND (t, i) = operand;
 	  if (operand && TREE_VOLATILE (operand))
 	    TREE_VOLATILE (t) = 1;
 	}
     }
-  va_end (p);
+  va_end (ap);
   return t;
 }
 
@@ -1242,25 +1236,23 @@ build (va_alist)
    or even garbage if their values do not matter.  */
 
 tree
-build_nt (va_alist)
-     va_dcl
+build_nt (int iCode, ...)
 {
-  register va_list p;
-  register enum tree_code code;
-  register tree t;
-  register int length;
-  register int i;
+  va_list ap;
+  enum tree_code code = (enum tree_code)iCode;
+  tree t;
+  int length;
+  int i;
 
-  va_start (p);
+  va_start (ap,iCode);
 
-  code = va_arg (p, enum tree_code);
   t = make_node (code);
   length = tree_code_length[(int) code];
 
   for (i = 0; i < length; i++)
-    TREE_OPERAND (t, i) = va_arg (p, tree);
+    TREE_OPERAND (t, i) = va_arg (ap, tree);
 
-  va_end (p);
+  va_end (ap);
   return t;
 }
 

@@ -40,9 +40,11 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
    
 #include <stdio.h>
 #include <setjmp.h>
+#include <stdlib.h>
 #include "config.h"
 #include "tree.h"
-#include <stdlib.h>
+#include "rtl.h"
+#include "toplev.h"
 
 static void lshift_double ();
 static void rshift_double ();

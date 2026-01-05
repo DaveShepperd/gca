@@ -35,11 +35,18 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 #include "config.h"
 #include <stdio.h>
-#include "gvarargs.h"
+/*#include "gvarargs.h"*/
 #include "rtl.h"
 #include "regs.h"
 #include "insn-config.h"
 #include "real.h"
+#include "flags.h"
+#include "tree.h"
+#include "expr.h"
+#include "optabs.h"
+#include "emit-rtl.h"
+#include "rtlanal.h"
+#include "jump.h"
 #include <stdlib.h>
 
 #define max(A,B) ((A) > (B) ? (A) : (B))
@@ -173,23 +180,20 @@ rtx change_address ();
 
 /*VARARGS2*/
 rtx
-gen_rtx (va_alist)
-     va_dcl
+gen_rtx (int iCode, int iMode, ...)
 {
-  va_list p;
-  enum rtx_code code;
-  enum machine_mode mode;
+  va_list ap;
+  enum rtx_code code = iCode;
+  enum machine_mode mode = iMode;
+  
   register int i;		/* Array indices...			*/
   register char *fmt;		/* Current rtx's format...		*/
   register rtx rt_val;		/* RTX to return to caller...		*/
 
-  va_start (p);
-  code = va_arg (p, enum rtx_code);
-  mode = va_arg (p, enum machine_mode);
-
+  va_start (ap,iMode);
   if (code == CONST_INT)
     {
-      int arg = va_arg (p, int);
+      int arg = va_arg (ap, int);
       if (arg == 0)
 	return const0_rtx;
       if (arg == 1)
@@ -211,20 +215,20 @@ gen_rtx (va_alist)
 	      break;
 
 	    case 'i':		/* An integer?  */
-	      XINT (rt_val, i) = va_arg (p, int);
+	      XINT (rt_val, i) = va_arg (ap, int);
 	      break;
 
 	    case 's':		/* A string?  */
-	      XSTR (rt_val, i) = va_arg (p, char *);
+	      XSTR (rt_val, i) = va_arg (ap, char *);
 	      break;
 
 	    case 'e':		/* An expression?  */
 	    case 'u':		/* An insn?  Same except when printing.  */
-	      XEXP (rt_val, i) = va_arg (p, rtx);
+	      XEXP (rt_val, i) = va_arg (ap, rtx);
 	      break;
 
 	    case 'E':		/* An RTX vector?  */
-	      XVEC (rt_val, i) = va_arg (p, rtvec);
+	      XVEC (rt_val, i) = va_arg (ap, rtvec);
 	      break;
 
 	    default:
@@ -232,7 +236,7 @@ gen_rtx (va_alist)
 	    }
 	}
     }
-  va_end (p);
+  va_end (ap);
   return rt_val;		/* Return the new RTX...		*/
 }
 
@@ -244,31 +248,27 @@ gen_rtx (va_alist)
 
 /*VARARGS1*/
 rtvec
-gen_rtvec (va_alist)
-     va_dcl
+gen_rtvec (int n, ...)
 {
-  int n, i;
-  va_list p;
+  int i;
+  va_list ap;
   rtx *vector;
-
-  va_start (p);
-  n = va_arg (p, int);
 
   if (n == 0)
     return NULL_RTVEC;		/* Don't allocate an empty rtvec...	*/
 
+  va_start (ap,n);
+
   vector = (rtx *) alloca (n * sizeof (rtx));
   for (i = 0; i < n; i++)
-    vector[i] = va_arg (p, rtx);
-  va_end (p);
+    vector[i] = va_arg (ap, rtx);
+  va_end (ap);
 
   return gen_rtvec_v (n, vector);
 }
 
 rtvec
-gen_rtvec_v (n, argp)
-     int n;
-     rtx *argp;
+gen_rtvec_v (int n, rtx *argp)
 {
   register int i;
   register rtvec rt_val;
@@ -1250,9 +1250,7 @@ force_next_line_note ()
 /* Return an indication of which type of insn should have X as a body.
    The value is CODE_LABEL, INSN, CALL_INSN or JUMP_INSN.  */
 
-enum rtx_code
-classify_insn (x)
-     rtx x;
+enum rtx_code classify_insn (rtx x)
 {
   if (GET_CODE (x) == CODE_LABEL)
     return CODE_LABEL;
@@ -1347,8 +1345,7 @@ push_to_sequence (first)
    you must call `gen_sequence' *before* calling here.  */
 
 void
-end_sequence (saved)
-     rtx saved;
+end_sequence (void)
 {
   first_insn = XEXP (sequence_stack, 0);
   last_insn = XEXP (XEXP (sequence_stack, 1), 0);

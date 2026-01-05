@@ -63,6 +63,11 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "hard-reg-set.h"
 #include "insn-config.h"
 #include "recog.h"
+#include "regclass.h"
+#include "rtlanal.h"
+#include "emit-rtl.h"
+#include "tree.h"
+#include "local-alloc.h"
 #include <stdlib.h>
 
 /* What about hardware registers used and set within same insn?

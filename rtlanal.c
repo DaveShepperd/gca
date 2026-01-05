@@ -20,6 +20,7 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 #include "config.h"
 #include "rtl.h"
+#include "rtlanal.h"
 #include <stdlib.h>
 
 extern void note_stores ();
@@ -424,9 +425,7 @@ rtx_equal_p (x, y)
      the SET or CLOBBER rtx that does the store.  */
      
 void
-note_stores (x, fun)
-     register rtx x;
-     void (*fun) ();
+note_stores (rtx x, void (*fun) (rtx remdest, rtx xx))
 {
   if ((GET_CODE (x) == SET || GET_CODE (x) == CLOBBER))
     {

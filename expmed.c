@@ -28,6 +28,10 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "insn-config.h"
 #include "expr.h"
 #include "recog.h"
+#include "emit-rtl.h"
+#include "toplev.h"
+#include "rtlanal.h"
+#include "optabs.h"
 #include <stdlib.h>
 
 static rtx extract_split_bit_field ();

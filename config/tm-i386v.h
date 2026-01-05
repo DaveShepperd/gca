@@ -84,3 +84,6 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 /* 1 if N is a possible register number for a function value. */
 
 #define FUNCTION_VALUE_REGNO_P(N) ((N) == 0 || (N)== FIRST_FLOAT_REG)
+
+#include "prototypes_cc1.h"
+

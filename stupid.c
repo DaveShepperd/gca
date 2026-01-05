@@ -46,6 +46,9 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "rtl.h"
 #include "hard-reg-set.h"
 #include "regs.h"
+#include "tree.h"
+#include "flow.h"
+#include "stupid.h"
 #include <stdlib.h>
 
 /* Vector mapping INSN_UIDs to suids.

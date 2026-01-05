@@ -27,6 +27,15 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "reload.h"
 #include "recog.h"
 #include "basic-block.h"
+#include "emit-rtl.h"
+#include "global-alloc.h"
+#include "rtlanal.h"
+#include "caller-save.h"
+#include "tree.h"
+#include "toplev.h"
+#include "optabs.h"
+#include "jump.h"
+#include "reload1.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -203,7 +212,7 @@ static int frame_pointer_address_altered;
 
 void mark_home_live ();
 static int possible_group_p ();
-static rtx scan_paradoxical_subregs ();
+static void scan_paradoxical_subregs (rtx insn);
 static void reload_as_needed ();
 static int modes_equiv_for_class_p ();
 static rtx alter_frame_pointer_addresses ();
@@ -1593,9 +1602,8 @@ spill_hard_reg (regno, global, dumpfile)
 
 /* Find all paradoxical subregs within X and update reg_max_ref_width.  */
 
-static rtx
-scan_paradoxical_subregs (x)
-     register rtx x;
+static void
+scan_paradoxical_subregs (rtx x)
 {
   register int i;
   register char *fmt;

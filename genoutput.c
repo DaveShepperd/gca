@@ -107,14 +107,20 @@ struct obstack *rtl_obstack = &obstack;
 
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
-extern int xmalloc ();
-extern void free ();
+void *xmalloc (unsigned int size);
+void *xrealloc(void *ptr, unsigned int size);
+void free (void *ptr);
 
-void fatal ();
-void fancy_abort ();
-void error ();
-void mybcopy ();
-void mybzero ();
+extern void init_rtl(void);
+extern char read_skip_spaces(FILE *infile);
+
+void fatal (const char *msg);
+void fancy_abort (void);
+void error (const char *msg, int a, int b);
+void mybzero (void *b, int length);
+void mybcopy (void *b1, void *b2, int length);
+
+int n_occurrences (char c,  char *s);
 
 /* insns in the machine description are assigned sequential code numbers
    that are used by insn-recog.c (produced by genrecog) to communicate
@@ -175,7 +181,14 @@ from the machine description file `md'.  */\n\n");
   printf ("#include \"conditions.h\"\n");
   printf ("#include \"insn-flags.h\"\n");
   printf ("#include \"insn-config.h\"\n\n");
-
+  printf ("#include \"flags.h\"\n");
+  printf ("#include \"tree.h\"\n");
+  printf ("#include \"varasm.h\"\n");
+  printf ("#include \"recog.h\"\n");
+  printf ("#include \"rtlanal.h\"\n");
+  printf ("#include \"final.h\"\n");
+  printf ("#include \"toplev.h\"\n");
+  
   printf ("#ifndef __STDC__\n");
   printf ("#define const\n");
   printf ("#endif\n\n");
@@ -390,7 +403,7 @@ scan_operands (part, this_address_p, this_strict_low)
 	max_opno = opno;
       if (max_opno >= MAX_MAX_OPERANDS)
 	error ("Too many operands (%d) in one instruction pattern.\n",
-	       max_opno + 1);
+	       max_opno + 1, 0);
       modes[opno] = GET_MODE (part);
       strict_low[opno] = this_strict_low;
       predicates[opno] = XSTR (part, 1);
@@ -411,7 +424,7 @@ scan_operands (part, this_address_p, this_strict_low)
 	max_opno = opno;
       if (max_opno >= MAX_MAX_OPERANDS)
 	error ("Too many operands (%d) in one instruction pattern.\n",
-	       max_opno + 1);
+	       max_opno + 1,0);
       modes[opno] = GET_MODE (part);
       strict_low[opno] = 0;
       predicates[opno] = XSTR (part, 1);
@@ -655,53 +668,46 @@ gen_expand (insn)
   d->machine_info = 0;
 }
 
-int
-xmalloc (size)
+void *
+xmalloc (unsigned int size)
 {
-  register int val = malloc (size);
+  void *val = (void *)malloc (size);
 
   if (val == 0)
     fatal ("virtual memory exhausted");
   return val;
 }
 
-int
-xrealloc (ptr, size)
-     char *ptr;
-     int size;
+void *
+xrealloc (void *ptr, unsigned int size)
 {
-  int result = realloc (ptr, size);
+  void *result = (void *)realloc (ptr, size);
   if (!result)
     fatal ("virtual memory exhausted");
   return result;
 }
 
 void
-mybzero (b, length)
-     register char *b;
-     register int length;
+mybzero (void *ib, int length)
 {
+  char *b = (char *)ib;
   while (length-- > 0)
     *b++ = 0;
 }
 
 void
-mybcopy (b1, b2, length)
-     register char *b1;
-     register char *b2;
-     register int length;
+mybcopy (void *ib1, void *ib2, int length)
 {
+  char *b1 = (char *)ib1;
+  char *b2 = (char *)ib2;
   while (length-- > 0)
     *b2++ = *b1++;
 }
 
 void
-fatal (s, a1, a2)
-     char *s;
+fatal (const char *msg)
 {
-  fprintf (stderr, "genoutput: ");
-  fprintf (stderr, s, a1, a2);
-  fprintf (stderr, "\n");
+  fprintf (stderr, "genoutput: %s\n", msg);
   exit (FATAL_EXIT_CODE);
 }
 
@@ -709,17 +715,16 @@ fatal (s, a1, a2)
    config.h can #define abort fancy_abort if you like that sort of thing.  */
 
 void
-fancy_abort ()
+fancy_abort (void)
 {
   fatal ("Internal gcc abort.");
 }
 
 void
-error (s, a1, a2)
-     char *s;
+error (const char *s, int a, int b)
 {
   fprintf (stderr, "genoutput: ");
-  fprintf (stderr, s, a1, a2);
+  fprintf (stderr, s, a, b);
   fprintf (stderr, "\n");
 }
 
@@ -776,9 +781,7 @@ main (argc, argv)
 }
 
 int
-n_occurrences (c, s)
-     char c;
-     char *s;
+n_occurrences (char c, char *s)
 {
   int n = 0;
   while (*s)

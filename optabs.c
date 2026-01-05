@@ -27,6 +27,8 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "expr.h"
 #include "insn-config.h"
 #include "recog.h"
+#include "emit-rtl.h"
+#include "optabs.h"
 #include <stdlib.h>
 
 /* In ANSI C we could write MODE + 1, but traditional C compilers
@@ -485,11 +487,7 @@ expand_twoval_binop (binoptab, op0, op1, targ0, targ1, unsignedp)
   return 0;
 }
 
-int
-expand_twoval_binop_convert (binoptab, mode, op0, op1, targ0, targ1, unsignedp)
-     register optab binoptab;
-     register rtx op0, op1, targ0, targ1;
-     int unsignedp;
+int expand_twoval_binop_convert( optab binoptab, int mode,  rtx op0,  rtx op1,  rtx targ0,  rtx targ1, int unsignedp)
 {
   register rtx t0 = gen_reg_rtx (SImode);
   register rtx t1 = gen_reg_rtx (SImode);

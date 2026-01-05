@@ -26,6 +26,12 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "reload.h"
 #include "recog.h"
 #include "basic-block.h"
+#include "rtlanal.h"
+#include "recog.h"
+#include "tree.h"
+#include "optabs.h"
+#include "reload.h"
+#include "caller-save.h"
 #include <stdlib.h>
 
 /* Set of hard regs currently live (during scan of all insns).  */

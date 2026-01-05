@@ -26,6 +26,12 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "hard-reg-set.h"
 #include "regs.h"
 #include "insn-config.h"
+#include "tree.h"
+#include "regclass.h"
+#include "toplev.h"
+#include "rtlanal.h"
+#include "reload1.h"
+#include "global-alloc.h"
 #include <stdlib.h>
 
 /* This pass of the compiler performs global register allocation.

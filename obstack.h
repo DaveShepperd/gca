@@ -202,6 +202,16 @@ int obstack_chunk_size (struct obstack *obstack);
 
 #define obstack_alignment_mask(h) ((h)->alignment_mask)
 
+extern void _obstack_begin (
+     struct obstack *h,
+     int size,
+     int alignment,
+     void *(*chunkfun) (),
+     void (*freefun) ());
+extern void _obstack_newchunk (
+     struct obstack *h,
+     int length);
+
 #define obstack_init(h) \
   _obstack_begin ((h), 0, 0, obstack_chunk_alloc, obstack_chunk_free)
 

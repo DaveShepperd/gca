@@ -99,8 +99,12 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
 
-extern int xmalloc ();
-extern void free ();
+#include "tree.h"
+#include "jump.h"
+#include "rtlanal.h"
+#include "regclass.h"
+#include "toplev.h"
+#include "flow.h"
 
 /* Get the basic block number of an insn.
    This info should not be expected to remain available
@@ -2037,7 +2041,7 @@ dump_flow_info (file)
 	if (reg_n_deaths[i] != 1)
 	  fprintf (file, "; dies in %d places", reg_n_deaths[i]);
 	if (reg_n_calls_crossed[i] == 1)
-	  fprintf (file, "; crosses 1 call", reg_n_calls_crossed[i]);
+	  fprintf (file, "; crosses 1 call");
 	else if (reg_n_calls_crossed[i])
 	  fprintf (file, "; crosses %d calls", reg_n_calls_crossed[i]);
 	if (PSEUDO_REGNO_BYTES (i) != UNITS_PER_WORD)

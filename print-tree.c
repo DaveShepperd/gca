@@ -20,6 +20,8 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 #include "config.h"
 #include "tree.h"
+#include "rtl.h"
+#include "c-decl.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -122,12 +124,12 @@ print_node_brief (file, prefix, node, indent)
   if (TREE_CODE (node) == INTEGER_CST)
     {
       if (TREE_INT_CST_HIGH (node) == 0)
-	fprintf (file, " %1u", TREE_INT_CST_LOW (node));
+	fprintf (file, " %lu", TREE_INT_CST_LOW (node));
       else if (TREE_INT_CST_HIGH (node) == -1
 	       && TREE_INT_CST_LOW (node) != 0)
-	fprintf (file, " -%1u", -TREE_INT_CST_LOW (node));
+	fprintf (file, " -%lu", -TREE_INT_CST_LOW (node));
       else
-	fprintf (file, " 0x%x%08x",
+	fprintf (file, " 0x%lx%08lx",
 		 TREE_INT_CST_HIGH (node),
 		 TREE_INT_CST_LOW (node));
     }
@@ -403,14 +405,14 @@ print_node (file, prefix, node, indent)
 	  if (i >= first_rtl)
 	    {
 	      if (TREE_OPERAND (node, i))
-		print_rtl (file, TREE_OPERAND (node, i));
+		print_rtl (file, TREE_CST_RTL(TREE_OPERAND (node, i)));
 	      else
 		fprintf (file, "(nil)");
 	      fprintf (file, "\n");
 	    }
 	  else
 	    {
-	      char temp[10];
+	      char temp[32];
 
 	      sprintf (temp, "arg %d", i);
 	      print_node (file, temp, TREE_OPERAND (node, i), indent + 4);
@@ -457,12 +459,12 @@ print_node (file, prefix, node, indent)
 	{
 	case INTEGER_CST:
 	  if (TREE_INT_CST_HIGH (node) == 0)
-	    fprintf (file, " %1u", TREE_INT_CST_LOW (node));
+	    fprintf (file, " %lu", TREE_INT_CST_LOW (node));
 	  else if (TREE_INT_CST_HIGH (node) == -1
 		   && TREE_INT_CST_LOW (node) != 0)
-	    fprintf (file, " -%1u", -TREE_INT_CST_LOW (node));
+	    fprintf (file, " -%lu", -TREE_INT_CST_LOW (node));
 	  else
-	    fprintf (file, " 0x%x%08x",
+	    fprintf (file, " 0x%lx%08lx",
 		     TREE_INT_CST_HIGH (node),
 		     TREE_INT_CST_LOW (node));
 	  break;

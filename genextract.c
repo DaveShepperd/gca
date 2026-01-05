@@ -26,11 +26,15 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 
 struct obstack obstack;
 struct obstack *rtl_obstack = &obstack;
+extern void init_rtl(void);
+extern char read_skip_spaces(FILE *infile);
 
 #define obstack_chunk_alloc xmalloc
 #define obstack_chunk_free free
+#if 0
 extern int xmalloc ();
 extern void free ();
+#endif
 
 /* Number instruction patterns handled, starting at 0 for first one.  */
 
@@ -56,8 +60,8 @@ struct link
 
 void walk_rtx ();
 void print_path ();
-void fatal ();
-void fancy_abort ();
+void fatal (const char *msg);
+void fancy_abort (void);
 
 void
 gen_insn (insn)
@@ -214,34 +218,29 @@ print_path (path)
     }
 }
 
-int
-xmalloc (size)
+void *
+xmalloc (unsigned int size)
 {
-  register int val = malloc (size);
+  void *val = (void *)malloc (size);
 
   if (val == 0)
     fatal ("virtual memory exhausted");
   return val;
 }
 
-int
-xrealloc (ptr, size)
-     char *ptr;
-     int size;
+void *
+xrealloc (void *ptr, unsigned int size)
 {
-  int result = realloc (ptr, size);
+  void *result = (void *)realloc (ptr, size);
   if (!result)
     fatal ("virtual memory exhausted");
   return result;
 }
 
 void
-fatal (s, a1, a2)
-     char *s;
+fatal (const char *s)
 {
-  fprintf (stderr, "genextract: ");
-  fprintf (stderr, s, a1, a2);
-  fprintf (stderr, "\n");
+  fprintf (stderr, "genextract: %s\n",s);
   exit (FATAL_EXIT_CODE);
 }
 
@@ -249,7 +248,7 @@ fatal (s, a1, a2)
    config.h can #define abort fancy_abort if you like that sort of thing.  */
 
 void
-fancy_abort ()
+fancy_abort (void)
 {
   fatal ("Internal gcc abort.");
 }

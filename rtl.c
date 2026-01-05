@@ -21,14 +21,16 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "config.h"
 #include <ctype.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include "rtl.h"
 #include <stdlib.h>
 
 #include "obstack.h"
 #define	obstack_chunk_alloc	xmalloc
 #define	obstack_chunk_free	free
-extern int xmalloc ();
-extern void free ();
+extern void *xmalloc (int size);
+extern void *xrealloc(void *ptr, int size);
+extern void free (void *ptr);
 
 /* Obstack used for allocating RTL objects.
    Between functions, this is the permanent_obstack.
@@ -411,8 +413,7 @@ print_rtx (in_rtx)
 /* Call this function from the debugger to see what X looks like.  */
 
 void
-debug_rtx (x)
-     rtx x;
+debug_rtx (rtx x)
 {
   outfile = stderr;
   print_rtx (x);

@@ -54,7 +54,15 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "flags.h"
 #include "real.h"
 #include "output.h"
+#include "tree.h"
+#include "toplev.h"
+#include "varasm.h"
+#include "rtlanal.h"
+#include "stmt.h"
+#include "final.h"
 #include <stdlib.h>
+
+extern void insn_extract (rtx insn); /* from created file insn-extract.c */
 
 /* Get N_SLINE and N_SOL from stab.h if we can expect the file to exist.  */
 #ifdef DBX_DEBUGGING_INFO
@@ -235,7 +243,7 @@ end_final (filename)
 
   if (profile_block_flag)
     {
-      char name[12];
+      char name[64];
 
       data_section ();
 
@@ -295,7 +303,6 @@ end_final (filename)
       ASM_OUTPUT_INTERNAL_LABEL (asm_out_file, "LPBX", 3);
       for (i = 0; i < count_basic_blocks; i++)
 	{
-	  char name[12];
 	  ASM_GENERATE_INTERNAL_LABEL (name, "LPB", i);
 	  ASM_OUTPUT_INT (asm_out_file, gen_rtx (SYMBOL_REF, Pmode, name));
 	}

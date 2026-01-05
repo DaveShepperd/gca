@@ -257,6 +257,7 @@ find_addr_reg (addr)
 static char * addr_q[] = {
     "<illegit>", "REG", "SYMBOL", "REG[INDEX/OFFSET]", "INDEXED", "OFFSET"};
 
+#if 0
 #define STRICT_INDEX_TERM_P(MODE, X)  \
   ((GET_CODE (X) == MULT					\
     && ((REG_P (XEXP (X, 0))					\
@@ -270,17 +271,14 @@ static char * addr_q[] = {
             && INTVAL (XEXP (X, 0)) <= 4			\
             && (INTVAL (XEXP (X, 0)) == GET_MODE_SIZE (MODE))	\
 	      && (warning ("MULT backwards"), 1))))		\
-  || (REG_P (X) && REGNO (XEXP (X, 0)) < FIRST_PSEUDO_REGISTER && GET_MODE_SIZE (MODE) == 1))
+  || (REG_P (X) && REGNO (X) < FIRST_PSEUDO_REGISTER && GET_MODE_SIZE (MODE) == 1))
+#endif
 
 extern char *mode_name[];
 
+#if DEBUG_LEGIT_ADDR
 int
-legit_addr_p(mode,x,line,file,strict)
-enum machine_mode mode;
-rtx x;
-int line;
-char *file;
-int strict;
+legit_addr_p(enum machine_mode mode, rtx x, int line, char *file, int strict)
 {
 
   int retval;
@@ -288,25 +286,45 @@ int strict;
 
   retval = 0;
   if ( strict == 0 ) {
-      if (GET_CODE (x) == REG) retval = 1;
-      else if (GET_CODE (x) == SYMBOL_REF && (x)->unchanging) retval = 2;
-      else if (GET_CODE (x) == PLUS
-	  && REG_P (XEXP (x, 0))
-	  && (  (VALID_OFFSET_P(mode, XEXP (x, 1)))
-	     || (INDEX_TERM_P (mode, XEXP (x, 1))))) retval = 3;
-      else if (INDEX_TERM_P (mode, x)) retval = 4;
-      else if (VALID_OFFSET_P (mode, x))	retval = 5;
+      if (GET_CODE (x) == REG)
+	  retval = 1;
+      else if (   GET_CODE (x) == SYMBOL_REF
+	       && (x)->unchanging)
+	  retval = 2;
+      else if (      GET_CODE (x) == PLUS
+		  && REG_P (XEXP (x, 0))
+		  && (
+		         (VALID_OFFSET_P(mode, XEXP (x, 1)))
+		      || (INDEX_TERM_P (mode, XEXP (x, 1)))
+		     )
+	      )
+	  retval = 3;
+      else if (INDEX_TERM_P (mode, x))
+	  retval = 4;
+      else if (VALID_OFFSET_P (mode, x))
+	  retval = 5;
   } else {
     /* strict means don't accept psuedo-regs */
-      if (GET_CODE (x) == REG && REGNO(x) < FIRST_PSEUDO_REGISTER ) retval = 1;
-      else if (GET_CODE (x) == SYMBOL_REF && (x)->unchanging) retval = 2;
-      else if (GET_CODE (x) == PLUS
-	  && REG_P (XEXP (x, 0))
-	  && REGNO (XEXP (x, 0)) < FIRST_PSEUDO_REGISTER
-	  && (  (VALID_OFFSET_P(mode, XEXP (x, 1)))
-	     || (STRICT_INDEX_TERM_P (mode, XEXP (x, 1))))) retval = 3;
-      else if (STRICT_INDEX_TERM_P (mode, x)) retval = 4;
-      else if (VALID_OFFSET_P (mode, x))	retval = 5;
+      if (   GET_CODE (x) == REG
+	  && REGNO(x) < FIRST_PSEUDO_REGISTER
+	 )
+	  retval = 1;
+      else if (   GET_CODE (x) == SYMBOL_REF
+	       && (x)->unchanging
+	      )
+	  retval = 2;
+      else if (   GET_CODE (x) == PLUS
+	       && REG_P (XEXP (x, 0))
+	       && REGNO (XEXP (x, 0)) < FIRST_PSEUDO_REGISTER
+	       && (   (VALID_OFFSET_P(mode, XEXP (x, 1)))
+	           || (STRICT_INDEX_TERM_P (mode, XEXP (x, 1)))
+		  )
+	      )
+	  retval = 3;
+      else if (STRICT_INDEX_TERM_P (mode, x))
+	  retval = 4;
+      else if (VALID_OFFSET_P (mode, x))
+	  retval = 5;
   }
 #if (1)
   fprintf(stderr,"\n%s:%d: %slegit_addr_p(%s,",file,line,
@@ -316,7 +334,8 @@ int strict;
 #endif
   return retval;
 }
-
+#endif
+#if DEBUG_LEGIT_CONST
 int legit_const_p(x,dbltype,line,file)
 rtx x;
 int dbltype,line;
@@ -332,6 +351,74 @@ char *file;
  fprintf(stderr,") = %d\n",retval);
  return retval;
 }
+#endif
+#if DEBUG_INDEX_TERM_ADDR
+int index_term_addr_p(const char *file, int line, int mode, void *xx)
+{
+    enum machine_mode MODE = (enum machine_mode)mode;
+    rtx X = (rtx)xx;
+    int retv;
+    retv = (   (   GET_CODE (X) == MULT
+		&& (    (   REG_P (XEXP (X, 0))
+		         && GET_CODE (XEXP (X, 1)) == CONST_INT
+		         && INTVAL (XEXP (X, 1)) <= 4
+		         && (INTVAL (XEXP (X, 1)) == GET_MODE_SIZE (MODE))
+		        )
+		     || (    REG_P (XEXP (X, 1))
+			  && GET_CODE (XEXP (X, 0)) == CONST_INT
+			  && INTVAL (XEXP (X, 0)) <= 4
+			  && (INTVAL (XEXP (X, 0)) == GET_MODE_SIZE (MODE))
+			  && (warning ("MULT backwards"), 1)
+			)
+		   )
+		)
+	     || (   REG_P (X)
+		 && GET_MODE_SIZE (MODE) == 1
+		)
+	  );
+    fprintf(stderr,"\n%s:%d: index_term_addr_p,",
+	    file,line);
+    debug_rtx(X);
+    fprintf(stderr,") returned %d\n", retv);
+    return retv;
+}
+
+int strict_index_term_addr_p(const char *file, int line, int mode, void *xx)
+{
+    enum machine_mode MODE = (enum machine_mode)mode;
+    rtx X = (rtx)xx;
+    int retv;
+    fprintf(stderr,"\n%s:%d: BEFORE strict_index_term_addr_p,", file, line);
+    debug_rtx(X);
+    fprintf(stderr,"\n");
+    retv = (    (   GET_CODE (X) == MULT
+	         && ( (    REG_P (XEXP (X, 0))
+			&& REGNO (XEXP (X, 0)) < FIRST_PSEUDO_REGISTER
+			&& GET_CODE (XEXP (X, 1)) == CONST_INT
+			&& INTVAL (XEXP (X, 1)) <= 4
+			&& (INTVAL (XEXP (X, 1)) == GET_MODE_SIZE (MODE))
+		      )
+		 ||   (	   REG_P (XEXP (X, 1))
+			&& REGNO (XEXP (X, 1)) < FIRST_PSEUDO_REGISTER
+			&& GET_CODE (XEXP (X, 0)) == CONST_INT
+			&& INTVAL (XEXP (X, 0)) <= 4
+			&& (INTVAL (XEXP (X, 0)) == GET_MODE_SIZE (MODE))
+			&& (warning ("MULT backwards"), 1)
+		      )
+		   )
+	        )
+	     || (    REG_P (X)
+/*		  && REGNO (XEXP (X, 0)) < FIRST_PSEUDO_REGISTER */
+		  && REGNO (X) < FIRST_PSEUDO_REGISTER
+		  && GET_MODE_SIZE (MODE) == 1
+		)
+	   );
+    fprintf(stderr,"\n%s:%d: AFTER strict_index_term_addr_p,", file, line);
+    debug_rtx(X);
+    fprintf(stderr,") returned %d\n", retv);
+    return retv;
+}
+#endif
 
 /*	Following is function version of the macro FUNCTION_PROLOGUE
 *	defined in tm.h and invoked in final.c. It has been put here

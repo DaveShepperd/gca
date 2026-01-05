@@ -58,12 +58,12 @@ struct obstack *_obstack;
    and FREEFUN the function to free them.  */
 
 void
-_obstack_begin (h, size, alignment, chunkfun, freefun)
-     struct obstack *h;
-     int size;
-     int alignment;
-     POINTER (*chunkfun) ();
-     void (*freefun) ();
+_obstack_begin (
+     struct obstack *h,
+     int size,
+     int alignment,
+     void *(*chunkfun) (int size),
+     void (*freefun) (void *ptr))
 {
   register struct _obstack_chunk* chunk; /* points to new chunk */
 
@@ -99,9 +99,9 @@ _obstack_begin (h, size, alignment, chunkfun, freefun)
    to the beginning of the new one.  */
 
 void
-_obstack_newchunk (h, length)
-     struct obstack *h;
-     int length;
+_obstack_newchunk (
+     struct obstack *h,
+     int length)
 {
   register struct _obstack_chunk*	old_chunk = h->chunk;
   register struct _obstack_chunk*	new_chunk;
@@ -149,9 +149,9 @@ _obstack_newchunk (h, length)
    If you use it in a program, you are probably losing.  */
 
 int
-_obstack_allocated_p (h, obj)
-     struct obstack *h;
-     POINTER obj;
+_obstack_allocated_p (
+     struct obstack *h,
+     POINTER obj)
 {
   register struct _obstack_chunk*  lp;	/* below addr of any objects in this chunk */
   register struct _obstack_chunk*  plp;	/* point to previous chunk if any */
@@ -203,9 +203,7 @@ _obstack_free (h, obj)
 
 #ifdef __STDC__
 void
-_obstack_free (h, obj)
-     struct obstack *h;
-     POINTER obj;
+_obstack_free (struct obstack *h, POINTER obj)
 {
   obstack_free (h, obj);
 }

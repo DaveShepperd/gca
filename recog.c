@@ -26,8 +26,14 @@ the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.  */
 #include "regs.h"
 #include "hard-reg-set.h"
 #include "real.h"
+#include "rtlanal.h"
+#include "recog.h"
+#include "reload.h"
+#include "tree.h"
+#include "toplev.h"
 #include <stdlib.h>
 
+extern int recog (rtx x0, rtx insn);	/* in created file insn-recog.c*/
 
 static int inequality_comparisons_p ();
 int strict_memory_address_p ();

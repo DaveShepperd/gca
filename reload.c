@@ -90,7 +90,14 @@ a register with any other reload.  */
 #include "hard-reg-set.h"
 #include "flags.h"
 #include "real.h"
+#include "rtlanal.h"
+#include "jump.h"
+#include "tree.h"
+#include "toplev.h"
+#include "reload.h"
 #include <stdlib.h>
+
+extern void insn_extract (rtx insn); /* from created file insn-extract.c */
 
 #define min(x,y) ((x) < (y) ? (x) : (y))
 
