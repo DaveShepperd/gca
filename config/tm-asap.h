@@ -1046,8 +1046,8 @@ asm_decl_func(FILE,NAME,DECL);
 { register int i;			\
   int inside,j=0;			\
   inside = FALSE;			\
-  for (i = 0; i < size; i++) {		\
-    if ((j &= 15) == 0) {		\
+    for (i = 0; i < size; i++) {	\
+    if ((j &= 31) == 0) {		\
       if (inside) { 			\
 	fputs(ASCII_DATA_ASM_CLOSE,f);	\
 	inside = FALSE;			\
@@ -1059,16 +1059,17 @@ asm_decl_func(FILE,NAME,DECL);
 	inside = FALSE;			\
 	j = 0;				\
       }					\
-      if ( (j & 15) != 0) fputc(',', f);\
+      if ( (j & 31) != 0) fputc(',', f);\
       else fputs("\t.byte\t",f);	\
       fprintf(f, "%d", p[i]);		\
     } else {				\
       if (!inside) {			\
-	if ((j & 15) != 0) fputc('\n',f);\
+	if ((j & 31) != 0) fputc('\n',f);\
 	fputs(ASCII_DATA_ASM_OPEN,f);	\
 	j = 0;				\
 	inside = TRUE;			\
       }					\
+      if ( p[i] == '"' ) fputc('\\',f); \
       fputc(p[i], f);			\
     }					\
   ++j;					\
